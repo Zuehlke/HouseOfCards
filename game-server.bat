@@ -1,0 +1,1 @@
+java -jar game-server/build/libs/game-server-0.1.0.jar
