@@ -1,1 +1,3 @@
 include 'game-server'
+include 'server-domain'
+
