@@ -40,7 +40,7 @@ public class NokerGame implements Game {
 
     public void start() {
         players.forEach(p -> p.setChips(INITIAL_CHIPS));
-        match = new Match(rotatePlayersForNextMatch(), deck);
+        match = new Match(getRotatedPlayersForNextMatch(), deck);
 
         firstPlayerPosition = RoundRobin.getNextStartPosition(players,firstPlayerPosition);
         match.shuffleDeck();
@@ -57,7 +57,7 @@ public class NokerGame implements Game {
      * The turn order of the players rotates every time a new match is started.
      * @return list with rotated players
      */
-    private List<Player> rotatePlayersForNextMatch() {
+    private List<Player> getRotatedPlayersForNextMatch() {
         List<Player> rotatedPlayers = new ArrayList<>();
         RoundRobin<Player> playerRoundRobin = new RoundRobin<>(this.players, firstPlayerPosition);
         Iterator<Player> playerIterator = playerRoundRobin.iterator();

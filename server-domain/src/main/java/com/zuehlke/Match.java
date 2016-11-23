@@ -1,5 +1,6 @@
 package com.zuehlke;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -29,6 +30,10 @@ public class Match {
 
     public void shuffleDeck() {
         deck.shuffle();
+    }
+
+    public List<Player> getAllPlayers() {
+        return new ArrayList<>(players);
     }
 
     // TODO: implement state machine
