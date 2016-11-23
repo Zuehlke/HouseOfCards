@@ -11,6 +11,7 @@
 .idea/mongoSettings.xml
 
 # Build artifacts
+build/
 classes/
 bot-domain/build/
 bot-server/build/
