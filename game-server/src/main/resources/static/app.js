@@ -21,7 +21,7 @@ function connect() {
             addToList(currentState.body);
             register_channel.unsubscribe();
             stompClient.subscribe('/topic/poker_updates', function (update) {
-                addToList(JSON.parse(update.body));
+                addToList(update.body);
             });
         });
         stompClient.send("/app/register", {}, {});

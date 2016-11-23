@@ -4,21 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-/**
- * @author Leo Zulfiu
- *         created on 22.11.2016
- */
 @Service
-public class ViewerPublishService {
+public class GameViewerPublishService {
     private SimpMessagingTemplate template;
 
     @Autowired
-    public ViewerPublishService(SimpMessagingTemplate template) {
+    public GameViewerPublishService(SimpMessagingTemplate template) {
         this.template = template;
     }
 
-    public void publish(String action) {
+    public void publish(State state) {
         //TODO: fitler and prepare state for broadcasting
-        template.convertAndSend("/topic/poker_updates", action);
+        template.convertAndSend("/topic/poker_updates", state);
     }
 }

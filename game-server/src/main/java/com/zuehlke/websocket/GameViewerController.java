@@ -6,17 +6,17 @@ import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class ViewerService {
+public class GameViewerController {
     private GameStateAdapter gameStateAdapter;
 
     @Autowired
-    public ViewerService(GameStateAdapter gameStateAdapter) {
+    public GameViewerController(GameStateAdapter gameStateAdapter) {
         this.gameStateAdapter = gameStateAdapter;
     }
 
     @MessageMapping("/register")
     @SendToUser("/topic/poker_register")
-    public GameStateAdapter.State register() throws Exception {
+    public State register() throws Exception {
         return gameStateAdapter.getState();
     }
 }

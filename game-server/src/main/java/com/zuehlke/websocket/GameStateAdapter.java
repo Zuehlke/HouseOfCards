@@ -5,10 +5,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Leo Zulfiu
- *         created on 22.11.2016
- */
 @Service
 public class GameStateAdapter {
     public State getState(){
@@ -19,23 +15,5 @@ public class GameStateAdapter {
         State state = new State(300, players);
 
         return state;
-    }
-
-    public static class State {
-        int pot;
-        List<String> players;
-
-        public State(int pot, List<String> players) {
-            this.pot = pot;
-            this.players = players;
-        }
-
-        public int getPot() {
-            return pot;
-        }
-
-        public List<String> getPlayers() {
-            return players;
-        }
     }
 }
