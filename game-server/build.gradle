@@ -36,6 +36,14 @@ dependencies {
     // end::actuator[]
 
     compile('org.springframework.boot:spring-boot-devtools')
+    compile('org.springframework:spring-messaging')
+    compile('org.springframework.boot:spring-boot-starter-websocket')
+
+    //JavaScript dependencies
+    compile('org.webjars:sockjs-client:1.1.1')
+    compile('org.webjars:stomp-websocket:2.3.3')
+    compile('org.webjars:jquery:3.1.0')
+    compile('org.webjars:bootstrap:3.1.0')
 
     testCompile("junit:junit")
 }

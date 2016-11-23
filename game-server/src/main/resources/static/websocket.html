@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Websockets Example</title>
+
+    <script src="/webjars/jquery/3.1.0/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/1.1.1/sockjs.js"></script>
+    <script src="/webjars/stomp-websocket/2.3.3/stomp.js"></script>
+    <script src="app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>WebSockets Example</h1>
+        <div id="connectionState"></div>
+
+
+        <button id="connect" type="button" class="btn btn-primary">Connect</button>
+        <button id="disconnect" type="button" class="btn btn-danger">Disconnect</button>
+
+        <h2>List</h2>
+        <ul id="myList">
+
+        </ul>
+    </div>
+</body>
+</html>
