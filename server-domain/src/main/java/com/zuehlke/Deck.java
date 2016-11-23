@@ -1,3 +1,7 @@
+package com.zuehlke;
+
+import com.zuehlke.Exceptions.EmptyDeckException;
+
 import java.util.*;
 
 
@@ -33,19 +37,11 @@ public class Deck {
         }
     }
 
-    /**
-     * Shuffle the cards of the deck.
-     */
     public void shuffle() {
         Collections.shuffle(cards, random);
     }
 
-    /**
-     * Draw a single card from the deck.
-     * @return top card of the deck
-     * @throws EmptyDeckException
-     */
-    public int drawCard() throws EmptyDeckException {
+    public int drawCard() {
         int card;
         try {
             card = cards.pop();
@@ -59,17 +55,7 @@ public class Deck {
         return cards.size();
     }
 
-    /**
-     * Returns all the cards from the current deck.
-     * @return List of cards of the current deck
-     */
     public List<Integer> getAllCards() {
         return new ArrayList<>(cards);
-    }
-
-    public class EmptyDeckException extends Exception {
-        public EmptyDeckException(String message) {
-            super(message);
-        }
     }
 }
