@@ -10,8 +10,15 @@
 # Mongo Explorer plugin:
 .idea/mongoSettings.xml
 
-# Build directory
+# Build artifacts
 classes/
+bot-domain/build/
+bot-server/build/
+game-domain/build/
+game-server/build/
+
+# Gradle
+.gradle/
 
 ## File-based project format:
 *.iws
