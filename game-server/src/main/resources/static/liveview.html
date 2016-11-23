@@ -13,17 +13,20 @@
 </head>
 <body>
     <div class="container">
-        <h1>WebSockets Example</h1>
-        <div id="connectionState"></div>
-
-
-        <button id="connect" type="button" class="btn btn-primary">Connect</button>
-        <button id="disconnect" type="button" class="btn btn-danger">Disconnect</button>
-
-        <h2>List</h2>
-        <ul id="myList">
-
+        <h1>Noker Liveview</h1>
+        <ul class="list-inline">
+            <li><button id="connect" type="button" class="btn btn-primary">Connect</button></li>
+            <li><button id="disconnect" type="button" class="btn btn-danger">Disconnect</button></li>
+            <li>
+                <ul class="list-inline">
+                    <li><p>Connection status: </p></li>
+                    <li><div id="connectionState"></div></li>
+                </ul>
+            </li>
         </ul>
+
+        <h2>Game States</h2>
+        <ul id="stateList"></ul>
     </div>
 </body>
 </html>

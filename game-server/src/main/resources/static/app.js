@@ -9,10 +9,16 @@ function setConnected(connected) {
 }
 
 function addToList(content) {
-    $("#myList").append("<li>" + content + "</li>");
+    $("#stateList").append("<li>" + content + "</li>");
 }
 
 function connect() {
+    //if already connected
+    if (stompClient != null) {
+        if (stompClient.connected) {
+            return;
+        }
+    }
     var socket = new SockJS('http://localhost:8080/live_view');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
@@ -43,4 +49,3 @@ $(function () {
     $("#connect").click(function() { connect(); });
     $("#disconnect").click(function() { disconnect(); });
 });
-

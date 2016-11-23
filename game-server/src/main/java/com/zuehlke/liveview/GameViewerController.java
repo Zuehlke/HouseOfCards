@@ -1,4 +1,4 @@
-package com.zuehlke.websocket;
+package com.zuehlke.liveview;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -16,7 +16,7 @@ public class GameViewerController {
 
     @MessageMapping("/register")
     @SendToUser("/topic/poker_register")
-    public State register() throws Exception {
-        return gameStateAdapter.getState();
+    public ViewState register() throws Exception {
+        return gameStateAdapter.getViewState();
     }
 }

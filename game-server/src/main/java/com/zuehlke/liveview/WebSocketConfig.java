@@ -1,4 +1,4 @@
-package com.zuehlke.websocket;
+package com.zuehlke.liveview;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

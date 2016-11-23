@@ -1,4 +1,4 @@
-package com.zuehlke.websocket;
+package com.zuehlke.liveview;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -13,8 +13,7 @@ public class GameViewerPublishService {
         this.template = template;
     }
 
-    public void publish(State state) {
-        //TODO: fitler and prepare state for broadcasting
-        template.convertAndSend("/topic/poker_updates", state);
+    public void publish(ViewState viewState) {
+        template.convertAndSend("/topic/poker_updates", viewState);
     }
 }
