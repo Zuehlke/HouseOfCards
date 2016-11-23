@@ -8,10 +8,6 @@ import static org.junit.Assert.*;
 
 public class DeckTest {
 
-    // The times that a single card appears in one deck
-    // => there exist 4 cards of the same value per deck
-    private static final int TIMES_OF_CARD_IN_DECK = 4;
-
     private Deck deck;
 
     @Before
@@ -34,7 +30,7 @@ public class DeckTest {
         List<Integer> cards = deck.getAllCards();
         cards.forEach(card -> cardCounter.put(card, cardCounter.get(card) + 1));
 
-        cardCounter.forEach((card, amount) -> assertEquals((int) amount, TIMES_OF_CARD_IN_DECK));
+        cardCounter.forEach((card, amount) -> assertEquals((int) amount, Deck.TIMES_OF_SINGLE_CARD_CONTAINED_IN_DECK));
     }
 
     @Test

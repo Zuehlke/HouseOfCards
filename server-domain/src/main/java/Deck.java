@@ -66,7 +66,7 @@ public class Deck {
     public List<Integer> getAllCards() {
         return new ArrayList<>(cards);
     }
-    
+
     public class EmptyDeckException extends Exception {
         public EmptyDeckException(String message) {
             super(message);
