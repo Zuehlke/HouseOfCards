@@ -2,6 +2,7 @@ package com.zuehlke.hoc;
 
 import com.zuehlke.hoc.actors.DefaultActorSystem;
 import com.zuehlke.hoc.actors.IEngineActor;
+import com.zuehlke.hoc.rest.RegisterMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class NokerController {
 
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public void register(@RequestBody Bot input) {
+    public void register(@RequestBody RegisterMessage input) {
         IEngineActor gameEng = actorSystem.getGameEngine();
         gameEng.registerPlayer(input);
     }

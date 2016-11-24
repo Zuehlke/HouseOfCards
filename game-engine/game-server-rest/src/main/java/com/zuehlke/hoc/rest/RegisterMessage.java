@@ -2,7 +2,7 @@ package com.zuehlke.hoc.rest;
 
 import java.util.Objects;
 
-public class Bot {
+public class RegisterMessage {
 
     private String name;
     private String hostname;
@@ -12,7 +12,7 @@ public class Bot {
         return name;
     }
 
-    public Bot setName(String name) {
+    public RegisterMessage setName(String name) {
         this.name = name;
         return this;
     }
@@ -21,7 +21,7 @@ public class Bot {
         return hostname;
     }
 
-    public Bot setHostname(String hostname) {
+    public RegisterMessage setHostname(String hostname) {
         this.hostname = hostname;
         return this;
     }
@@ -30,7 +30,7 @@ public class Bot {
         return port;
     }
 
-    public Bot setPort(int port) {
+    public RegisterMessage setPort(int port) {
         this.port = port;
         return this;
     }
@@ -39,9 +39,9 @@ public class Bot {
     public boolean equals(Object other) {
         if (other == null) { return false; }
         else if (other == this) { return true; }
-        else if (!(other instanceof Bot)) { return false; }
+        else if (!(other instanceof RegisterMessage)) { return false; }
         else {
-            Bot otherBot = (Bot) other;
+            RegisterMessage otherBot = (RegisterMessage) other;
             return Objects.equals(getName(), otherBot.getName()) &&
                     Objects.equals(getHostname(), otherBot.getHostname()) &&
                     Objects.equals(getPort(), otherBot.getPort());
