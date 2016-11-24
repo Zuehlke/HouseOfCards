@@ -1,5 +1,6 @@
 package com.zuehlke.hoc;
 
+import com.zuehlke.hoc.actors.BotNotifier;
 import com.zuehlke.hoc.actors.DefaultActorSystem;
 import com.zuehlke.hoc.actors.IEngineActor;
 import com.zuehlke.hoc.rest.RegisterMessage;
@@ -18,17 +19,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class NokerController {
 
     private static final Logger log = LoggerFactory.getLogger(NokerController.class.getName());
+    private final BotNotifier botNotifier;
 
     private DefaultActorSystem actorSystem;
 
-    public NokerController(@Autowired DefaultActorSystem actorSystem) {
+
+    @Autowired
+    public NokerController(DefaultActorSystem actorSystem, BotNotifier botNotifier) {
         this.actorSystem = actorSystem;
+        this.botNotifier = botNotifier;
     }
 
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public void register(@RequestBody RegisterMessage input) {
         IEngineActor gameEng = actorSystem.getGameEngine();
-        gameEng.registerPlayer(input);
+        gameEng.registerPlayer(input.getName());
     }
 }

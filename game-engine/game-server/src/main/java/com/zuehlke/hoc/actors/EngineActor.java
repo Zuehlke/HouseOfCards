@@ -2,7 +2,7 @@ package com.zuehlke.hoc.actors;
 
 import akka.actor.ActorContext;
 import akka.actor.TypedActor;
-import com.zuehlke.hoc.HelloService;
+import com.zuehlke.hoc.*;
 import com.zuehlke.hoc.rest.RegisterMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,23 +15,25 @@ import java.util.Map;
 
 public class EngineActor implements IEngineActor {
 
-    private static final Logger log = LoggerFactory.getLogger(EngineActor.class.getName());
+    private final Game game;
+    private final BotNotifier botNotifier;
 
-    private final List<String> bots;
-
-    public EngineActor(HelloService helloService){
-         this.bots = new ArrayList<>();
+    public EngineActor(HelloService helloService, BotNotifier botNotifier){
+         this.game = new NokerGame();
+         this.botNotifier = botNotifier;
     }
 
-    public void registerPlayer(RegisterMessage bot) {
-        bots.add(bot.getName());
+    public void registerPlayer(String botName) {
+        game.addPlayer(new Player(botName));
+        if(game.isReady()){
+            game.start();
+            botNotifier.gameStartEvent();
+            sendPlayerInfo();
+        }
+    }
 
-        log.info("Current bots: " + bots.stream().reduce("", (a, b) -> a += (b + ", ")));
-/*
-        helloService.registerReply();
-         = new RestTemplate();
-        String s = response.postForObject(bot.getHostname(), bot, String.class);
-*/
+    private void sendPlayerInfo() {
+        game.getPlayers().forEach(p -> botNotifier.sendPlayerInfo(p));
     }
 
 

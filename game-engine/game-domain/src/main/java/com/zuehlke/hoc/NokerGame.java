@@ -3,6 +3,7 @@ package com.zuehlke.hoc;
 import com.zuehlke.hoc.Exceptions.ExceededMaxPlayersException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
 public class NokerGame implements Game {
 
     public final static long INITIAL_CHIPS = 100;
-    public final static int MIN_NUM_OF_PLAYERS = 2;
+    public final static int MIN_NUM_OF_PLAYERS = 3;
     public final static int CARDS_PER_PLAYER = 2;
     public static final int MAX_NUM_OF_PLAYERS = Deck.NUM_CARDS_OF_SINGLE_DECK/CARDS_PER_PLAYER;
 
@@ -28,6 +29,11 @@ public class NokerGame implements Game {
         } else {
             throw new ExceededMaxPlayersException("Could not add player. Exceeded the maximum number of players.");
         }
+    }
+
+    @Override
+    public List<Player> getPlayers() {
+        return Collections.unmodifiableList(players);
     }
 
     public boolean isReady() {
