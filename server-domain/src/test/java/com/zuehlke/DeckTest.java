@@ -1,3 +1,7 @@
+package com.zuehlke;
+
+import com.zuehlke.Exceptions.EmptyDeckException;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,15 +26,15 @@ public class DeckTest {
             cardCounter.put(i, 0);
         }
 
-        assertEquals(deck.getSize(), 0);
+        Assert.assertEquals(deck.getSize(), 0);
 
         deck.initialize();
-        assertEquals(deck.getSize(), Deck.NUM_CARDS_OF_SINGLE_DECK);
+        Assert.assertEquals(deck.getSize(), Deck.NUM_CARDS_OF_SINGLE_DECK);
 
         List<Integer> cards = deck.getAllCards();
         cards.forEach(card -> cardCounter.put(card, cardCounter.get(card) + 1));
 
-        cardCounter.forEach((card, amount) -> assertEquals((int) amount, Deck.TIMES_OF_SINGLE_CARD_CONTAINED_IN_DECK));
+        cardCounter.forEach((card, amount) -> Assert.assertEquals((int) amount, Deck.TIMES_OF_SINGLE_CARD_CONTAINED_IN_DECK));
     }
 
     @Test
@@ -40,33 +44,33 @@ public class DeckTest {
 
         deck.shuffle();
         List<Integer> shuffledCards = deck.getAllCards();
-        assertEquals(shuffledCards.size(), Deck.NUM_CARDS_OF_SINGLE_DECK);
+        Assert.assertEquals(shuffledCards.size(), Deck.NUM_CARDS_OF_SINGLE_DECK);
         assertNotEquals(unshuffledCards, shuffledCards);
     }
 
     @Test
-    public void drawingCardsReducesDeckSize() throws Deck.EmptyDeckException {
+    public void drawingCardsReducesDeckSize() {
         deck.initialize();
         deck.shuffle();
 
-        assertEquals(deck.getSize(), Deck.NUM_CARDS_OF_SINGLE_DECK);
+        Assert.assertEquals(deck.getSize(), Deck.NUM_CARDS_OF_SINGLE_DECK);
 
         int cardsToDraw = 10;
         for (int i = 0; i < cardsToDraw; i++) {
             deck.drawCard();
         }
-        assertEquals(deck.getSize(), Deck.NUM_CARDS_OF_SINGLE_DECK - cardsToDraw);
-        assertEquals(deck.getAllCards().size(), Deck.NUM_CARDS_OF_SINGLE_DECK - cardsToDraw);
+        Assert.assertEquals(deck.getSize(), Deck.NUM_CARDS_OF_SINGLE_DECK - cardsToDraw);
+        Assert.assertEquals(deck.getAllCards().size(), Deck.NUM_CARDS_OF_SINGLE_DECK - cardsToDraw);
         cardsToDraw = deck.getSize();
         for (int i = 0; i < cardsToDraw; i++) {
             deck.drawCard();
         }
-        assertEquals(deck.getSize(), 0);
-        assertEquals(deck.getAllCards().size(), 0);
+        Assert.assertEquals(deck.getSize(), 0);
+        Assert.assertEquals(deck.getAllCards().size(), 0);
     }
 
-    @Test(expected = Deck.EmptyDeckException.class)
-    public void drawCardOfEmptyDeck() throws Deck.EmptyDeckException {
+    @Test(expected = EmptyDeckException.class)
+    public void drawCardOfEmptyDeck() {
         deck.initialize();
         deck.shuffle();
 
@@ -79,7 +83,7 @@ public class DeckTest {
     }
 
     @Test
-    public void drawnCardComesFromTopOfTheDeck() throws Deck.EmptyDeckException {
+    public void drawnCardComesFromTopOfTheDeck() {
         deck.initialize();
         deck.shuffle();
 
