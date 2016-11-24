@@ -1,5 +1,5 @@
-include 'game-server' //the spring boot game server
-include 'game-domain' // the domain of the noker game
-include 'bot:bot-server'
-include 'game-engine'
-
+include 'bot:bot-server' // the AKKA server with the bot
+include 'bot:bot-domain' // the domain of the example bot
+include 'game-engine:game-server' //the spring boot game server
+include 'game-engine:game-domain' // the domain of the noker game
+include 'game-engine:game-server-rest' // rest endpoint messages
