@@ -11,12 +11,8 @@
 .idea/mongoSettings.xml
 
 # Build artifacts
-build/
 classes/
-bot-domain/build/
-bot-server/build/
-game-domain/build/
-game-server/build/
+**/build/
 
 # Gradle
 .gradle/
