@@ -18,10 +18,7 @@ public class Application {
             String teamname = args[1];
             int port = Integer.parseInt(args[2]);
 
-            RegisterMessage registerMessage = new RegisterMessage();
-            registerMessage.setName(teamname);
-            registerMessage.setHostname(uri);
-            registerMessage.setPort(port);
+            RegisterMessage registerMessage = createRegisterMessage(uri, teamname, port);
 
             ActorSystem system = ActorSystem.create();
             ActorRef a = system.actorOf(Props.create(HttpClientActor.class), "httpclient");
@@ -30,5 +27,13 @@ public class Application {
         } else {
             System.out.println("Usage: nokerbot <competitionrunner URI>");
         }
+    }
+
+    private static RegisterMessage createRegisterMessage(String uri, String teamname, int port) {
+        RegisterMessage registerMessage = new RegisterMessage();
+        registerMessage.setName(teamname);
+        registerMessage.setHostname(uri);
+        registerMessage.setPort(port);
+        return registerMessage;
     }
 }
