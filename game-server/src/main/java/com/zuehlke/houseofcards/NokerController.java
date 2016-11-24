@@ -26,7 +26,7 @@ public class NokerController {
     }
 
 
-    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
     public void register(@RequestBody Bot input) {
         IEngineActor gameEng = actorSystem.getGameEngine();
         gameEng.registerPlayer(input);
