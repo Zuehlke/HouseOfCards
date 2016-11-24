@@ -39,11 +39,9 @@ public class NokerGame implements Game {
     }
 
     public void start() {
-        players.forEach(p -> p.setChips(INITIAL_CHIPS));
+        players.forEach(p -> p.setChipsStack(INITIAL_CHIPS));
         match = new Match(getRotatedPlayersForNextMatch(), deck);
-
         firstPlayerPosition = RoundRobin.getNextStartPosition(players,firstPlayerPosition);
-        match.shuffleDeck();
         match.dealFirstCard();
     }
 

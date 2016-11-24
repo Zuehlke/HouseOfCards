@@ -7,34 +7,60 @@ import java.util.List;
 
 public class Match {
 
-    private List<Player> players;
-    private Deck deck;
-    private Player currentPlayer;
-    private int currentRound = 0;
-    private long pot = 0;
+    private State state;
 
     /**
      * Init an new match.
-     * @param players in the correct turn order
+     * @param players already in the correct order of turns
      */
     public Match(List<Player> players, Deck deck) {
-        this.players = players;
-        this.deck = deck;
         deck.initialize();
-        currentPlayer = players.get(0);
+        deck.shuffle();
+        state = new State(players, deck, players.get(0), 0, 0);
     }
 
     public void dealFirstCard() {
-        players.forEach(p -> p.setFirstCard(deck.drawCard()));
+        state.getPlayers().forEach(p -> p.setFirstCard(state.getDeck().drawCard()));
     }
 
-    public void shuffleDeck() {
-        deck.shuffle();
+    public Player getCurrentPlayer() {
+        return state.getCurrentPlayer();
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        state.setCurrentPlayer(currentPlayer);
+    }
+
+    public int getCurrentRound() {
+        return state.getCurrentRound();
+    }
+
+    public void setCurrentRound(int currentRound) {
+        state.setCurrentRound(currentRound);
+    }
+
+    public long getPot() {
+        return state.getPot();
+    }
+
+    public void setPot(long pot) {
+        state.setPot(pot);
+    }
+
+    public void incrementPot(long amountOfChips) {
+        state.setPot(state.getPot() + amountOfChips);
+    }
+
+    public void decrementPot(long amountOfChips) {
+        state.setPot(state.getPot() - amountOfChips);
+    }
+
+    public Deck getDeck() {
+        return state.getDeck();
     }
 
     public List<Player> getAllPlayers() {
-        return new ArrayList<>(players);
+        return new ArrayList<>(state.getPlayers());
     }
 
-    // TODO: implement state machine
 }

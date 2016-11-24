@@ -5,7 +5,7 @@ package com.zuehlke;
 public class Player {
 
     private String name;
-    private long chips;
+    private long chipsStack;
     private int firstCard;
     private int secondCard;
 
@@ -33,11 +33,19 @@ public class Player {
         return name;
     }
 
-    public long getChips() {
-        return chips;
+    public long getChipsStack() {
+        return chipsStack;
     }
 
-    public void setChips(long chips) {
-        this.chips = chips;
+    public void setChipsStack(long chipsStack) {
+        this.chipsStack = chipsStack;
+    }
+
+    public void increaseChipsStack(long amountOfChips) {
+        chipsStack += amountOfChips;
+    }
+
+    public void decreaseChipsStack(long amountOfChips) {
+        chipsStack -= amountOfChips;
     }
 }

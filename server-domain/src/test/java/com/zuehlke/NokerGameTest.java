@@ -58,7 +58,7 @@ public class NokerGameTest {
         game.addPlayer(new Player("John"));
         game.addPlayer(new Player("Pete"));
         game.start();
-        game.getAllPlayers().forEach(p -> Assert.assertEquals(p.getChips(), NokerGame.INITIAL_CHIPS));
+        game.getAllPlayers().forEach(p -> Assert.assertEquals(p.getChipsStack(), NokerGame.INITIAL_CHIPS));
     }
 
 //    TODO: test when matchmaking is implemented
