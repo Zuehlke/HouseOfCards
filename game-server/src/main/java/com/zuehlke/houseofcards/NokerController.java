@@ -2,9 +2,11 @@ package com.zuehlke.houseofcards;
 
 import com.zuehlke.houseofcards.actors.DefaultActorSystem;
 import com.zuehlke.houseofcards.actors.IEngineActor;
+import com.zuehlke.houseofcards.dto.Bot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,11 +26,9 @@ public class NokerController {
     }
 
 
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public void register() {
-        IEngineActor gameEng = actorSystem.getGameEng();
-        gameEng.registerPlayer("one", "localhost:3333");
-        gameEng.testSend();
-
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public void register(@RequestBody Bot input) {
+        IEngineActor gameEng = actorSystem.getGameEngine();
+        gameEng.registerPlayer(input);
     }
 }

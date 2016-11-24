@@ -1,7 +1,9 @@
 package com.zuehlke.houseofcards.actors;
 
-public interface IEngineActor {
-    void registerPlayer(String nickname, String callBackUrl);
+import com.zuehlke.houseofcards.dto.Bot;
 
-    void testSend();
+public interface IEngineActor {
+
+    void registerPlayer(Bot bot);
+
 }
