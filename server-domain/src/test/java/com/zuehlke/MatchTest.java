@@ -41,12 +41,8 @@ public class MatchTest {
     @Test
     public void dealFirstCardDeckIsUpdated() {
         Deck deck = new Deck();
-        deck.initialize();
-        deck.shuffle();
-
         Match testMatch = new Match(players, deck);
         testMatch.dealFirstCard();
-
-        assertEquals(testMatch.getDeck().getSize(), Deck.NUM_CARDS_OF_SINGLE_DECK - players.size());
+        assertEquals(Deck.NUM_CARDS_OF_SINGLE_DECK - players.size(), testMatch.getDeck().getSize());
     }
 }
