@@ -1,8 +1,6 @@
 package com.zuehlke.houseofcards;
 
 import com.zuehlke.houseofcards.Exceptions.ExceededMaxPlayersException;
-import com.zuehlke.houseofcards.NokerGame;
-import com.zuehlke.houseofcards.Player;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

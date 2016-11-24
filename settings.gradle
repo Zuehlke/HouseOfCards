@@ -1,4 +1,5 @@
 include 'game-server' //the spring boot game server
 include 'game-domain' // the domain of the noker game
-include 'bot-domain' // the domain of the example bot
-include 'bot-server' // the spring boot server with the boot
+include 'bot:bot-server'
+include 'game-engine'
+

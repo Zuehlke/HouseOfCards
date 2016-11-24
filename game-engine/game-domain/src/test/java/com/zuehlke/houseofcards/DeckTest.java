@@ -1,6 +1,5 @@
 package com.zuehlke.houseofcards;
 
-import com.zuehlke.houseofcards.Deck;
 import com.zuehlke.houseofcards.Exceptions.EmptyDeckException;
 import org.junit.Assert;
 import org.junit.Before;

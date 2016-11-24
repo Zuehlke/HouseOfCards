@@ -5,15 +5,16 @@ apply plugin: 'java'
 apply plugin: 'scala'
 
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+jar {
+    baseName = 'bot-server'
+    version =  '0.1.0'
+}
 
 repositories {
     mavenCentral()
 }
-
-tasks.withType(ScalaCompile) {
-    scalaCompileOptions.useAnt = false
-}
-
 
 dependencies {
     compile group: 'com.typesafe.akka', name: 'akka-actor_2.11', version: '2.4.12'

@@ -1,8 +1,5 @@
 package com.zuehlke.houseofcards;
 
-import com.zuehlke.houseofcards.Deck;
-import com.zuehlke.houseofcards.Match;
-import com.zuehlke.houseofcards.Player;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
