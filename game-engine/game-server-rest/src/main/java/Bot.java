@@ -1,9 +1,6 @@
-package com.zuehlke.houseofcards.dto;
-
-
 import java.util.Objects;
 
-public class Bot extends BaseDTO<Bot> {
+public class Bot {
 
     private String name;
     private String hostname;
