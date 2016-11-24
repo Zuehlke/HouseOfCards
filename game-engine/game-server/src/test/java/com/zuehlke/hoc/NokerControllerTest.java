@@ -1,5 +1,6 @@
 package com.zuehlke.hoc;
 
+import com.zuehlke.hoc.rest.RegisterMessage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,23 +46,20 @@ public class NokerControllerTest {
     @Test
     public void register() throws Exception {
 
-        Bot bot = new Bot()
+        RegisterMessage request = new RegisterMessage()
                 .setName("Francis Underwood")
                 .setHostname("localhost")
                 .setPort(2222);
 
 
-        String request = json(bot);
+        String requestJson = json(request);
         this.mvc.perform(
                 post("/noker/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(request)
+                        .content(requestJson)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(""));
-
-
-
     }
 
     protected String json(Object o) throws IOException {
