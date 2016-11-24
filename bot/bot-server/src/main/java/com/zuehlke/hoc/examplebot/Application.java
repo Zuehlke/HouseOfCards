@@ -15,11 +15,13 @@ public class Application {
 
         if (args.length > 0 && args[0] != null && !args[0].isEmpty()) {
             String uri = args[0];
+            String teamname = args[1];
+            int port = Integer.parseInt(args[2]);
 
             RegisterMessage registerMessage = new RegisterMessage();
-            registerMessage.setName("The Necomers");
+            registerMessage.setName(teamname);
             registerMessage.setHostname(uri);
-            registerMessage.setPort(8081);
+            registerMessage.setPort(port);
 
             ActorSystem system = ActorSystem.create();
             ActorRef a = system.actorOf(Props.create(HttpClientActor.class), "httpclient");
