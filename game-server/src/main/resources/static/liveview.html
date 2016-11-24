@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Websockets Example</title>
+
+    <link href="/webjars/bootstrap/3.1.0/css/bootstrap.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <script src="/webjars/jquery/3.1.0/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/1.1.1/sockjs.js"></script>
+    <script src="/webjars/stomp-websocket/2.3.3/stomp.js"></script>
+    <script src="app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Noker Liveview</h1>
+        <ul class="list-inline">
+            <li><button id="connect" type="button" class="btn btn-primary">Connect</button></li>
+            <li><button id="disconnect" type="button" class="btn btn-danger">Disconnect</button></li>
+            <li><p>Connection status: </p></li>
+            <li><div id="connectionState"></div></li>
+        </ul>
+
+        <h2>Game States</h2>
+        <ul id="stateList"></ul>
+    </div>
+</body>
+</html>
