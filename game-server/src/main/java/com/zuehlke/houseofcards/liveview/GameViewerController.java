@@ -1,4 +1,4 @@
-package com.zuehlke.liveview;
+package com.zuehlke.houseofcards.liveview;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;

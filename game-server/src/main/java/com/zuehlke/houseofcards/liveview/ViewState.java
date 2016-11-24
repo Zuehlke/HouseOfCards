@@ -1,4 +1,4 @@
-package com.zuehlke.liveview;
+package com.zuehlke.houseofcards.liveview;
 
 import java.util.List;
 import java.util.Map;
