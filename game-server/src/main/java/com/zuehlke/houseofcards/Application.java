@@ -1,7 +1,6 @@
-package hello;
+package com.zuehlke.houseofcards;
 
 import java.util.Arrays;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -19,6 +18,10 @@ public class Application {
         for (String beanName : beanNames) {
             System.out.println(beanName);
         }
+
+        //ActorSystem system = ctx.getBean(ActorSystem.class);
+        //SpringExtension ext = ctx.getBean(SpringExtension.class);
+        //ActorRef supervisor = system.actorOf(ext.props("PlayerSupervisorActor"), "PlayerSupervisorActor");
     }
 
 }
