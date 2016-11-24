@@ -1,9 +1,9 @@
-package com.zuehlke.houseofcards;
+package com.zuehlke.houseofcards.actors;
 
 import akka.actor.ActorSystem;
 import akka.actor.TypedActor;
 import akka.actor.TypedProps;
-import akka.japi.Creator;
+import com.zuehlke.houseofcards.HelloService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,6 @@
-package com.zuehlke.houseofcards;
+package com.zuehlke.houseofcards.actors;
+
+import com.zuehlke.houseofcards.HelloService;
 
 public class EngineActor implements IEngineActor {
 
