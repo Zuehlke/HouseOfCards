@@ -12,7 +12,7 @@ public class Application {
 
     public static void main(String[] args) {
 
-        if (args[0] != null && !args[0].isEmpty()) {
+        if (args.length > 0 && args[0] != null && !args[0].isEmpty()) {
             String uri = args[0];
 
             ActorSystem system = ActorSystem.create();
@@ -20,7 +20,8 @@ public class Application {
 
             Http.get(system)
                     .singleRequest(HttpRequest.create(uri), materializer);
+        } else {
+            //TODO: print a log message if no args provided
         }
-
     }
 }
