@@ -21,7 +21,7 @@ public class Application {
             Http.get(system)
                     .singleRequest(HttpRequest.create(uri), materializer);
         } else {
-            //TODO: print a log message if no args provided
+            System.out.println("Usage: nokerbot <competitionrunner URI>");
         }
     }
 }
