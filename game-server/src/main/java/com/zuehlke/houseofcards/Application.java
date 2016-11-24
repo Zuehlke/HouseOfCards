@@ -1,4 +1,4 @@
-package com.zuehlke;
+package com.zuehlke.houseofcards;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

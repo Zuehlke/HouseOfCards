@@ -12,8 +12,23 @@ repositories {
     mavenCentral()
 }
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-tomcat:1.4.2.RELEASE")
     compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.springframework.boot:spring-boot-starter-test")
+    compile('org.springframework.boot:spring-boot-starter-web:1.4.2.RELEASE')
+    compile('org.springframework.boot:spring-boot-devtools')
+    compile(group: 'com.typesafe.akka', name: 'akka-actor_2.11', version: '2.4.14')
     testCompile("junit:junit:4.12")
 }
