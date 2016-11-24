@@ -1,11 +1,12 @@
 package com.zuehlke.hoc.examplebot;
 
+import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
-import akka.http.javadsl.Http;
-import akka.http.javadsl.model.HttpRequest;
-import akka.stream.ActorMaterializer;
+import akka.actor.Props;
+import com.zuehlke.hoc.rest.RegisterMessage;
 
 /**
+ * Command line applcation to start a bot. The bot will register itself at the competition runner and play the noker game according the rules.
  * @author Lukas Hofmaier
  */
 public class Application {
@@ -15,11 +16,15 @@ public class Application {
         if (args.length > 0 && args[0] != null && !args[0].isEmpty()) {
             String uri = args[0];
 
-            ActorSystem system = ActorSystem.create();
-            ActorMaterializer materializer = ActorMaterializer.create(system);
+            RegisterMessage registerMessage = new RegisterMessage();
+            registerMessage.setName("The Necomers");
+            registerMessage.setHostname(uri);
+            registerMessage.setPort(8081);
 
-            Http.get(system)
-                    .singleRequest(HttpRequest.create(uri), materializer);
+            ActorSystem system = ActorSystem.create();
+            ActorRef a = system.actorOf(Props.create(HttpClientActor.class), "httpclient");
+            a.tell(registerMessage, ActorRef.noSender());
+
         } else {
             System.out.println("Usage: nokerbot <competitionrunner URI>");
         }
