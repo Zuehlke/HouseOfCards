@@ -1,5 +1,6 @@
-package com.zuehlke;
+package com.zuehlke.houseofcards;
 
+import com.zuehlke.houseofcards.RoundRobin;
 import org.junit.Test;
 
 import java.util.Arrays;

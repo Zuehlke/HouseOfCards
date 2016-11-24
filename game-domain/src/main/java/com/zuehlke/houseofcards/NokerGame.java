@@ -1,6 +1,6 @@
-package com.zuehlke;
+package com.zuehlke.houseofcards;
 
-import com.zuehlke.Exceptions.ExceededMaxPlayersException;
+import com.zuehlke.houseofcards.Exceptions.ExceededMaxPlayersException;
 
 import java.util.ArrayList;
 import java.util.Iterator;

@@ -1,6 +1,6 @@
-package com.zuehlke;
+package com.zuehlke.houseofcards;
 
-import com.zuehlke.Exceptions.EmptyDeckException;
+import com.zuehlke.houseofcards.Exceptions.EmptyDeckException;
 
 import java.util.*;
 

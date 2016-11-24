@@ -1,6 +1,8 @@
-package com.zuehlke;
+package com.zuehlke.houseofcards;
 
-import com.zuehlke.Exceptions.ExceededMaxPlayersException;
+import com.zuehlke.houseofcards.Exceptions.ExceededMaxPlayersException;
+import com.zuehlke.houseofcards.NokerGame;
+import com.zuehlke.houseofcards.Player;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,9 +66,9 @@ public class NokerGameTest {
 //    TODO: test when matchmaking is implemented
 //    @Test
 //    public void matchFirstPlayerRotation() {
-//        game.addPlayer(new com.zuehlke.Player("John"));
-//        game.addPlayer(new com.zuehlke.Player("Pete"));
-//        game.addPlayer(new com.zuehlke.Player("Tom"));
+//        game.addPlayer(new com.zuehlke.houseofcards.Player("John"));
+//        game.addPlayer(new com.zuehlke.houseofcards.Player("Pete"));
+//        game.addPlayer(new com.zuehlke.houseofcards.Player("Tom"));
 //        => expect first player to be John
 //        game.nextMatch();
 //        => expect first player to be Pete

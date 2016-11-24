@@ -1,4 +1,4 @@
-package com.zuehlke;
+package com.zuehlke.houseofcards;
 
 public interface Game {
 

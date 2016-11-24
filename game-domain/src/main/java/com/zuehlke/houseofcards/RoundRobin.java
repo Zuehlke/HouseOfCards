@@ -1,4 +1,4 @@
-package com.zuehlke;
+package com.zuehlke.houseofcards;
 
 import java.util.Iterator;
 import java.util.List;

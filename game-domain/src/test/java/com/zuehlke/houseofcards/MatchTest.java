@@ -1,5 +1,8 @@
-package com.zuehlke;
+package com.zuehlke.houseofcards;
 
+import com.zuehlke.houseofcards.Deck;
+import com.zuehlke.houseofcards.Match;
+import com.zuehlke.houseofcards.Player;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -27,7 +30,7 @@ public class MatchTest {
         players.add(new Player("John"));
         players.add(new Player("Pete"));
         players.add(new Player("Tom"));
-        match = new com.zuehlke.Match(players, mockedDeck);
+        match = new Match(players, mockedDeck);
     }
 
     @Test

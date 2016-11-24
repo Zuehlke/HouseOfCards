@@ -1,4 +1,4 @@
-package com.zuehlke.Exceptions;
+package com.zuehlke.houseofcards.Exceptions;
 
 
 public class EmptyDeckException extends RuntimeException {
