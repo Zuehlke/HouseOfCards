@@ -1,16 +1,7 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.2.RELEASE")
-    }
-}
-
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-apply plugin: 'spring-boot'
+apply plugin: 'org.springframework.boot'
 
 jar {
     baseName = 'game-server'
@@ -20,7 +11,6 @@ jar {
 repositories {
     mavenCentral()
 }
-
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -34,24 +24,20 @@ idea {
 }
 
 dependencies {
-    // tag::jetty[]
-    compile("org.springframework.boot:spring-boot-starter-web") {
-        exclude module: "spring-boot-starter-tomcat"
-    }
-    compile("org.springframework.boot:spring-boot-starter-jetty")
-    // end::jetty[]
-    // tag::actuator[]
+    compile("org.springframework.boot:spring-boot-starter-tomcat:1.4.2.RELEASE")
     compile("org.springframework.boot:spring-boot-starter-actuator")
-    // end::actuator[]
-
-	
-    compile group: 'com.typesafe.akka', name: 'akka-actor_2.11', version: '2.4.14'
-
-
+    compile("org.springframework.boot:spring-boot-starter-test")
+    compile('org.springframework.boot:spring-boot-starter-web:1.4.2.RELEASE')
     compile('org.springframework.boot:spring-boot-devtools')
-	
-	compile("org.springframework.boot:spring-boot-starter-test")
+    compile('org.springframework:spring-messaging')
+    compile('org.springframework.boot:spring-boot-starter-websocket')
+    compile(group: 'com.typesafe.akka', name: 'akka-actor_2.11', version: '2.4.14')
 
-    testCompile("junit:junit")
+    //JavaScript dependencies
+    compile('org.webjars:sockjs-client:1.1.1')
+    compile('org.webjars:stomp-websocket:2.3.3')
+    compile('org.webjars:jquery:3.1.0')
+    compile('org.webjars:bootstrap:3.1.0')
+
+    testCompile("junit:junit:4.12")
 }
-
