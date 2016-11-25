@@ -18,11 +18,11 @@ public class Round {
         this.roundPlayers = players;
         this.currentPlayer = currentPlayer;
         this.deck = deck;
-        startRound();
     }
 
     public void startRound() {
         dealCard();
+        notifier.askPlayerForAction(currentPlayer);
     }
 
     public void dealCard() {

@@ -17,8 +17,6 @@ public class State {
     public State() {
         registeredPlayers = new ArrayList<>();
         deck = new Deck();
-        deck.initialize();
-        deck.shuffle();
     }
 
     public List<Player> getRegisteredPlayers() {

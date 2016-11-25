@@ -23,6 +23,7 @@ public class Match {
         pot = 0;
 
         round = new Round(matchPlayers, matchPlayers.get(0), deck, notifier);
+        round.startRound();
     }
 
     public void handleMove() {

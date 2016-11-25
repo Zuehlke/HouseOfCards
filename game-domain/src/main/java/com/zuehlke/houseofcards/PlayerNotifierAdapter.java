@@ -17,18 +17,27 @@ public class PlayerNotifierAdapter {
     public void publishStart(Match match) {
         StartInfo startInfo = new StartInfo();
 
-        List<Player> players = match.getMatchPlayers();
-        players.forEach(player -> startInfo.addPlayerInfo(new PlayerInfo(player.getName(), player.getChipsStack())));
+        List<String> players = new ArrayList<>();
+        List<Player> matchPlayers = match.getMatchPlayers();
 
-        notifier.publishStart(startInfo);
+        matchPlayers.forEach(player -> players.add(player.getName()));
+        matchPlayers.forEach(player -> startInfo.addPlayerInfo(new PlayerInfo(player.getName(), player.getChipsStack())));
+
+        GameEvent gameEvent = new GameEvent(players, startInfo.toString());
+
+        publishGameEvent(gameEvent);
     }
 
-    public void publishGameEvent() {
-        notifier.broadcastGameEvent(null);
+    public void publishGameEvent(GameEvent gameEvent) {
+        notifier.broadcast(gameEvent);
     }
 
-    public void askPlayerForAction() {
-        notifier.askPlayerForAction(null);
+    public void askPlayerForAction(Player player) {
+        List<String> recievers = new ArrayList<>();
+        recievers.add(player.getName());
+        GameEvent gameEvent = new GameEvent(recievers, "Your turn!");
+
+        notifier.publishToPlayer(gameEvent);
     }
 
     public void publishToPlayer(DealCardEvent dealCardEvent) {

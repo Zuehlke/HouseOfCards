@@ -14,7 +14,7 @@ public class GameEvent {
     @Override
     public String toString() {
         return "GameEvent{" +
-                "players=" + players +
+                "receiver players=" + players +
                 ", message='" + message + '\'' +
                 '}';
     }
