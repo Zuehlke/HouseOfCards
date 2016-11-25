@@ -1,5 +1,6 @@
 package com.zuehlke.hoc.examplebot;
 
+import akka.camel.CamelMessage;
 import akka.camel.javaapi.UntypedConsumerActor;
 
 /**
@@ -23,7 +24,14 @@ public class HttpReceiverActor extends UntypedConsumerActor {
     }
 
     @Override
-    public void onReceive(Object o) throws Throwable {
+    public void onReceive(Object message) throws Throwable {
+        //incomming HTTP request are sent as CamelMessage to the mailbox of this actor
+        if (message instanceof CamelMessage) {
+            CamelMessage camelMessage = (CamelMessage) message;
 
+            //return a message to the sender. This will return a HTTP response to the HTTP request sender
+            // and close the TCP stream
+            getSender().tell("aye, captain!", getSelf());
+        }
     }
 }
