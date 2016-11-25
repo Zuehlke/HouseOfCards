@@ -29,14 +29,17 @@ public class NokerGame implements Game {
 
     @Override
     public State addPlayer(Player player) {
-        // TODO: fix
-        List<Player> players = gameState.getRegisteredPlayers();
-        if (players.size() == numOfPlayers) {
-            start();
-        } else {
-            players.add(player);
+        if (!allPlayersJoined()) {
+            gameState.getRegisteredPlayers().add(player);
+            if (allPlayersJoined()) {
+                start();
+            }
         }
         return gameState;
+    }
+
+    public boolean allPlayersJoined() {
+        return gameState.getRegisteredPlayers().size() == numOfPlayers;
     }
 
     @Override
