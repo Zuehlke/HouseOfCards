@@ -9,6 +9,8 @@ branches:
 notifications:
   email:
     - 'yannick.streit@zuehlke.com'
+    - 'lukas.hofmaier@zuehlke.com'
+    - 'andreas.albrecht@zuehlke.com'
 
 before_install:
   - chmod +x gradlew
