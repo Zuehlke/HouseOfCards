@@ -3,8 +3,6 @@ package com.zuehlke.houseofcards;
 
 import com.zuehlke.houseofcards.Exceptions.InitGameException;
 
-import java.util.List;
-
 
 /**
  * This class is used for testing the communication between the

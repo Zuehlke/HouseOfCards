@@ -12,6 +12,7 @@ public class State {
     private Deck deck;
     private Player currentPlayer;
     private long pot = 0;
+    private long raiseLimit = 0;
 
     public State() {
         registeredPlayers = new ArrayList<>();
@@ -58,6 +59,14 @@ public class State {
 
     public void decreasePot(long amountOfChips) {
         pot -= amountOfChips;
+    }
+
+    public long getRaiseLimit() {
+        return raiseLimit;
+    }
+
+    public void setRaiseLimit(long raiseLimit) {
+        this.raiseLimit = raiseLimit;
     }
 
     @Override

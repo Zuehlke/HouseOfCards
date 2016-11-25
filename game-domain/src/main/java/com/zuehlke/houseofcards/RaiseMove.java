@@ -14,9 +14,9 @@ public class RaiseMove implements Move {
 
     @Override
     public boolean isValid(State state) {
-        // TODO: check if it's the players turn && amount of chips is valid for call
-        // amount should be equal to the call of last callingPlayer
-        return state.getCurrentPlayer().getName().equals(player);
+        boolean isPlayersTurn = state.getCurrentPlayer().getName().equals(player);
+        boolean raiseAmountIsValid = amountOfChips <= state.getRaiseLimit();
+        return isPlayersTurn && raiseAmountIsValid;
     }
 
     @Override
