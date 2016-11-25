@@ -1,10 +1,6 @@
 package com.zuehlke.houseofcards;
 
-import com.zuehlke.houseofcards.Exceptions.ExceededMaxPlayersException;
-import com.zuehlke.houseofcards.NokerGame;
-import com.zuehlke.houseofcards.Player;
-import org.junit.Assert;
-import org.junit.Before;
+import com.zuehlke.houseofcards.Exceptions.InitGameException;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -12,13 +8,30 @@ import static org.junit.Assert.*;
 
 public class NokerGameTest {
 
-//    private NokerGame game;
+    @Test(expected = InitGameException.class)
+    public void initGameWithTooLittlePlayers() {
+        Game game = new NokerGame(1);
+    }
 
-//    @Before
-//    public void setup() {
-//        game = new NokerGame();
-//    }
+    @Test(expected = InitGameException.class)
+    public void initGameWithZeroPlayers() {
+        Game game = new NokerGame(0);
+    }
 
+    @Test
+    public void initGameWithMaxPlayers() {
+        Game game = new NokerGame(NokerGame.MAX_NUM_OF_PLAYERS);
+        State gameState = null;
+        for (int i = 0; i < NokerGame.MAX_NUM_OF_PLAYERS; i++) {
+            gameState = game.addPlayer(new Player("TestPlayer"));
+        }
+        assertEquals(gameState.getRegisteredPlayers().size(), NokerGame.MAX_NUM_OF_PLAYERS);
+    }
+
+    @Test(expected = InitGameException.class)
+    public void initGameWithTooManyPlayers() {
+        Game game = new NokerGame(NokerGame.MAX_NUM_OF_PLAYERS + 1);
+    }
 
     @Test
     public void addPlayers() {
@@ -41,49 +54,18 @@ public class NokerGameTest {
     }
 
 
-//    @Test
-//    public void addPlayers() {
-//        game.addPlayer(new Player("John"));
-//        game.addPlayer(new Player("Pete"));
-//        Assert.assertEquals(game.getAllPlayers().size(), 2);
-//    }
-//
-//    @Test
-//    public void notEnoughPlayersToStartGame() {
-//        game.addPlayer(new Player("John"));
-//        assertFalse(game.isReady());
-//    }
-//
-//    @Test
-//    public void enoughPlayersToStartGame() {
-//        game.addPlayer(new Player("John"));
-//        game.addPlayer(new Player("Pete"));
-//        assertTrue(game.isReady());
-//    }
-//
-//    @Test
-//    public void addMaximumOfPlayers() {
-//        for (int i = 0; i < NokerGame.MAX_NUM_OF_PLAYERS; i++) {
-//            game.addPlayer(new Player("TestPlayer"));
-//        }
-//    }
-//
-//    @Test(expected = ExceededMaxPlayersException.class)
-//    public void exceedMaximumOfPlayers() {
-//        for (int i = 0; i < NokerGame.MAX_NUM_OF_PLAYERS; i++) {
-//            game.addPlayer(new Player("TestPlayer"));
-//        }
-//        // An exception should be thrown here:
-//        game.addPlayer(new Player("TestPlayer"));
-//    }
-//
-//    @Test
-//    public void distributeInitialChips() {
-//        game.addPlayer(new Player("John"));
-//        game.addPlayer(new Player("Pete"));
-//        game.start();
-//        game.getAllPlayers().forEach(p -> Assert.assertEquals(p.getChipsStack(), NokerGame.INITIAL_CHIPS));
-//    }
+    @Test
+    public void distributeInitialChips() {
+        Game game = new NokerGame(2);
+        game.addPlayer(new Player("John"));
+        State gameState = game.addPlayer(new Player("Pete"));
+
+        gameState.getRegisteredPlayers()
+                .forEach(player -> assertEquals(player.getChipsStack(), NokerGame.INITIAL_CHIPS));
+    }
+
+
+
 
 //    TODO: test when matchmaking is implemented
 //    @Test
@@ -100,4 +82,19 @@ public class NokerGameTest {
 //        => expect first player to be John again
 //    }
 
+//    @Test
+//    public void dealFirstCardPlayersGetCorrectCard() {
+//        match.dealFirstCard();
+//        for (int i = 0; i < match.getAllPlayers().size(); i++) {
+//            assertEquals(match.getAllPlayers().get(i).getFirstCard(), i);
+//        }
+//    }
+//
+//    @Test
+//    public void dealFirstCardDeckIsUpdated() {
+//        Deck deck = new Deck();
+//        Match testMatch = new Match(players, deck);
+//        testMatch.dealFirstCard();
+//        assertEquals(Deck.NUM_CARDS_OF_SINGLE_DECK - players.size(), testMatch.getDeck().getSize());
+//    }
 }

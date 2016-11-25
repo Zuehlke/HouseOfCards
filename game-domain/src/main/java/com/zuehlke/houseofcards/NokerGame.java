@@ -1,6 +1,8 @@
 package com.zuehlke.houseofcards;
 
 
+import com.zuehlke.houseofcards.Exceptions.InitGameException;
+
 import java.util.List;
 
 
@@ -22,6 +24,13 @@ public class NokerGame implements Game {
 
 
     public NokerGame(int numOfPlayers) {
+        if (numOfPlayers < MIN_NUM_OF_PLAYERS) {
+            throw new InitGameException(
+                    String.format("A Noker game requires at least %d players", MIN_NUM_OF_PLAYERS));
+        } else if (numOfPlayers > MAX_NUM_OF_PLAYERS) {
+            throw new InitGameException(
+                    String.format("A Noker game can have a maximum of %d players", MAX_NUM_OF_PLAYERS));
+        }
         gameState = new State();
         this.numOfPlayers = numOfPlayers;
         isReady = false;    // TODO: move to state class?
