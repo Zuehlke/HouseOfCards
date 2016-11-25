@@ -5,20 +5,36 @@ package com.zuehlke.houseofcards;
 public class Main {
     public static void main(String[] args) {
 
-        Table table = new Table(new NokerGame(2));
+        NokerGame game = new NokerGame(2, new PlayerNotifier() {
+            @Override
+            public void publishStart(StartInfo startInfo) {
+                System.out.println(startInfo);
+            }
+
+            @Override
+            public void publishGameEvent(GameEvent event) {
+                System.out.println(event);
+            }
+
+            @Override
+            public void askPlayerFoAction(PlayerAction action) {
+                System.out.println(action);
+            }
+        });
         State currentState;
 
-        currentState = table.registerPlayer("Tom");
-        System.out.println(currentState);
-
-        currentState = table.registerPlayer("Pete");
-        System.out.println(currentState);
-
-        currentState = table.handleMove(new FoldMove("Tom"));
-        currentState = table.handleMove(new FoldMove("Pete"));
+        game.createPlayer("Tom");
+        game.createPlayer("Pete");
 
 
-        currentState = table.handleMove(new RaiseMove("Tom", 50));
+
+
+
+        currentState = game.handleMove(new FoldMove("Tom"));
+        currentState = game.handleMove(new FoldMove("Pete"));
+
+
+        currentState = game.handleMove(new RaiseMove("Tom", 50));
         System.out.println(currentState);
 
 

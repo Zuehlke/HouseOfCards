@@ -70,9 +70,9 @@ public class NokerGameTest {
 //    TODO: test when matchmaking is implemented
 //    @Test
 //    public void matchFirstPlayerRotation() {
-//        game.addPlayer(new com.zuehlke.houseofcards.Player("John"));
-//        game.addPlayer(new com.zuehlke.houseofcards.Player("Pete"));
-//        game.addPlayer(new com.zuehlke.houseofcards.Player("Tom"));
+//        game.createPlayer(new com.zuehlke.houseofcards.Player("John"));
+//        game.createPlayer(new com.zuehlke.houseofcards.Player("Pete"));
+//        game.createPlayer(new com.zuehlke.houseofcards.Player("Tom"));
 //        => expect first player to be John
 //        game.nextMatch();
 //        => expect first player to be Pete
