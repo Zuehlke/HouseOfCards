@@ -17,6 +17,9 @@ dependencies {
     compile('com.typesafe.akka:akka-http-core_2.11:10.0.0')
     compile('com.typesafe.akka:akka-http_2.11:10.0.0')
     compile group: 'com.fasterxml', name: 'jackson-module-json-org', version: '0.9.1'
+    compile('com.typesafe.akka:akka-camel_2.11:2.4.14')
+    compile('org.apache.camel:camel-jetty:2.18.0')
+    compile('ch.qos.logback:logback-classic:1.1.7')
 }
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
