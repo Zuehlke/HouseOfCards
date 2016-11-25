@@ -9,7 +9,7 @@ import com.zuehlke.hoc.rest.RegisterMessage;
  * Command line applcation to start a bot. The bot will register itself at the competition runner and play the noker game according the rules.
  * @author Lukas Hofmaier
  */
-public class Application {
+public class BotApplication {
 
     public static void main(String[] args) {
 
