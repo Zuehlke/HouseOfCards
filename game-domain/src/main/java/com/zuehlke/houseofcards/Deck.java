@@ -26,19 +26,8 @@ public class Deck {
     public Deck() {
         cards = new Stack<>();
         random = new Random();
-    }
-
-    /**
-     * Initialize the deck with {@value Deck#NUM_CARDS_OF_SINGLE_DECK} cards.
-     */
-    public void initialize() {
-        for (int i = 0; i < NUM_CARDS_OF_SINGLE_DECK; i++) {
-            cards.push(i % (HIGHEST_CARD-1)+2);
-        }
-    }
-
-    public void shuffle() {
-        Collections.shuffle(cards, random);
+        initialize();
+        shuffle();
     }
 
     public int drawCard() {
@@ -57,5 +46,18 @@ public class Deck {
 
     public List<Integer> getAllCards() {
         return new ArrayList<>(cards);
+    }
+
+    /**
+     * Initialize the deck with {@value Deck#NUM_CARDS_OF_SINGLE_DECK} cards.
+     */
+    private void initialize() {
+        for (int i = 0; i < NUM_CARDS_OF_SINGLE_DECK; i++) {
+            cards.push(i % (HIGHEST_CARD-1)+2);
+        }
+    }
+
+    private void shuffle() {
+        Collections.shuffle(cards, random);
     }
 }
