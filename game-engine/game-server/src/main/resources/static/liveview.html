@@ -12,6 +12,7 @@
     <script src="app.js"></script>
 </head>
 <body>
+
     <div class="container">
         <h1>Noker Liveview</h1>
         <ul class="list-inline">
@@ -20,9 +21,63 @@
             <li><p>Connection status: </p></li>
             <li><div id="connectionState"></div></li>
         </ul>
-
-        <h2>Game States</h2>
-        <ul id="stateList"></ul>
     </div>
+
+    <div>
+        <div id="globalValues" class="container-fluid">
+            <div class="panel panel-default">
+                <div class="panel panel-heading">
+                    <h3 class="panel-heading">Global Values</h3>
+                </div>
+                <div class="panel panel-body">
+                    <div>PotSize</div>
+                    <div>currentPlayer</div>
+                    <div>dealer</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div id="players" class="row">
+                <div class="col-xs-6">
+                    <div class="panel panel-default">
+                        <div class="panel panel-heading">
+                            <h3 class="panel-heading"> PlayerName1 </h3>
+                        </div>
+                        <div class="panel panel-body">
+                            <div>Cards: KK</div>
+                            <div>Money: 120</div>
+                            <div>Bet: 20</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="panel panel-default">
+                        <div class="panel panel-heading">
+                            <h3 class="panel-heading"> PlayerName2 </h3>
+                        </div>
+                        <div class="panel panel-body">
+                            <div>Cards: AA</div>
+                            <div>Money: 100</div>
+                            <div>Bet: 0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="panel panel-default">
+                        <div class="panel panel-heading">
+                            <h3 class="panel-heading"> PlayerName3 </h3>
+                        </div>
+                        <div class="panel panel-body">
+                            <div>Cards: AA</div>
+                            <div>Money: 100</div>
+                            <div>Bet: 0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>

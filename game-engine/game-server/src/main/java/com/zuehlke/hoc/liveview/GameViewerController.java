@@ -16,7 +16,8 @@ public class GameViewerController {
 
     @MessageMapping("/register")
     @SendToUser("/topic/poker_register")
-    public ViewState register() throws Exception {
-        return gameStateAdapter.getViewState();
+    public MockViewState register() throws Exception {
+        return new MockViewState(MockViewState.counter);
+        //return gameStateAdapter.getViewState();
     }
 }

@@ -17,7 +17,7 @@ public class WebsocketActor {
         this.gameStateAdapter = gameStateAdapter;
     }
 
-    @Scheduled(fixedDelay = 15000)
+    @Scheduled(fixedDelay = 5000)
     public void getCurrentStateAndPublish() {
         ViewState viewState = gameStateAdapter.getViewState();
         gameViewerPublishService.publish(viewState);

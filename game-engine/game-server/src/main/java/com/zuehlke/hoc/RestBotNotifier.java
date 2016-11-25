@@ -1,6 +1,5 @@
 package com.zuehlke.hoc;
 
-import akka.event.ActorClassificationUnsubscriber;
 import com.zuehlke.hoc.actors.BotNotifier;
 import com.zuehlke.hoc.actors.EngineActor;
 import com.zuehlke.hoc.rest.RegisterMessage;
