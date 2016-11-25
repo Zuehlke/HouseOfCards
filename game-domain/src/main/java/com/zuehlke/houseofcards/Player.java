@@ -1,32 +1,30 @@
 package com.zuehlke.houseofcards;
 
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class Player {
 
     private String name;
     private long chipsStack;
-    private int firstCard;
-    private int secondCard;
+    private List<Integer> hand;
 
     public Player(String name) {
+        hand = new ArrayList<>();
         this.name = name;
     }
 
-    public int getFirstCard() {
-        return firstCard;
+    public void addCard(int card) {
+        hand.add(card);
     }
 
-    public void setFirstCard(int firstCard) {
-        this.firstCard = firstCard;
+    public int getFirstCard() {
+        return hand.get(0);
     }
 
     public int getSecondCard() {
-        return secondCard;
-    }
-
-    public void setSecondCard(int secondCard) {
-        this.secondCard = secondCard;
+        return hand.get(1);
     }
 
     public String getName() {

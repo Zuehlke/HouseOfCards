@@ -1,16 +1,27 @@
 package com.zuehlke.houseofcards;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StartInfo {
+    private List<PlayerInfo> playerInfos;
 
-    private List<PlayerInfo> players;
-
-    public StartInfo(List<PlayerInfo> players) {
-        this.players = players;
+    public StartInfo() {
+        playerInfos = new ArrayList<>();
     }
 
-    public List<PlayerInfo> getPlayers() {
-        return players;
+    public List<PlayerInfo> getPlayerInfos() {
+        return playerInfos;
+    }
+
+    public void addPlayerInfo(PlayerInfo playerInfo) {
+        playerInfos.add(playerInfo);
+    }
+
+    @Override
+    public String toString() {
+        return "StartInfo{" +
+                "playerInfos=" + playerInfos +
+                '}';
     }
 }

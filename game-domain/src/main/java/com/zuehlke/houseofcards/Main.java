@@ -12,30 +12,28 @@ public class Main {
             }
 
             @Override
-            public void publishGameEvent(GameEvent event) {
+            public void publishToPlayer(GameEvent event) {
                 System.out.println(event);
             }
 
             @Override
-            public void askPlayerFoAction(PlayerAction action) {
+            public void broadcastGameEvent(GameEvent event) {
+                System.out.println(event);
+            }
+
+            @Override
+            public void askPlayerForAction(PlayerAction action) {
                 System.out.println(action);
             }
         });
-        State currentState;
-
         game.createPlayer("Tom");
         game.createPlayer("Pete");
 
+        game.handleMove(new FoldMove("Tom"));
+        game.handleMove(new FoldMove("Pete"));
 
 
-
-
-        currentState = game.handleMove(new FoldMove("Tom"));
-        currentState = game.handleMove(new FoldMove("Pete"));
-
-
-        currentState = game.handleMove(new RaiseMove("Tom", 50));
-        System.out.println(currentState);
+        game.handleMove(new RaiseMove("Tom", 50));
 
 
 

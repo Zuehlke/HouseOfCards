@@ -2,6 +2,10 @@ package com.zuehlke.houseofcards;
 
 
 import com.zuehlke.houseofcards.Exceptions.InitGameException;
+import com.zuehlke.houseofcards.model.Match;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -17,53 +21,52 @@ public class NokerGame {
     public static final int MAX_NUM_OF_PLAYERS = Deck.NUM_CARDS_OF_SINGLE_DECK/CARDS_PER_PLAYER;
 
     private final PlayerNotifierAdapter notifier;
+
+    private List<Player> gamePlayers;
     private int numOfPlayers;
-    private boolean isReady;
-    private State gameState;
+    private Match currentMatch;
 
 
     public NokerGame(int numOfPlayers, PlayerNotifier notifier) {
         this.notifier = new PlayerNotifierAdapter(notifier);
         if (numOfPlayers < MIN_NUM_OF_PLAYERS) {
             throw new InitGameException(
-                    String.format("A Noker game requires at least %d players", MIN_NUM_OF_PLAYERS));
+                    String.format("A Noker game requires at least %d gamePlayers", MIN_NUM_OF_PLAYERS));
         } else if (numOfPlayers > MAX_NUM_OF_PLAYERS) {
             throw new InitGameException(
-                    String.format("A Noker game can have a maximum of %d players", MAX_NUM_OF_PLAYERS));
+                    String.format("A Noker game can have a maximum of %d gamePlayers", MAX_NUM_OF_PLAYERS));
         }
-        gameState = new State();
         this.numOfPlayers = numOfPlayers;
-        isReady = false;    // TODO: move to state class?
+        this.gamePlayers = new ArrayList<>();
     }
 
-    public Player createPlayer(String playerName) {
+    public void createPlayer(String playerName) {
         Player player = new Player(playerName);
-        gameState.getRegisteredPlayers().add(player);
+        gamePlayers.add(player);
         if(allPlayersJoined()){
-            start();
+            startGame();
         }
-        return player;
     }
 
     public boolean allPlayersJoined() {
-        return gameState.getRegisteredPlayers().size() == numOfPlayers;
+        return gamePlayers.size() == numOfPlayers;
     }
 
 
-    public void start() {
-        gameState.setPot(0);
-        gameState.setCurrentPlayer(gameState.getRegisteredPlayers().get(0));  // TODO: rotate players on each match
-        gameState.getRegisteredPlayers().forEach(p -> p.setChipsStack(INITIAL_CHIPS));
-        gameState.getRegisteredPlayers().forEach(p -> p.setFirstCard(gameState.getDeck().drawCard()));
-        notifier.publishStart(gameState);
+    public void startGame() {
+        gamePlayers.forEach(player -> player.setChipsStack(INITIAL_CHIPS));
+        currentMatch = new Match(gamePlayers, notifier);
+        notifier.publishStart(currentMatch);
+        currentMatch.startMatch();
     }
 
-    public State handleMove(Move move) {
+    public void handleMove(Move move) {
+        /*
         // TODO: check if round/match/game finished
         if (move.isValid(gameState)) {
             move.execute(gameState);
         }
         // TODO: handle next round/match etc.
-        return gameState;
+        return gameState;*/
     }
 }
