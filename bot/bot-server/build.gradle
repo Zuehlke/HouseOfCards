@@ -1,21 +1,6 @@
-apply plugin: 'scala'
-
-jar {
-    baseName = 'bot-server'
-    version =  '0.1.0'
-}
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     compile(project(':bot:bot-domain'))
 
     compile('com.typesafe.akka:akka-actor_2.11:2.4.12')
-    compile('org.scala-lang:scala-library:2.11.8')
     compile('com.typesafe.akka:akka-http-core_2.11:10.0.0')
-    compile('com.typesafe.akka:akka-http_2.11:10.0.0')
-
-    testCompile('junit:junit:4.11')
 }

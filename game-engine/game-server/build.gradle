@@ -1,22 +1,7 @@
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 
-jar {
-    baseName = 'game-server'
-    version =  '0.1.0'
-}
-
-repositories {
-    mavenCentral()
-}
-
-idea {
-    module {
-        downloadJavadoc = true
-        downloadSources = true
-    }
+springBoot {
+    mainClass = "game-server.Application"
 }
 
 dependencies {
@@ -24,19 +9,17 @@ dependencies {
     compile(project(':game-engine:game-server-rest'))
 
     compile('org.springframework.boot:spring-boot-starter-tomcat:1.4.2.RELEASE')
-    compile('org.springframework.boot:spring-boot-starter-actuator')
     compile('org.springframework.boot:spring-boot-starter-test')
     compile('org.springframework.boot:spring-boot-starter-web:1.4.2.RELEASE')
     compile('org.springframework.boot:spring-boot-devtools')
-    compile('org.springframework:spring-messaging')
     compile('org.springframework.boot:spring-boot-starter-websocket')
     compile('com.typesafe.akka:akka-actor_2.11:2.4.14')
 
-    //JavaScript dependencies
+    //JavaScript dependencies for the frontend
     compile('org.webjars:sockjs-client:1.1.1')
     compile('org.webjars:stomp-websocket:2.3.3')
     compile('org.webjars:jquery:3.1.0')
     compile('org.webjars:bootstrap:3.1.0')
 
-    testCompile('junit:junit:4.12')
+
 }
