@@ -10,6 +10,16 @@ package com.zuehlke.hoc.rest;
  */
 public class RegistrationResponse {
 
+    private Result registrationResult;
+
+    public Result getRegistrationResult() {
+        return registrationResult;
+    }
+
+    public void setRegistrationResult(Result registrationResult) {
+        this.registrationResult = registrationResult;
+    }
+
     private enum Result {
         CONFIRMATION, NAME_ALREADY_TAKEN, URI_ALREADY_TAKEN, REGISTRATION_CLOSED
     }
