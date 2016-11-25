@@ -29,6 +29,10 @@ function connect() {
             stompClient.subscribe('/topic/poker_updates', function (update) {
                 addToList(update.body);
             });
+
+            stompClient.subscribe('/topic/player', function(update) {
+                addToList('Player: ' + update.body);
+            });
         });
         stompClient.send("/app/register", {}, {});
 

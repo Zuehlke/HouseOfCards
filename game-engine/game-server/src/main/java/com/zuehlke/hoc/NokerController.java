@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class NokerController {
 
     private static final Logger log = LoggerFactory.getLogger(NokerController.class.getName());
+
     private final BotNotifier botNotifier;
 
     private DefaultActorSystem actorSystem;
