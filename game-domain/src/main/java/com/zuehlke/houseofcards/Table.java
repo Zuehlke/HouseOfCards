@@ -9,21 +9,11 @@ public class Table {
         this.game = game;
     }
 
-    public void registerPlayer(String playerName) {
-        game.addPlayer(new Player(playerName));
+    public State registerPlayer(String playerName) {
+        return game.addPlayer(new Player(playerName));
     }
 
-    public void startGame() {
-        if (game.isReady()) {
-            game.start();
-        }
-    }
-
-    public Game getCurrentGame(){
-        return game;
-    }
-
-    public void handleAction(Action action) {
-        game.handleAction(action);
+    public State handleMove(Move move) {
+        return game.handleMove(move);
     }
 }

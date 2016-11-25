@@ -1,30 +1,31 @@
 package com.zuehlke.houseofcards;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class State {
 
-    private List<Player> players;
+    private List<Player> registeredPlayers;             // all players that initially joined the table
+    private List<Player> activePlayersInCurrentGame;    // players that still have chips in the current game
+    private List<Player> activePlayersInCurrentMatch;   // players that haven't folded in the current match
     private Deck deck;
     private Player currentPlayer;
-    private int currentRound = 0;
     private long pot = 0;
 
-    public State(List<Player> players, Deck deck, Player currentPlayer, int currentRound, long pot) {
-        this.players = players;
-        this.deck = deck;
-        this.currentPlayer = currentPlayer;
-        this.currentRound = currentRound;
-        this.pot = pot;
+    public State() {
+        registeredPlayers = new ArrayList<>();
+        deck = new Deck();
+        deck.initialize();
+        deck.shuffle();
     }
 
-    public List<Player> getPlayers() {
-        return players;
+    public List<Player> getRegisteredPlayers() {
+        return registeredPlayers;
     }
 
-    public void setPlayers(List<Player> players) {
-        this.players = players;
+    public void setRegisteredPlayers(List<Player> registeredPlayers) {
+        this.registeredPlayers = registeredPlayers;
     }
 
     public Deck getDeck() {
@@ -43,19 +44,28 @@ public class State {
         this.currentPlayer = currentPlayer;
     }
 
-    public int getCurrentRound() {
-        return currentRound;
-    }
-
-    public void setCurrentRound(int currentRound) {
-        this.currentRound = currentRound;
-    }
-
     public long getPot() {
         return pot;
     }
 
     public void setPot(long pot) {
         this.pot = pot;
+    }
+
+    public void increasePot(long amountOfChips) {
+        pot += amountOfChips;
+    }
+
+    public void decreasePot(long amountOfChips) {
+        pot -= amountOfChips;
+    }
+
+    @Override
+    public String toString() {
+        return "State{" +
+                "registeredPlayers=" + registeredPlayers +
+                ", currentPlayer=" + currentPlayer +
+                ", pot=" + pot +
+                '}';
     }
 }

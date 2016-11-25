@@ -48,4 +48,12 @@ public class Player {
     public void decreaseChipsStack(long amountOfChips) {
         chipsStack -= amountOfChips;
     }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "name='" + name + '\'' +
+                ", chipsStack=" + chipsStack +
+                '}';
+    }
 }

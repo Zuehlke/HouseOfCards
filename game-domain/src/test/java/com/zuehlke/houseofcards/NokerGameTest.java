@@ -12,56 +12,78 @@ import static org.junit.Assert.*;
 
 public class NokerGameTest {
 
-    private NokerGame game;
+//    private NokerGame game;
 
-    @Before
-    public void setup() {
-        game = new NokerGame();
-    }
+//    @Before
+//    public void setup() {
+//        game = new NokerGame();
+//    }
+
 
     @Test
     public void addPlayers() {
-        game.addPlayer(new Player("John"));
-        game.addPlayer(new Player("Pete"));
-        Assert.assertEquals(game.getAllPlayers().size(), 2);
-    }
+        int numOfPlayers = 3;
+        Game game = new NokerGame(numOfPlayers);
 
-    @Test
-    public void notEnoughPlayersToStartGame() {
-        game.addPlayer(new Player("John"));
+        game.addPlayer(new Player("TestPlayer1"));
         assertFalse(game.isReady());
-    }
-
-    @Test
-    public void enoughPlayersToStartGame() {
-        game.addPlayer(new Player("John"));
-        game.addPlayer(new Player("Pete"));
+        game.addPlayer(new Player("TestPlayer2"));
+        assertFalse(game.isReady());
+        game.addPlayer(new Player("TestPlayer3"));
         assertTrue(game.isReady());
+
+        // The following players should not be added to the game.
+        game.addPlayer(new Player("TestPlayer4"));
+        State gameState = game.addPlayer(new Player("TestPlayer5"));
+
+        assertTrue(game.isReady());
+        assertEquals(gameState.getRegisteredPlayers().size(), numOfPlayers);
     }
 
-    @Test
-    public void addMaximumOfPlayers() {
-        for (int i = 0; i < NokerGame.MAX_NUM_OF_PLAYERS; i++) {
-            game.addPlayer(new Player("TestPlayer"));
-        }
-    }
 
-    @Test(expected = ExceededMaxPlayersException.class)
-    public void exceedMaximumOfPlayers() {
-        for (int i = 0; i < NokerGame.MAX_NUM_OF_PLAYERS; i++) {
-            game.addPlayer(new Player("TestPlayer"));
-        }
-        // An exception should be thrown here:
-        game.addPlayer(new Player("TestPlayer"));
-    }
-
-    @Test
-    public void distributeInitialChips() {
-        game.addPlayer(new Player("John"));
-        game.addPlayer(new Player("Pete"));
-        game.start();
-        game.getAllPlayers().forEach(p -> Assert.assertEquals(p.getChipsStack(), NokerGame.INITIAL_CHIPS));
-    }
+//    @Test
+//    public void addPlayers() {
+//        game.addPlayer(new Player("John"));
+//        game.addPlayer(new Player("Pete"));
+//        Assert.assertEquals(game.getAllPlayers().size(), 2);
+//    }
+//
+//    @Test
+//    public void notEnoughPlayersToStartGame() {
+//        game.addPlayer(new Player("John"));
+//        assertFalse(game.isReady());
+//    }
+//
+//    @Test
+//    public void enoughPlayersToStartGame() {
+//        game.addPlayer(new Player("John"));
+//        game.addPlayer(new Player("Pete"));
+//        assertTrue(game.isReady());
+//    }
+//
+//    @Test
+//    public void addMaximumOfPlayers() {
+//        for (int i = 0; i < NokerGame.MAX_NUM_OF_PLAYERS; i++) {
+//            game.addPlayer(new Player("TestPlayer"));
+//        }
+//    }
+//
+//    @Test(expected = ExceededMaxPlayersException.class)
+//    public void exceedMaximumOfPlayers() {
+//        for (int i = 0; i < NokerGame.MAX_NUM_OF_PLAYERS; i++) {
+//            game.addPlayer(new Player("TestPlayer"));
+//        }
+//        // An exception should be thrown here:
+//        game.addPlayer(new Player("TestPlayer"));
+//    }
+//
+//    @Test
+//    public void distributeInitialChips() {
+//        game.addPlayer(new Player("John"));
+//        game.addPlayer(new Player("Pete"));
+//        game.start();
+//        game.getAllPlayers().forEach(p -> Assert.assertEquals(p.getChipsStack(), NokerGame.INITIAL_CHIPS));
+//    }
 
 //    TODO: test when matchmaking is implemented
 //    @Test

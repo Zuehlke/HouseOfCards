@@ -1,13 +1,14 @@
 package com.zuehlke.houseofcards;
 
-import com.zuehlke.houseofcards.Exceptions.ExceededMaxPlayersException;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
-
+/**
+ * This class is used for testing the communication between the
+ * external caller and the domain. Whenever a method is called
+ * a mocked state is returned.
+ */
 public class NokerGame implements Game {
 
     public final static long INITIAL_CHIPS = 100;
@@ -15,54 +16,49 @@ public class NokerGame implements Game {
     public final static int CARDS_PER_PLAYER = 2;
     public static final int MAX_NUM_OF_PLAYERS = Deck.NUM_CARDS_OF_SINGLE_DECK/CARDS_PER_PLAYER;
 
-    private List<Player> players = new ArrayList<>();
-    private Deck deck = new Deck();
-    private int firstPlayerPosition = 0;
-
-    private Match match;
+    private int numOfPlayers;
+    private boolean isReady;
+    private State gameState;
 
 
-    public void addPlayer(Player player) {
-        if (players.size() < MAX_NUM_OF_PLAYERS) {
-            players.add(player);
-        } else {
-            throw new ExceededMaxPlayersException("Could not add player. Exceeded the maximum number of players.");
-        }
-    }
-
-    public boolean isReady() {
-        return players.size() >= MIN_NUM_OF_PLAYERS;
-    }
-
-    public List<Player> getAllPlayers() {
-        return new ArrayList<>(players);
-    }
-
-    public void start() {
-        players.forEach(p -> p.setChipsStack(INITIAL_CHIPS));
-        match = new Match(getRotatedPlayersForNextMatch(), deck);
-        firstPlayerPosition = RoundRobin.getNextStartPosition(players,firstPlayerPosition);
-        match.dealFirstCard();
+    public NokerGame(int numOfPlayers) {
+        gameState = new State();
+        this.numOfPlayers = numOfPlayers;
+        isReady = false;    // TODO: move to state class?
     }
 
     @Override
-    public void handleAction(Action action) {
-        // TODO: implement method
+    public State addPlayer(Player player) {
+        // TODO: fix
+        List<Player> players = gameState.getRegisteredPlayers();
+        if (players.size() == numOfPlayers) {
+            start();
+        } else {
+            players.add(player);
+        }
+        return gameState;
     }
 
-    /**
-     * Rearranges the player order for the next match.
-     * The turn order of the players rotates every time a new match is started.
-     * @return list with rotated players
-     */
-    private List<Player> getRotatedPlayersForNextMatch() {
-        List<Player> rotatedPlayers = new ArrayList<>();
-        RoundRobin<Player> playerRoundRobin = new RoundRobin<>(this.players, firstPlayerPosition);
-        Iterator<Player> playerIterator = playerRoundRobin.iterator();
+    @Override
+    public boolean isReady() {
+        return isReady;
+    }
 
-        while (playerIterator.hasNext()){
-            rotatedPlayers.add(playerIterator.next());
+    private void start() {
+        gameState.setPot(0);
+        gameState.setCurrentPlayer(gameState.getRegisteredPlayers().get(0));  // TODO: rotate players on each match
+        gameState.getRegisteredPlayers().forEach(p -> p.setChipsStack(INITIAL_CHIPS));
+        gameState.getRegisteredPlayers().forEach(p -> p.setFirstCard(gameState.getDeck().drawCard()));
+        isReady = true;
+    }
+
+    @Override
+    public State handleMove(Move move) {
+        // TODO: check if round/match/game finished
+        if (move.isValid(gameState)) {
+            move.execute(gameState);
         }
-        return rotatedPlayers;
+        // TODO: handle next round/match etc.
+        return gameState;
     }
 }
