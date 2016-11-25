@@ -10,9 +10,16 @@ import akka.camel.javaapi.UntypedConsumerActor;
  */
 public class HttpReceiverActor extends UntypedConsumerActor {
 
+    //the bot will reveive incomming HTTP request from the competition runner on this URI
+    private String endpointUri;
+
+    public HttpReceiverActor(String listenOnUri) {
+        this.endpointUri = String.format("jetty:%1", listenOnUri);
+    }
+
     @Override
     public String getEndpointUri() {
-        return null;
+        return this.endpointUri;
     }
 
     @Override
