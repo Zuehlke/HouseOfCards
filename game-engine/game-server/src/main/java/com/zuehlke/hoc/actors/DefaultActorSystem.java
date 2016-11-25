@@ -3,8 +3,6 @@ package com.zuehlke.hoc.actors;
 import akka.actor.ActorSystem;
 import akka.actor.TypedActor;
 import akka.actor.TypedProps;
-import com.zuehlke.hoc.HelloService;
-import com.zuehlke.hoc.RestBotNotifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,14 +17,14 @@ public class DefaultActorSystem {
     private IEngineActor gameEngine;
 
     @Autowired
-    public DefaultActorSystem(HelloService helloService, BotNotifier botNotifier){
+    public DefaultActorSystem(BotNotifier botNotifier, ViewNotifier viewNotifier){
         this.system = ActorSystem.create(ACTOR_SYSTEM);
-        this.gameEngine = createGameEngine(helloService,botNotifier);
+        this.gameEngine = createGameEngine(botNotifier, viewNotifier);
     }
 
-    private IEngineActor createGameEngine(HelloService helloService, BotNotifier botNotifier) {
+    private IEngineActor createGameEngine(BotNotifier botNotifier, ViewNotifier viewNotifier) {
         TypedProps<EngineActor> props = new TypedProps<>(IEngineActor.class,
-                () -> new EngineActor(helloService, botNotifier));
+                () -> new EngineActor(botNotifier, viewNotifier));
         return TypedActor.get(system).typedActorOf(props, GAME_ENGINE_ACTOR);
     }
 
