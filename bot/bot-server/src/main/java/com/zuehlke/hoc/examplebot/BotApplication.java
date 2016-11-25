@@ -21,7 +21,7 @@ public class BotApplication {
             RegisterMessage registerMessage = createRegisterMessage(uri, teamname, port);
 
             ActorSystem system = ActorSystem.create();
-            ActorRef a = system.actorOf(Props.create(HttpClientActor.class), "httpclient");
+            ActorRef a = system.actorOf(Props.create(HttpSenderActor.class), "httpclient");
             a.tell(registerMessage, ActorRef.noSender());
 
         } else {

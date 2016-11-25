@@ -12,7 +12,7 @@ import org.codehaus.jackson.map.ObjectMapper;
  * Responsible for sending HTTP message to the competition runner.
  * @author Lukas Hofmaier
  */
-public class HttpClientActor extends UntypedActor {
+public class HttpSenderActor extends UntypedActor {
 
     /**
      * Forwards RegisterMessages to the competitionrunner.
