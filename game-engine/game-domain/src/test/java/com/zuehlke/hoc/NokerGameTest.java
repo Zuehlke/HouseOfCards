@@ -34,6 +34,7 @@ public class NokerGameTest {
     public void enoughPlayersToStartGame() {
         game.addPlayer(new Player("John"));
         game.addPlayer(new Player("Pete"));
+        game.addPlayer(new Player("Mike"));
         assertTrue(game.isReady());
     }
 

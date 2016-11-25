@@ -50,8 +50,22 @@ public class NokerControllerTest {
                 .setName("Francis Underwood")
                 .setHostname("localhost")
                 .setPort(2222);
+        send(request);
 
+        request = new RegisterMessage()
+                .setName("Flash")
+                .setHostname("localhost")
+                .setPort(1111);
+        send(request);
 
+        request = new RegisterMessage()
+                .setName("Mister Bean")
+                .setHostname("localhost")
+                .setPort(9999);
+        send(request);
+    }
+
+    private void send(RegisterMessage request) throws Exception {
         String requestJson = json(request);
         this.mvc.perform(
                 post("/noker/register")
