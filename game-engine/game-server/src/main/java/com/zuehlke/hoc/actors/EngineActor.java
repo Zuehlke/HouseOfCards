@@ -17,19 +17,24 @@ public class EngineActor implements IEngineActor {
 
     private final Game game;
     private final BotNotifier botNotifier;
+    private final ViewNotifier viewNotifier;
 
-    public EngineActor(HelloService helloService, BotNotifier botNotifier){
+    public EngineActor(BotNotifier botNotifier, ViewNotifier viewNotifier){
          this.game = new NokerGame();
          this.botNotifier = botNotifier;
+         this.viewNotifier = viewNotifier;
     }
 
     public void registerPlayer(String botName) {
-        game.addPlayer(new Player(botName));
+        Player p = new Player(botName);
+        game.addPlayer(p);
         if(game.isReady()){
             game.start();
             botNotifier.gameStartEvent();
             sendPlayerInfo();
         }
+        
+        viewNotifier.onRegisterPlayer(p);
     }
 
     private void sendPlayerInfo() {
