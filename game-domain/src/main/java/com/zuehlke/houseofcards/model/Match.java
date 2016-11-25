@@ -1,17 +1,23 @@
 package com.zuehlke.houseofcards.model;
 
-import com.zuehlke.houseofcards.Deck;
-import com.zuehlke.houseofcards.Player;
+import com.zuehlke.houseofcards.moves.Move;
 import com.zuehlke.houseofcards.PlayerNotifierAdapter;
 
 import java.util.List;
 
+
+/**
+ * This class represents a match of a Noker game.
+ * A match consists of two consecutive rounds of betting.
+ */
 public class Match {
-    private Round round;
+
     private List<Player> matchPlayers;
-    private long pot;
+    private Round round;
+    private Pot pot;
     private Deck deck;
     private PlayerNotifierAdapter notifier;
+
 
     public Match(List<Player> matchPlayers, PlayerNotifierAdapter notifier) {
         this.notifier = notifier;
@@ -20,14 +26,14 @@ public class Match {
 
     public void startMatch() {
         this.deck = new Deck();
-        pot = 0;
+        pot = new Pot();
 
-        round = new Round(matchPlayers, matchPlayers.get(0), deck, notifier);
+        round = new Round(matchPlayers, matchPlayers.get(0), deck, pot, notifier);
         round.startRound();
     }
 
-    public void handleMove() {
-
+    public void handleMove(Move move) {
+        move.execute(round);
     }
 
     public List<Player> getMatchPlayers() {

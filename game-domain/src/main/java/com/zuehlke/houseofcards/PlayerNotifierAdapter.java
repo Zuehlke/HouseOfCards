@@ -2,6 +2,7 @@ package com.zuehlke.houseofcards;
 
 import com.zuehlke.houseofcards.events.DealCardEvent;
 import com.zuehlke.houseofcards.model.Match;
+import com.zuehlke.houseofcards.model.Player;
 
 import java.util.ArrayList;
 import java.util.List;

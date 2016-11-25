@@ -1,5 +1,8 @@
 package com.zuehlke.houseofcards;
 
+import com.zuehlke.houseofcards.model.Deck;
+import com.zuehlke.houseofcards.model.Player;
+
 import java.util.ArrayList;
 import java.util.List;
 

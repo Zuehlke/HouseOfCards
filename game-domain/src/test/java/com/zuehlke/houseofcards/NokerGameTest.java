@@ -1,6 +1,7 @@
 package com.zuehlke.houseofcards;
 
 import com.zuehlke.houseofcards.Exceptions.InitGameException;
+import com.zuehlke.houseofcards.model.Player;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -70,9 +71,9 @@ public class NokerGameTest {
 //    TODO: test when matchmaking is implemented
 //    @Test
 //    public void matchFirstPlayerRotation() {
-//        game.createPlayer(new com.zuehlke.houseofcards.Player("John"));
-//        game.createPlayer(new com.zuehlke.houseofcards.Player("Pete"));
-//        game.createPlayer(new com.zuehlke.houseofcards.Player("Tom"));
+//        game.createPlayer(new com.zuehlke.houseofcards.model.Player("John"));
+//        game.createPlayer(new com.zuehlke.houseofcards.model.Player("Pete"));
+//        game.createPlayer(new com.zuehlke.houseofcards.model.Player("Tom"));
 //        => expect first player to be John
 //        game.nextMatch();
 //        => expect first player to be Pete

@@ -2,16 +2,20 @@ package com.zuehlke.houseofcards;
 
 
 import com.zuehlke.houseofcards.Exceptions.InitGameException;
+import com.zuehlke.houseofcards.model.Deck;
 import com.zuehlke.houseofcards.model.Match;
+import com.zuehlke.houseofcards.model.Player;
+import com.zuehlke.houseofcards.moves.Move;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 /**
- * This class is used for testing the communication between the
- * external caller and the domain. Whenever a method is called
- * a mocked state is returned.
+ * This class represents a Noker game.
+ * To create a game, the number of players must be known.
+ * A game takes registrations and moves from players and consists of
+ * multiple matches. Matches are played until one player owns the total amount of chips of the game.
  */
 public class NokerGame {
 
@@ -52,8 +56,7 @@ public class NokerGame {
         return gamePlayers.size() == numOfPlayers;
     }
 
-
-    public void startGame() {
+    private void startGame() {
         gamePlayers.forEach(player -> player.setChipsStack(INITIAL_CHIPS));
         currentMatch = new Match(gamePlayers, notifier);
         notifier.publishStart(currentMatch);
@@ -61,12 +64,6 @@ public class NokerGame {
     }
 
     public void handleMove(Move move) {
-        /*
-        // TODO: check if round/match/game finished
-        if (move.isValid(gameState)) {
-            move.execute(gameState);
-        }
-        // TODO: handle next round/match etc.
-        return gameState;*/
+        currentMatch.handleMove(move);
     }
 }

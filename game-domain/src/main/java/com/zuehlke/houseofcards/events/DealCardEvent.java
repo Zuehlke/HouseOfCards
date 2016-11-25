@@ -1,6 +1,6 @@
 package com.zuehlke.houseofcards.events;
 
-import com.zuehlke.houseofcards.Player;
+import com.zuehlke.houseofcards.model.Player;
 
 public class DealCardEvent {
     private Player player;

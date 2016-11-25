@@ -1,4 +1,4 @@
-package com.zuehlke.houseofcards;
+package com.zuehlke.houseofcards.model;
 
 
 import java.util.ArrayList;

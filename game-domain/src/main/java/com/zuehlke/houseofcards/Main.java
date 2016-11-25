@@ -1,6 +1,11 @@
 package com.zuehlke.houseofcards;
 
 
+import com.zuehlke.houseofcards.moves.CallMove;
+import com.zuehlke.houseofcards.moves.FoldMove;
+import com.zuehlke.houseofcards.moves.RaiseMove;
+
+
 
 public class Main {
     public static void main(String[] args) {
@@ -17,16 +22,15 @@ public class Main {
                 System.out.println(event);
             }
         });
+
         game.createPlayer("Tom");
         game.createPlayer("Pete");
 
         game.handleMove(new CallMove());
-        game.handleMove(new FoldMove("Pete"));
+        game.handleMove(new FoldMove());
 
 
-        game.handleMove(new RaiseMove("Tom", 50));
-
-
+        game.handleMove(new RaiseMove(50));
 
     }
 }
