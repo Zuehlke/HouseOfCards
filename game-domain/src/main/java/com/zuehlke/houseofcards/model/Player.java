@@ -24,6 +24,9 @@ public class Player {
     }
 
     public int getSecondCard() {
+        if(hand.size() < 2){
+            return -1;
+        }
         return hand.get(1);
     }
 

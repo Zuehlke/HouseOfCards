@@ -1,7 +1,15 @@
 package com.zuehlke.houseofcards.model;
 
+import java.util.List;
+
+
 /**
- * Created by bolli on 27.11.2016.
+ * Calculates the winner of a match.
  */
 public class WiningStrategy {
+
+    public static Player winner(List<Player> matchPlayers, Bets bets) {
+        //TODO: impl. the function
+        return null;
+    }
 }

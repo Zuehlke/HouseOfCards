@@ -1,9 +1,12 @@
-package com.zuehlke.houseofcards;
+package com.zuehlke.houseofcards.notification.api;
 
+import com.zuehlke.houseofcards.PlayerInfo;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StartInfo {
+public class StartInfo implements Serializable {
     private List<PlayerInfo> playerInfos;
 
     public StartInfo() {

@@ -4,8 +4,9 @@ package com.zuehlke.houseofcards;
 import com.zuehlke.houseofcards.Exceptions.InitGameException;
 import com.zuehlke.houseofcards.model.Deck;
 import com.zuehlke.houseofcards.model.Match;
+import com.zuehlke.houseofcards.model.NokerDeck;
 import com.zuehlke.houseofcards.model.Player;
-import com.zuehlke.houseofcards.moves.Move;
+import com.zuehlke.houseofcards.notification.api.PlayerNotifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +23,11 @@ public class NokerGame {
     public final static long INITIAL_CHIPS = 100;
     public final static int MIN_NUM_OF_PLAYERS = 2;
     public final static int CARDS_PER_PLAYER = 2;
-    public static final int MAX_NUM_OF_PLAYERS = Deck.NUM_CARDS_OF_SINGLE_DECK/CARDS_PER_PLAYER;
+    public static final int MAX_NUM_OF_PLAYERS = NokerDeck.NUM_CARDS_OF_SINGLE_DECK/CARDS_PER_PLAYER;
 
     private final PlayerNotifierAdapter notifier;
+    private final List<Player> gamePlayers;
 
-    private List<Player> gamePlayers;
     private int numOfPlayers;
     private Match currentMatch;
 
@@ -57,13 +58,33 @@ public class NokerGame {
     }
 
     private void startGame() {
+        notifier.broadcastGameStarted();
         gamePlayers.forEach(player -> player.setChipsStack(INITIAL_CHIPS));
-        currentMatch = new Match(gamePlayers, notifier);
-        notifier.publishStart(currentMatch);
+        currentMatch = new Match(gamePlayers, new NokerDeck(),notifier);
         currentMatch.startMatch();
     }
 
-    public void handleMove(Move move) {
-        currentMatch.handleMove(move);
+    public void playerFold(Player player) {
+        currentMatch.playerFold(player);
+    }
+
+    public void playerCall(Player player) {
+        currentMatch.playerCall(player);
+    }
+
+    public void playerRaise(Player player, long raise) {
+        currentMatch.playerRaise(player, raise);
+    }
+
+    private void ifMatchIsFinishedGoAhead() {
+        if(currentMatch.isFinished()){
+            if(currentMatch.hasMoreThanOnePlayerChips()){
+                currentMatch = currentMatch.createNextMatch();
+                currentMatch.startMatch();
+            }else{
+                notifier.broadcastGameFinished();
+            }
+
+        }
     }
 }

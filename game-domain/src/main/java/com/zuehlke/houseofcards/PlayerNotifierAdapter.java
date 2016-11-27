@@ -1,8 +1,8 @@
 package com.zuehlke.houseofcards;
 
-import com.zuehlke.houseofcards.events.DealCardEvent;
 import com.zuehlke.houseofcards.model.Match;
 import com.zuehlke.houseofcards.model.Player;
+import com.zuehlke.houseofcards.notification.api.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,8 @@ public class PlayerNotifierAdapter {
         this.notifier = notifier;
     }
 
-    public void publishStart(Match match) {
+
+    public void publishFinish(Match match) {
         StartInfo startInfo = new StartInfo();
 
         List<String> players = new ArrayList<>();
@@ -24,28 +25,52 @@ public class PlayerNotifierAdapter {
         matchPlayers.forEach(player -> players.add(player.getName()));
         matchPlayers.forEach(player -> startInfo.addPlayerInfo(new PlayerInfo(player.getName(), player.getChipsStack())));
 
-        GameEvent gameEvent = new GameEvent(players, startInfo.toString());
-
-        publishGameEvent(gameEvent);
+        notifier.boradcastGameStarts(startInfo);
     }
 
-    public void publishGameEvent(GameEvent gameEvent) {
-        notifier.broadcast(gameEvent);
+
+    public void askPlayerForAction(String name, long chipsToCall) {
+        notifier.playersTurn(name);
     }
 
-    public void askPlayerForAction(Player player) {
-        List<String> recievers = new ArrayList<>();
-        recievers.add(player.getName());
-        GameEvent gameEvent = new GameEvent(recievers, "Your turn!");
-
-        notifier.publishToPlayer(gameEvent);
+    public void sendCardInfoToPlayer(String name, int card) {
+            notifier.sendCardInfo(name, card);
     }
 
-    public void publishToPlayer(DealCardEvent dealCardEvent) {
-        List<String> recievers = new ArrayList<>();
-        recievers.add(dealCardEvent.getPlayer().getName());
-        GameEvent gameEvent = new GameEvent(recievers, ""+dealCardEvent.getCard());
+    public void broadcastMatchStart(Match match) {
+        StartInfo startInfo = new StartInfo();
 
-        notifier.publishToPlayer(gameEvent);
+        List<String> players = new ArrayList<>();
+        List<Player> matchPlayers = match.getMatchPlayers();
+
+        matchPlayers.forEach(player -> players.add(player.getName()));
+        matchPlayers.forEach(player -> startInfo.addPlayerInfo(new PlayerInfo(player.getName(), player.getChipsStack())));
+
+        notifier.boradcastGameStarts(startInfo);
+    }
+
+    public void broadcastRoundStarts(){}
+
+    public void broadcastRoundFinished() {}
+
+    public void broadcastPlayerFolded(Player player) {
+    }
+
+    public void broadcastPlayerCalled(Player player) {
+    }
+
+    public void broadcastPlayerRaised(Player player, long raise) {
+    }
+
+    public void sendGameFinisedToPlayer(Player p) {
+    }
+
+    public void broadcastMatchFinished() {
+    }
+
+    public void broadcastGameFinished() {
+    }
+
+    public void broadcastGameStarted() {
     }
 }

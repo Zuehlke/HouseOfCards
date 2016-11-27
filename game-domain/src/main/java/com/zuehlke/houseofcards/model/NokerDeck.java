@@ -12,7 +12,7 @@ import java.util.*;
  * In general, there exist 13 different cards (from 2 until ace),
  * therefore each card is contained 4 times in the deck.
  */
-public class Deck {
+public class NokerDeck implements Deck {
 
     public final static int LOWEST_CARD = 2;
     public final static int HIGHEST_CARD = 14;
@@ -23,7 +23,7 @@ public class Deck {
 
     private Random random;
 
-    public Deck() {
+    public NokerDeck() {
         cards = new Stack<>();
         random = new Random();
         initialize();
@@ -49,7 +49,7 @@ public class Deck {
     }
 
     /**
-     * Initialize the deck with {@value Deck#NUM_CARDS_OF_SINGLE_DECK} cards.
+     * Initialize the deck with {@value #NUM_CARDS_OF_SINGLE_DECK} cards.
      */
     private void initialize() {
         for (int i = 0; i < NUM_CARDS_OF_SINGLE_DECK; i++) {
@@ -57,7 +57,7 @@ public class Deck {
         }
     }
 
-    private void shuffle() {
+    public void shuffle() {
         Collections.shuffle(cards, random);
     }
 }
