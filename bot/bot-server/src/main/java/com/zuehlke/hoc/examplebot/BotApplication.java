@@ -6,7 +6,9 @@ import akka.actor.Props;
 import com.zuehlke.hoc.rest.RegisterMessage;
 
 /**
- * Command line applcation to start a bot. The bot will register itself at the competition runner and play the noker game according the rules.
+ * Command line applcation to start a bot. The bot will register itself at the competition runner and play the noker
+ * game according the rules.
+ *
  * @author Lukas Hofmaier
  */
 public class BotApplication {
