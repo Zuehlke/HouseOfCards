@@ -23,10 +23,10 @@ public class BotApplication {
             ActorSystem system = ActorSystem.create();
 
             ActorRef player = system.actorOf(Props.create(JustCallActor.class));
-            Props httpReceiverProbs = Props.create(HttpSenderActor.class, uri, player);
-            ActorRef a = system.actorOf(httpReceiverProbs, "httpclient");
-            system.actorOf(Props.create(HttpReceiverActor.class), "httpreceiver");
-            a.tell(registerMessage, ActorRef.noSender());
+            Props httpReceiverProbs = Props.create(HttpReceiverActor.class, uri, player);
+            ActorRef httpSender = system.actorOf(Props.create(HttpSenderActor.class));
+            system.actorOf(httpReceiverProbs);
+            httpSender.tell(registerMessage, ActorRef.noSender());
 
         } else {
             System.out.println("Usage: nokerbot <competitionrunner URI>");
