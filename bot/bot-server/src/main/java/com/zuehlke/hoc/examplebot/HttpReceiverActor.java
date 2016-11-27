@@ -22,7 +22,7 @@ public class HttpReceiverActor extends UntypedConsumerActor {
     private ActorRef playerActor;
 
     public HttpReceiverActor(String listenOnUri, ActorRef playerActor) {
-        this.endpointUri = String.format("jetty:%1", listenOnUri);
+        this.endpointUri = String.format("jetty:%s", listenOnUri);
         this.playerActor = playerActor;
     }
 
