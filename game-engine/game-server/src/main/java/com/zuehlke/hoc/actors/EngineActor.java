@@ -1,7 +1,7 @@
 package com.zuehlke.hoc.actors;
 
-import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.NokerGame;
+import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.notification.api.PlayerNotifier;
 import com.zuehlke.hoc.notification.api.StartInfo;
 import org.slf4j.Logger;
@@ -18,7 +18,7 @@ public class EngineActor implements IEngineActor {
     public EngineActor(BotNotifier botNotifier, ViewNotifier viewNotifier){
         this.botNotifier = botNotifier;
         this.viewNotifier = viewNotifier;
-        game = new NokerGame(3, new PlayerNotifier() {
+        game = new NokerGame(2, new PlayerNotifier() {
             @Override
             public void sendCardInfo(String player, int card) {
                 viewNotifier.sendGameInfo("Player "+player+" got card "+card);
