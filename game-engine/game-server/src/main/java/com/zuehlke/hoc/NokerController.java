@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-
-
 @RestController
 @RequestMapping("/noker")
 public class NokerController {
@@ -31,9 +29,13 @@ public class NokerController {
         this.botNotifier = botNotifier;
     }
 
-
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public void register(@RequestBody RegisterMessage input) {
+        log.info("Received register call");
+        log.info("Register message: {}", input);
+
+        botNotifier.registerBot(input);
+
         IEngineActor gameEng = actorSystem.getGameEngine();
         gameEng.registerPlayer(input.getName());
     }
