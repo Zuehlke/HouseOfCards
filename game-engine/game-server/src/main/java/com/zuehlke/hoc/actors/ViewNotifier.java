@@ -1,6 +1,6 @@
 package com.zuehlke.hoc.actors;
 
-import com.zuehlke.hoc.Player;
+import com.zuehlke.hoc.model.Player;
 
 public interface ViewNotifier {
     void sendGameInfo();

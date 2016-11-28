@@ -1,4 +1,4 @@
-package com.zuehlke.hoc;
+package com.zuehlke.hoc.model;
 
 import com.zuehlke.hoc.Exceptions.EmptyDeckException;
 
@@ -12,7 +12,7 @@ import java.util.*;
  * In general, there exist 13 different cards (from 2 until ace),
  * therefore each card is contained 4 times in the deck.
  */
-public class Deck {
+public class NokerDeck implements Deck {
 
     public final static int LOWEST_CARD = 2;
     public final static int HIGHEST_CARD = 14;
@@ -23,21 +23,14 @@ public class Deck {
 
     private Random random;
 
-    public Deck() {
+    public NokerDeck() {
         cards = new Stack<>();
         random = new Random();
-    }
-
-    /**
-     * Initialize the deck with {@value Deck#NUM_CARDS_OF_SINGLE_DECK} cards.
-     */
-    public void initialize() {
-        for (int i = 0; i < NUM_CARDS_OF_SINGLE_DECK; i++) {
-            cards.push(i % (HIGHEST_CARD-1)+2);
-        }
+        initialize();
     }
 
     public void shuffle() {
+        resetDeck();
         Collections.shuffle(cards, random);
     }
 
@@ -51,11 +44,18 @@ public class Deck {
         return card;
     }
 
-    public int getSize() {
-        return cards.size();
-    }
-
     public List<Integer> getAllCards() {
         return new ArrayList<>(cards);
+    }
+
+    private void initialize() {
+        for (int i = 0; i < NUM_CARDS_OF_SINGLE_DECK; i++) {
+            cards.push(i % (HIGHEST_CARD-1)+2);
+        }
+    }
+
+    private void resetDeck() {
+        cards.clear();
+        initialize();
     }
 }

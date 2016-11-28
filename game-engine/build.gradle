@@ -1,6 +1,0 @@
-apply plugin: 'java'
-
-jar {
-    baseName = 'game-engine'
-    version =  '0.1.0'
-}
