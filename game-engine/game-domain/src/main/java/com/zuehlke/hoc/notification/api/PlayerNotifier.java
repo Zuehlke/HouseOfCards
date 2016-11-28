@@ -1,19 +1,14 @@
 package com.zuehlke.hoc.notification.api;
 
-import java.io.Serializable;
-
 public interface PlayerNotifier {
 
-
-    void playersTurn(String player);
     void sendCardInfo(String player, int card);
+    void playersTurn(String player, long minimumChipsForCall);
 
-    void boradcastGameStarts(StartInfo info);
-    void boradcastNextRound();
-    void boradcastNextMatch();
-    void broadcastPlayerRaised(String name, long amount);
-    void broadcastPlayerCalled(String name);
-    void boradcastPlayerFolded(String name);
-
-
+    void broadcastGameStarts(StartInfo info);
+    void broadcastPlayerRaised(String playerName, long amount);
+    void broadcastPlayerCalled(String playerName);
+    void broadcastPlayerFolded(String playerName);
+    void broadcastNextRound();
+    void broadcastNextMatch();
 }

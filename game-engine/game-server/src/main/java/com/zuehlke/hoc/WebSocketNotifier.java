@@ -17,12 +17,7 @@ public class WebSocketNotifier implements ViewNotifier {
     }
 
     @Override
-    public void sendGameInfo() {
-
-    }
-
-    @Override
-    public void onRegisterPlayer(Player player) {
-        messagingTemplate.convertAndSend("/topic/player", player);
+    public void sendGameInfo(String info) {
+        messagingTemplate.convertAndSend(info);
     }
 }
