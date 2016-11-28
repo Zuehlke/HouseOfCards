@@ -26,36 +26,44 @@ public class EngineActor implements IEngineActor {
 
             @Override
             public void playersTurn(String player, long minimumChipsForCall) {
+                viewNotifier.sendGameInfo("Next turn: Player "+player);
 
             }
 
             @Override
             public void broadcastGameStarts(StartInfo info) {
+                viewNotifier.sendGameInfo("A new game started: " + info.toString());
 
             }
 
             @Override
             public void broadcastPlayerRaised(String playerName, long amount) {
+                viewNotifier.sendGameInfo("Player " + playerName + " raised");
 
             }
 
             @Override
             public void broadcastPlayerCalled(String playerName) {
+                viewNotifier.sendGameInfo("Player " + playerName + " called");
+
 
             }
 
             @Override
             public void broadcastPlayerFolded(String playerName) {
+                viewNotifier.sendGameInfo("Player " + playerName + " folded");
 
             }
 
             @Override
             public void broadcastNextRound() {
+                viewNotifier.sendGameInfo("New round started");
 
             }
 
             @Override
             public void broadcastNextMatch() {
+                viewNotifier.sendGameInfo("New match started");
 
             }
         });
