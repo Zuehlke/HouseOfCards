@@ -9,7 +9,7 @@ function setConnected(connected) {
 }
 
 function addToList(content) {
-    $("#stateList").append("<li>" + content + "</li>");
+    $("#eventList").append("<li>" + content + "</li>");
 }
 
 function connect() {
@@ -24,14 +24,10 @@ function connect() {
     stompClient.connect({}, function (frame) {
         setConnected(true);
         var register_channel = stompClient.subscribe('/user/topic/poker_register', function (currentState) {
-            addToList(currentState.body);
+            addToList(JSON.parse(currentState.body).message);
             register_channel.unsubscribe();
             stompClient.subscribe('/topic/poker_updates', function (update) {
-                addToList(update.body);
-            });
-
-            stompClient.subscribe('/topic/player', function(update) {
-                addToList('Player: ' + update.body);
+                addToList(JSON.parse(update.body).message);
             });
         });
         stompClient.send("/app/register", {}, {});
