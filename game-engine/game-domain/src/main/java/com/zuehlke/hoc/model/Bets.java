@@ -85,4 +85,5 @@ public class Bets {
     public boolean playerHasCalled(Player player) {
         return playerCalled.contains(player.getName());
     }
+
 }

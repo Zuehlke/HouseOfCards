@@ -87,8 +87,11 @@ public class Match {
     }
 
     private void showdown() {
-        Player winner = WiningStrategy.winner(matchPlayers, round.getBets());
-        winner.setChipsStack(winner.getChipsStack()+round.getBets().getTotalPot());
+        List<Player> winners = WinningStrategy.winners(matchPlayers, round.getBets());
+        long wonChipsShare = round.getBets().getTotalPot() / winners.size();
+
+        winners.forEach(winner -> winner.setChipsStack(winner.getChipsStack() + wonChipsShare));
+
         cleanHands();
         notifier.broadcastMatchFinished();
     }
