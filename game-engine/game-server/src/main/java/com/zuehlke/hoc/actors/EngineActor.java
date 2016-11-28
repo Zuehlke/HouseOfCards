@@ -4,6 +4,7 @@ import com.zuehlke.hoc.NokerGame;
 import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.notification.api.PlayerNotifier;
 import com.zuehlke.hoc.notification.api.StartInfo;
+import com.zuehlke.hoc.rest.RegisterMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,8 +70,9 @@ public class EngineActor implements IEngineActor {
         });
     }
 
-    public void registerPlayer(String botName) {
-        Player player = game.createPlayer(botName);
+    public void registerPlayer(RegisterMessage registerMessage) {
+        this.botNotifier.registerBot(registerMessage);
+        Player player = game.createPlayer(registerMessage.getName());
         viewNotifier.sendGameInfo(player.getName()+" registered!");
         botNotifier.gameStartEvent();
         sendPlayerInfo();
