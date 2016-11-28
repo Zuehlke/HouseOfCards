@@ -33,8 +33,9 @@ public class EngineActor implements IEngineActor {
 
             @Override
             public void broadcastGameStarts(StartInfo info) {
+                log.info("broadcastGameStarts");
                 viewNotifier.sendGameInfo("A new game started: " + info.toString());
-
+                botNotifier.gameStartEvent();
             }
 
             @Override
@@ -74,7 +75,6 @@ public class EngineActor implements IEngineActor {
         this.botNotifier.registerBot(registerMessage);
         Player player = game.createPlayer(registerMessage.getName());
         viewNotifier.sendGameInfo(player.getName()+" registered!");
-        botNotifier.gameStartEvent();
         sendPlayerInfo();
     }
 
