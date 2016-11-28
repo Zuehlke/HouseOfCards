@@ -7,6 +7,8 @@ import akka.http.javadsl.model.HttpRequest;
 import akka.stream.ActorMaterializer;
 import com.zuehlke.hoc.rest.RegisterMessage;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Responsible for sending HTTP message to the competition runner.
@@ -14,8 +16,10 @@ import org.codehaus.jackson.map.ObjectMapper;
  */
 public class HttpSenderActor extends UntypedActor {
 
+    final static Logger log = LoggerFactory.getLogger(HttpSenderActor.class);
+
     /**
-     * Forwards RegisterMessages to the competitionrunner.
+     * Forwards RegisterMessages to the competition runner.
      *
      * @param message that contains host, port and player name
      * @throws Throwable
@@ -32,6 +36,8 @@ public class HttpSenderActor extends UntypedActor {
 
             Http.get(getContext().system())
                     .singleRequest(request, materializer);
+            log.debug("send register message");
+            log.debug("Register message: {}", registerMessage);
         }
     }
 }
