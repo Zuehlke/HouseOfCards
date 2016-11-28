@@ -1,11 +1,17 @@
 // run with (example arguments): gradle run -p bot/bot-server -PappArgs="['localhost', 'newcomer', '8081']"
 apply plugin: 'application'
 
-mainClassName = 'com.zuehlke.hoc.examplebot.Application'
+mainClassName = 'com.zuehlke.hoc.examplebot.BotApplication'
 
 run {
     if ( project.hasProperty("appArgs") ) {
         args Eval.me(appArgs)
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.zuehlke.hoc.examplebot.BotApplication'
     }
 }
 

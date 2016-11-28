@@ -36,7 +36,7 @@ public class RestBotNotifier implements BotNotifier{
 
     @Override
     public void gameStartEvent(){
-        log.debug("Send start event to all bots.");
+        log.info("Send start event to all bots.");
 
         bots.values().stream().forEach(x -> {
             String url = String.format("http://%s:%d/start", x.getHostname(), x.getPort());

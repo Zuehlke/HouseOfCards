@@ -21,7 +21,7 @@ public class EngineActor implements IEngineActor {
         game = new NokerGame(2, new PlayerNotifier() {
             @Override
             public void sendCardInfo(String player, int card) {
-                viewNotifier.sendGameInfo("Player "+player+" got card "+card);
+                //viewNotifier.sendGameInfo("Player "+player+" got card "+card);
             }
 
             @Override
@@ -31,7 +31,7 @@ public class EngineActor implements IEngineActor {
 
             @Override
             public void broadcastGameStarts(StartInfo info) {
-
+                botNotifier.gameStartEvent();
             }
 
             @Override
@@ -64,7 +64,7 @@ public class EngineActor implements IEngineActor {
     public void registerPlayer(String botName) {
         Player player = game.createPlayer(botName);
         viewNotifier.sendGameInfo(player.getName()+" registered!");
-        botNotifier.gameStartEvent();
+
         sendPlayerInfo();
     }
 

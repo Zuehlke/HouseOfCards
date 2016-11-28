@@ -1,11 +1,22 @@
 // gradle run -p game-engine/game-server
-apply plugin: 'application'
-apply plugin: 'org.springframework.boot'
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.2.RELEASE")
+    }
+}
 
-mainClassName = 'com.zuehlke.hoc.Application'
+apply plugin: 'spring-boot'
 
-springBoot {
-    mainClass = "game-server.Application"
+jar {
+    baseName = 'competition-runner'
+    version = '0.0.1'
+}
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
@@ -24,6 +35,5 @@ dependencies {
     compile('org.webjars:stomp-websocket:2.3.3')
     compile('org.webjars:jquery:3.1.0')
     compile('org.webjars:bootstrap:3.1.0')
-
 
 }
