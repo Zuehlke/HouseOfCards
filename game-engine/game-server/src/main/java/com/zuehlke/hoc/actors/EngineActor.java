@@ -1,14 +1,24 @@
 package com.zuehlke.hoc.actors;
 
+import akka.actor.ActorContext;
+import akka.actor.TypedActor;
+import com.zuehlke.hoc.*;
 import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.NokerGame;
-import com.zuehlke.hoc.notification.api.PlayerNotifier;
-import com.zuehlke.hoc.notification.api.StartInfo;
+import com.zuehlke.hoc.rest.RegisterMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class EngineActor implements IEngineActor {
 
-    private final NokerGame game;
+    private final static Logger log = LoggerFactory.getLogger(EngineActor.class);
+    private final Game game;
     private final BotNotifier botNotifier;
     private final ViewNotifier viewNotifier;
 
@@ -61,5 +71,13 @@ public class EngineActor implements IEngineActor {
     public void registerPlayer(String botName) {
         Player player = game.createPlayer(botName);
         viewNotifier.sendGameInfo(player.getName()+" registered!");
+        botNotifier.gameStartEvent();
+        sendPlayerInfo();
     }
+
+    private void sendPlayerInfo() {
+        game.getPlayers().forEach(p -> botNotifier.sendPlayerInfo(p));
+    }
+
+
 }

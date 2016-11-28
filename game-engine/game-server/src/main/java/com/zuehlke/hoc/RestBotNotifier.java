@@ -1,9 +1,7 @@
 package com.zuehlke.hoc;
 
-import akka.event.ActorClassificationUnsubscriber;
 import com.zuehlke.hoc.actors.BotNotifier;
-import com.zuehlke.hoc.actors.EngineActor;
-import com.zuehlke.hoc.model.Player;
+import com.zuehlke.hoc.rest.GameEvent;
 import com.zuehlke.hoc.rest.RegisterMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +37,14 @@ public class RestBotNotifier implements BotNotifier{
     @Override
     public void gameStartEvent(){
         log.debug("Send start event to all bots.");
+
+        bots.values().stream().forEach(x -> {
+            String url = String.format("http://%s:%d/start", x.getHostname(), x.getPort());
+            log.info("send game start to {}", url);
+            GameEvent startEvent = new GameEvent();
+            startEvent.setEventKind(GameEvent.EventKind.START);
+            restTemplate.postForObject(url, startEvent, String.class);
+        });
     }
 
     @Override
