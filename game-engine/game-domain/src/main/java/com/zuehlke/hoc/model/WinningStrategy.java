@@ -7,7 +7,7 @@ import java.util.Map;
 
 
 /**
- * Calculates the winner of a match.
+ * Calculates the winners of a match.
  */
 public class WinningStrategy {
 
@@ -16,7 +16,8 @@ public class WinningStrategy {
 
     public static List<Player> winners(List<Player> matchPlayers, Bets bets) {
         List<Player> remainingPlayersOfRound = filterFoldedPlayers(matchPlayers, bets);
-        return getPlayersWithBestHand(remainingPlayersOfRound);
+        Map<Player, Integer> playerScores = calculatePlayerScores(remainingPlayersOfRound);
+        return calculateWinners(playerScores);
     }
 
     /**
@@ -33,12 +34,6 @@ public class WinningStrategy {
             }
         });
         return remainingPlayers;
-    }
-
-
-    private static List<Player> getPlayersWithBestHand(List<Player> remainingPlayersOfRound) {
-        Map<Player, Integer> playerScores = calculatePlayerScores(remainingPlayersOfRound);
-        return calculateWinners(playerScores);
     }
 
 
@@ -64,15 +59,14 @@ public class WinningStrategy {
     private static List<Player> calculateWinners(Map<Player, Integer> playerScores) {
         List<Player> winners = new ArrayList<>();
 
-        // TODO: refactor
-        int bestScore = 0;
+        int highestScore = 0;
         for(Map.Entry<Player,Integer> playerScore : playerScores.entrySet()) {
-            if (bestScore == 0 || playerScore.getValue() > bestScore) {
-                bestScore = playerScore.getValue();
+            if (highestScore == 0 || playerScore.getValue() > highestScore) {
+                highestScore = playerScore.getValue();
             }
         }
 
-        int finalBestScore = bestScore;
+        int finalBestScore = highestScore;
         playerScores.entrySet().forEach(score -> {
             if (score.getValue() == finalBestScore) {
                 winners.add(score.getKey());
