@@ -18,7 +18,7 @@ public class NokerController {
 
     private static final Logger log = LoggerFactory.getLogger(NokerController.class.getName());
 
-    private final BotNotifier botNotifier;
+    private BotNotifier botNotifier;
 
     private DefaultActorSystem actorSystem;
 
@@ -30,13 +30,12 @@ public class NokerController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public void register(@RequestBody RegisterMessage input) {
+    public void register(@RequestBody RegisterMessage registerMessage) {
         log.info("Received register call");
-        log.info("Register message: {}", input);
+        log.info("Register message: {}", registerMessage);
 
-        botNotifier.registerBot(input);
 
         IEngineActor gameEng = actorSystem.getGameEngine();
-        gameEng.registerPlayer(input.getName());
+        gameEng.registerPlayer(registerMessage);
     }
 }

@@ -4,6 +4,6 @@ import com.zuehlke.hoc.rest.RegisterMessage;
 
 public interface IEngineActor {
 
-    void registerPlayer(String botName);
+    void registerPlayer(RegisterMessage registerMessage);
 
 }
