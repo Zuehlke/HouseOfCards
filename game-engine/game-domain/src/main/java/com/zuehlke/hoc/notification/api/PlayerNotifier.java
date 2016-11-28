@@ -1,5 +1,7 @@
 package com.zuehlke.hoc.notification.api;
 
+import java.io.Serializable;
+
 public interface PlayerNotifier {
 
 
