@@ -27,7 +27,11 @@ public class NokerDeck implements Deck {
         cards = new Stack<>();
         random = new Random();
         initialize();
-        shuffle();
+    }
+
+    public void shuffle() {
+        resetDeck();
+        Collections.shuffle(cards, random);
     }
 
     public int drawCard() {
@@ -40,24 +44,18 @@ public class NokerDeck implements Deck {
         return card;
     }
 
-    public int getSize() {
-        return cards.size();
-    }
-
     public List<Integer> getAllCards() {
         return new ArrayList<>(cards);
     }
 
-    /**
-     * Initialize the deck with {@value #NUM_CARDS_OF_SINGLE_DECK} cards.
-     */
     private void initialize() {
         for (int i = 0; i < NUM_CARDS_OF_SINGLE_DECK; i++) {
             cards.push(i % (HIGHEST_CARD-1)+2);
         }
     }
 
-    public void shuffle() {
-        Collections.shuffle(cards, random);
+    private void resetDeck() {
+        cards.clear();
+        initialize();
     }
 }
