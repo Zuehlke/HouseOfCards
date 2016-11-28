@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Lukas Hofmaier
  */
-public class JustCallActor extends UntypedActor {
+class JustCallActor extends UntypedActor {
 
     private final static Logger log = LoggerFactory.getLogger(JustCallActor.class);
 

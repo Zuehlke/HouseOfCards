@@ -14,15 +14,14 @@ import org.slf4j.LoggerFactory;
  * Responsible for sending HTTP message to the competition runner.
  * @author Lukas Hofmaier
  */
-public class HttpSenderActor extends UntypedActor {
+class HttpSenderActor extends UntypedActor {
 
-    final static Logger log = LoggerFactory.getLogger(HttpSenderActor.class);
+    private final static Logger log = LoggerFactory.getLogger(HttpSenderActor.class);
 
     /**
      * Forwards RegisterMessages to the competition runner.
      *
      * @param message that contains host, port and player name
-     * @throws Throwable
      */
     @Override
     public void onReceive(Object message) throws Throwable {

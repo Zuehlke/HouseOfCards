@@ -4,7 +4,6 @@ import akka.actor.ActorRef;
 import akka.camel.CamelMessage;
 import akka.camel.javaapi.UntypedConsumerActor;
 import com.zuehlke.hoc.rest.GameEvent;
-import com.zuehlke.hoc.rest.RegisterMessage;
 import org.apache.camel.converter.stream.InputStreamCache;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
@@ -16,7 +15,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Lukas Hofmaier
  */
-public class HttpReceiverActor extends UntypedConsumerActor {
+class HttpReceiverActor extends UntypedConsumerActor {
 
     private final static Logger log = LoggerFactory.getLogger(HttpReceiverActor.class);
 
