@@ -7,16 +7,10 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class GameViewerController {
-    private GameStateAdapter gameStateAdapter;
-
-    @Autowired
-    public GameViewerController(GameStateAdapter gameStateAdapter) {
-        this.gameStateAdapter = gameStateAdapter;
-    }
 
     @MessageMapping("/register")
     @SendToUser("/topic/poker_register")
-    public ViewState register() throws Exception {
-        return gameStateAdapter.getViewState();
+    public SimpleViewerMessage register() throws Exception {
+        return new SimpleViewerMessage("REGISTRED");
     }
 }
