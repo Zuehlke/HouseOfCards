@@ -1,4 +1,8 @@
+// gradle run -p game-engine/game-server
+apply plugin: 'application'
 apply plugin: 'org.springframework.boot'
+
+mainClassName = 'com.zuehlke.hoc.Application'
 
 springBoot {
     mainClass = "game-server.Application"
