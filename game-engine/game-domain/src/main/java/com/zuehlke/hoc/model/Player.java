@@ -24,6 +24,10 @@ public class Player {
     }
 
     public int getFirstCard() {
+        //TODO: this shouldn't be a C style return..
+        if(hand.size() < 1){
+            return -1;
+        }
         return hand.get(0);
     }
 
@@ -61,6 +65,4 @@ public class Player {
                 ", chipsStack=" + chipsStack +
                 '}';
     }
-
-
 }
