@@ -26,8 +26,8 @@ public class HttpReceiverActor extends UntypedConsumerActor {
     //reference to actor that reacts an game events sent by the competition server
     private ActorRef playerActor;
 
-    public HttpReceiverActor(RegisterMessage registerMessage, ActorRef playerActor) {
-        this.endpointUri = String.format("jetty:http://%s:%d/start", registerMessage.getHostname(), registerMessage.getPort());
+    public HttpReceiverActor(Credentials credentials, ActorRef playerActor) {
+        this.endpointUri = String.format("jetty:http://%s:%d/start", credentials.getHostname(), credentials.getPort());
         log.debug("Receiver listens on {}", this.endpointUri);
         this.playerActor = playerActor;
     }
