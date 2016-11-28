@@ -25,7 +25,7 @@ public class BotApplication {
             ActorSystem system = ActorSystem.create();
 
             ActorRef player = system.actorOf(Props.create(JustCallActor.class));
-            Props httpReceiverProbs = Props.create(HttpReceiverActor.class, uri, player);
+            Props httpReceiverProbs = Props.create(HttpReceiverActor.class, registerMessage, player);
             ActorRef httpSender = system.actorOf(Props.create(HttpSenderActor.class));
             system.actorOf(httpReceiverProbs);
             httpSender.tell(registerMessage, ActorRef.noSender());

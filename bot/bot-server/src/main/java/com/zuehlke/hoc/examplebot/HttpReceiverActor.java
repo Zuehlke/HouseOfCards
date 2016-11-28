@@ -3,9 +3,12 @@ package com.zuehlke.hoc.examplebot;
 import akka.actor.ActorRef;
 import akka.camel.CamelMessage;
 import akka.camel.javaapi.UntypedConsumerActor;
-import com.zuehlke.hoc.rest.RegistrationResponse;
+import com.zuehlke.hoc.rest.GameEvent;
+import com.zuehlke.hoc.rest.RegisterMessage;
 import org.apache.camel.converter.stream.InputStreamCache;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Listens for HTTP requests, transforms incoming requests to <code>RegistrationResponse</code> and forwards them to the
@@ -15,14 +18,17 @@ import org.codehaus.jackson.map.ObjectMapper;
  */
 public class HttpReceiverActor extends UntypedConsumerActor {
 
+    private final static Logger log = LoggerFactory.getLogger(HttpReceiverActor.class);
+
     //the bot will reveive incomming HTTP request from the competition runner on this URI
     private String endpointUri;
 
     //reference to actor that reacts an game events sent by the competition server
     private ActorRef playerActor;
 
-    public HttpReceiverActor(String listenOnUri, ActorRef playerActor) {
-        this.endpointUri = String.format("jetty:%s", listenOnUri);
+    public HttpReceiverActor(RegisterMessage registerMessage, ActorRef playerActor) {
+        this.endpointUri = String.format("jetty:http://%s:%d/start", registerMessage.getHostname(), registerMessage.getPort());
+        log.debug("Receiver listens on {}", this.endpointUri);
         this.playerActor = playerActor;
     }
 
@@ -40,10 +46,12 @@ public class HttpReceiverActor extends UntypedConsumerActor {
             //retrieve json from HTTP Request and convert it into a RegistrationResponse
             Object body = camelMessage.body();
             InputStreamCache inputStreamCache = (InputStreamCache) body;
-            ObjectMapper objectMapper = new ObjectMapper();
-            RegistrationResponse registrationResponse = objectMapper.readValue(inputStreamCache, RegistrationResponse.class);
 
-            this.playerActor.tell(registrationResponse, getSelf());
+            ObjectMapper objectMapper = new ObjectMapper();
+            GameEvent gameEvent = objectMapper.readValue(inputStreamCache, GameEvent.class);
+            log.debug("received event: {}", gameEvent.eventKind);
+
+            this.playerActor.tell(gameEvent, getSelf());
 
             //return a message to the sender. This will return a HTTP response to the HTTP request sender
             // and close the TCP stream
