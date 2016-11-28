@@ -1,6 +1,7 @@
 package com.zuehlke.hoc;
 
 import com.zuehlke.hoc.actors.ViewNotifier;
+import com.zuehlke.hoc.model.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;

@@ -3,6 +3,7 @@ package com.zuehlke.hoc;
 import akka.event.ActorClassificationUnsubscriber;
 import com.zuehlke.hoc.actors.BotNotifier;
 import com.zuehlke.hoc.actors.EngineActor;
+import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.rest.RegisterMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

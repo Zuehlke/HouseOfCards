@@ -1,6 +1,6 @@
 package com.zuehlke.hoc.actors;
 
-import com.zuehlke.hoc.Player;
+import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.rest.RegisterMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
