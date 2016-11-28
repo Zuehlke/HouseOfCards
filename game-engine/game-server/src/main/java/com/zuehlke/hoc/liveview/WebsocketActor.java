@@ -9,17 +9,14 @@ import org.springframework.stereotype.Component;
 @EnableScheduling
 public class WebsocketActor {
     private GameViewerPublishService gameViewerPublishService;
-    private GameStateAdapter gameStateAdapter;
 
     @Autowired
-    public WebsocketActor(GameViewerPublishService gameViewerPublishService, GameStateAdapter gameStateAdapter) {
+    public WebsocketActor(GameViewerPublishService gameViewerPublishService) {
         this.gameViewerPublishService = gameViewerPublishService;
-        this.gameStateAdapter = gameStateAdapter;
     }
 
-    @Scheduled(fixedDelay = 15000)
+    @Scheduled(fixedDelay = 5000)
     public void getCurrentStateAndPublish() {
-        ViewState viewState = gameStateAdapter.getViewState();
-        gameViewerPublishService.publish(viewState);
+        gameViewerPublishService.publish("XYZ");
     }
 }

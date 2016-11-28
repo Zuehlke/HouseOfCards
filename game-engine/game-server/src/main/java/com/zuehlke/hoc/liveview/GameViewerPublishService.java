@@ -13,7 +13,10 @@ public class GameViewerPublishService {
         this.template = template;
     }
 
-    public void publish(ViewState viewState) {
-        template.convertAndSend("/topic/poker_updates", viewState);
+    public void publish(String message) {
+        template.convertAndSend("/topic/poker_updates", new SimpleViewerMessage(message));
     }
+
+
+
 }
