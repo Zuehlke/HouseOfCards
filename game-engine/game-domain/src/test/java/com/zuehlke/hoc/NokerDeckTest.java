@@ -48,6 +48,16 @@ public class NokerDeckTest {
     }
 
     @Test
+    public void shuffleResetsTheDeckSize() {
+        nokerDeck.shuffle();
+        nokerDeck.drawCard();
+        nokerDeck.drawCard();
+        assertEquals(nokerDeck.getAllCards().size(), NokerDeck.NUM_CARDS_OF_SINGLE_DECK-2);
+        nokerDeck.shuffle();
+        assertEquals(nokerDeck.getAllCards().size(), NokerDeck.NUM_CARDS_OF_SINGLE_DECK);
+    }
+
+    @Test
     public void drawingCardsReducesNokerDeckSize() {
         nokerDeck.shuffle();
 
