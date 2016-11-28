@@ -16,19 +16,14 @@ public class PlayerNotifierAdapter {
     }
 
     public void askPlayerForAction(String name, long chipsToCall) {
-        System.out.println("askPlayerForAction: " +name + ","+chipsToCall);
-        notifier.playersTurn(name);
+        notifier.playersTurn(name, chipsToCall);
     }
 
     public void sendCardInfoToPlayer(String name, int card) {
-            System.out.println("sendCardInfoToPlayer: " +name + ","+card);
-            notifier.sendCardInfo(name, card);
+        notifier.sendCardInfo(name, card);
     }
 
     public void broadcastMatchStart(Match match) {
-
-        System.out.println("broadcastMatchStart");
-
         StartInfo startInfo = new StartInfo();
 
         List<String> players = new ArrayList<>();
@@ -37,7 +32,19 @@ public class PlayerNotifierAdapter {
         matchPlayers.forEach(player -> players.add(player.getName()));
         matchPlayers.forEach(player -> startInfo.addPlayerInfo(new PlayerInfo(player.getName(), player.getChipsStack())));
 
-        notifier.boradcastGameStarts(startInfo);
+        notifier.broadcastGameStarts(startInfo);
+    }
+
+    public void broadcastPlayerFolded(Player player) {
+        notifier.broadcastPlayerFolded(player.getName());
+    }
+
+    public void broadcastPlayerCalled(Player player) {
+        notifier.broadcastPlayerCalled(player.getName());
+    }
+
+    public void broadcastPlayerRaised(Player player, long raise) {
+        notifier.broadcastPlayerRaised(player.getName(), raise);
     }
 
     public void broadcastRoundStarts(){
@@ -46,18 +53,6 @@ public class PlayerNotifierAdapter {
 
     public void broadcastRoundFinished() {
         System.out.println("broadcastRoundFinished");
-    }
-
-    public void broadcastPlayerFolded(Player player) {
-        System.out.println("broadcastPlayerFolded");
-    }
-
-    public void broadcastPlayerCalled(Player player) {
-        System.out.println("broadcastPlayerCalled");
-    }
-
-    public void broadcastPlayerRaised(Player player, long raise) {
-        System.out.println("broadcastPlayerRaised");
     }
 
     public void broadcastMatchFinished() {
@@ -69,7 +64,6 @@ public class PlayerNotifierAdapter {
     }
 
     public void broadcastGameStarted() {
-
         System.out.println("broadcastGameStarted");
     }
 }
