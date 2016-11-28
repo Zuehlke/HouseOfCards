@@ -2,12 +2,51 @@ package com.zuehlke.houseofcards;
 
 import com.zuehlke.houseofcards.Exceptions.InitGameException;
 import com.zuehlke.houseofcards.model.Player;
+import com.zuehlke.houseofcards.notification.api.PlayerNotifier;
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.internal.matchers.Not;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
 
 public class NokerGameTest {
+
+
+
+
+    // TODO: finish implementation
+    // this test exists to demonstrate the interaction between the outside infrastructure
+    // and the domain environment.
+    @Test
+    public void testWholeGame(){
+
+        PlayerNotifier playerNotifier = Mockito.mock(PlayerNotifier.class);
+
+        NokerGame game = new NokerGame(3, playerNotifier);
+
+        Player tobi = game.createPlayer("tobi");
+        Player riki = game.createPlayer("riki");
+        Player trump = game.createPlayer("trump");
+
+        // first round
+        game.playerCall(tobi);
+        game.playerCall(riki);
+        game.playerRaise(trump, 10);
+        game.playerCall(tobi);
+        game.playerFold(riki);
+
+        //second round
+        game.playerRaise(tobi,20);
+        game.playerRaise(trump, 20);
+        game.playerCall(tobi);
+
+
+    }
+
 
 //    @Test(expected = InitGameException.class)
 //    public void initGameWithTooLittlePlayers() {

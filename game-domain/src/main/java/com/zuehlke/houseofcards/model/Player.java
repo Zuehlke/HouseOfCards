@@ -15,6 +15,10 @@ public class Player {
         this.name = name;
     }
 
+    public void cleanHand() {
+        hand.clear();
+    }
+
     public void addCard(int card) {
         hand.add(card);
     }
@@ -57,4 +61,6 @@ public class Player {
                 ", chipsStack=" + chipsStack +
                 '}';
     }
+
+
 }

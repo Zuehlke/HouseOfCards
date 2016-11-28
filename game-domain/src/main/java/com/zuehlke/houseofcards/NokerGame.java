@@ -2,7 +2,6 @@ package com.zuehlke.houseofcards;
 
 
 import com.zuehlke.houseofcards.Exceptions.InitGameException;
-import com.zuehlke.houseofcards.model.Deck;
 import com.zuehlke.houseofcards.model.Match;
 import com.zuehlke.houseofcards.model.NokerDeck;
 import com.zuehlke.houseofcards.model.Player;
@@ -45,12 +44,13 @@ public class NokerGame {
         this.gamePlayers = new ArrayList<>();
     }
 
-    public void createPlayer(String playerName) {
+    public Player createPlayer(String playerName) {
         Player player = new Player(playerName);
         gamePlayers.add(player);
         if(allPlayersJoined()){
             startGame();
         }
+        return player;
     }
 
     public boolean allPlayersJoined() {
@@ -66,14 +66,17 @@ public class NokerGame {
 
     public void playerFold(Player player) {
         currentMatch.playerFold(player);
+        ifMatchIsFinishedGoAhead();
     }
 
     public void playerCall(Player player) {
         currentMatch.playerCall(player);
+        ifMatchIsFinishedGoAhead();
     }
 
     public void playerRaise(Player player, long raise) {
         currentMatch.playerRaise(player, raise);
+        ifMatchIsFinishedGoAhead();
     }
 
     private void ifMatchIsFinishedGoAhead() {
@@ -84,7 +87,6 @@ public class NokerGame {
             }else{
                 notifier.broadcastGameFinished();
             }
-
         }
     }
 }

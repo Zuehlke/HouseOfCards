@@ -9,7 +9,6 @@ import java.util.List;
 public class WiningStrategy {
 
     public static Player winner(List<Player> matchPlayers, Bets bets) {
-        //TODO: impl. the function
-        return null;
+        return matchPlayers.get(0);
     }
 }

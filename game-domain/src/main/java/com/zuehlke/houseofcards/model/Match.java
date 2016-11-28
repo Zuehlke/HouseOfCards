@@ -47,7 +47,7 @@ public class Match {
             if(p.getChipsStack() > 0){
                 playerForNextRound.add(p);
             }else{
-                notifier.sendGameFinisedToPlayer(p);
+                notifier.broadcastGameFinished();
             }
         });
         matchPlayers = playerForNextRound;
@@ -89,7 +89,12 @@ public class Match {
     private void showdown() {
         Player winner = WiningStrategy.winner(matchPlayers, round.getBets());
         winner.setChipsStack(winner.getChipsStack()+round.getBets().getTotalPot());
+        cleanHands();
         notifier.broadcastMatchFinished();
+    }
+
+    private void cleanHands() {
+            matchPlayers.forEach(p -> p.cleanHand());
     }
 
     public boolean isFinished(){
