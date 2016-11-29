@@ -16,6 +16,7 @@ public class WebsocketActor {
         this.viewNotifier = viewNotifier;
     }
 
+    /* Used to test the communication with the live view */
     @Scheduled(fixedDelay = 5000)
     public void getCurrentStateAndPublish() {
         //viewNotifier.sendGameInfo("Message from notifier.");
