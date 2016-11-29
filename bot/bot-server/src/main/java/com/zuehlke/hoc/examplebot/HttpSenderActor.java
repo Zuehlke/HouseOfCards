@@ -35,7 +35,7 @@ class HttpSenderActor extends UntypedActor {
 
             Http.get(getContext().system())
                     .singleRequest(request, materializer);
-            log.debug("send register message");
+            log.debug("Send register message");
             log.debug("Register message: {}", registerMessage);
         }
     }

@@ -38,8 +38,9 @@ public class RestBotNotifier implements BotNotifier {
         String url = String.format("http://%s:%d/start", registerMessage.getHostname(), registerMessage.getPort());
         GameEvent registrationResponse = new GameEvent();
         if (bots.containsKey(registerMessage.getName())) {
-            log.info(String.format("Name %s is already taken. Send NAME_ALREADY_TAKEN message to originator", registerMessage.getName()));
+            log.info("Name {} is already taken.", registerMessage.getName());
             registrationResponse.setEventKind(GameEvent.EventKind.NAME_ALREADY_TAKEN);
+            log.info("Send NAME_ALREADY_TAKEN message to {}.", url);
             restTemplate.postForObject(url, registrationResponse, String.class);
             return false;
         }
@@ -47,6 +48,7 @@ public class RestBotNotifier implements BotNotifier {
         bots.put(registerMessage.getName(), registerMessage);
         log.info("Current bots: " + bots.keySet().stream().reduce("", (a, b) -> a += (b + ", ")));
         registrationResponse.setEventKind(GameEvent.EventKind.RESERVATION_CONFIRMATION);
+        log.info("Send RESERVATION_CONFIRMATION message for team {} to {}", registerMessage.getName(), url);
         restTemplate.postForObject(url, registrationResponse, String.class);
         return true;
     }
