@@ -50,8 +50,8 @@ class JustCallActor extends UntypedActor {
                     break;
                 case NAME_ALREADY_TAKEN: log.info(String.format("The user name %s is already taken", credentials.getHostname()));
                     RegisterMessage registerMessageWithAlteredName = createRegisterMessage(credentials);
-                    registerMessageWithAlteredName.setName(String.format("%s_", registerMessageWithAlteredName.getName()));
-                    log.info(String.format("Retry registration with name %s.", registerMessageWithAlteredName.getName()));
+                    registerMessageWithAlteredName.setPlayerName(String.format("%s_", registerMessageWithAlteredName.getPlayerName()));
+                    log.info(String.format("Retry registration with name %s.", registerMessageWithAlteredName.getPlayerName()));
                     this.httpSender.tell(registerMessageWithAlteredName,getSelf());
                     break;
                 case RESERVATION_CONFIRMATION:log.info("Registration confirmed. Wait for game to start");
@@ -63,7 +63,7 @@ class JustCallActor extends UntypedActor {
 
     private static RegisterMessage createRegisterMessage(Credentials credentials) {
         RegisterMessage registerMessage = new RegisterMessage();
-        registerMessage.setName(credentials.getName());
+        registerMessage.setPlayerName(credentials.getName());
         registerMessage.setHostname(credentials.getHostname());
         registerMessage.setPort(credentials.getPort());
         return registerMessage;

@@ -50,7 +50,7 @@ public class BotNotifierTest {
                 .expect(requestTo("http://localhost:2222/start"))
                 .andRespond(withSuccess("{}", MediaType.APPLICATION_JSON));
         botNotifier.registerBot(new RegisterMessage()
-                .setName("Winner Bot")
+                .setPlayerName("Winner Bot")
                 .setHostname("localhost")
                 .setPort(2222));
         server.verify();
