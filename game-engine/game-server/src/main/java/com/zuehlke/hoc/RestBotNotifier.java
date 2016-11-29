@@ -46,7 +46,7 @@ public class RestBotNotifier implements BotNotifier {
         log.info("Register bot: " + registerMessage.getName() + " -> " + registerMessage.getHostname() + ":" + registerMessage.getPort());
         bots.put(registerMessage.getName(), registerMessage);
         log.info("Current bots: " + bots.keySet().stream().reduce("", (a, b) -> a += (b + ", ")));
-        registrationResponse.setEventKind(GameEvent.EventKind.CONFIRMATION);
+        registrationResponse.setEventKind(GameEvent.EventKind.RESERVATION_CONFIRMATION);
         restTemplate.postForObject(url, registrationResponse, String.class);
         return true;
     }

@@ -54,11 +54,10 @@ class JustCallActor extends UntypedActor {
                     log.info(String.format("Retry registration with name %s.", registerMessageWithAlteredName.getName()));
                     this.httpSender.tell(registerMessageWithAlteredName,getSelf());
                     break;
-                case CONFIRMATION:log.info("Registration confirmed. Wait for game to start");
+                case RESERVATION_CONFIRMATION:log.info("Registration confirmed. Wait for game to start");
                     break;
                 default: log.info("Received unknown RegistrationResponse: %s", gameEvent.getEventKind().toString());
             }
-
         }
     }
 

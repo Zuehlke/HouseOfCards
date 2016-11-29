@@ -48,7 +48,6 @@ class HttpReceiverActor extends UntypedConsumerActor {
 
             ObjectMapper objectMapper = new ObjectMapper();
             GameEvent gameEvent = objectMapper.readValue(inputStreamCache, GameEvent.class);
-            log.debug("received event: {}", gameEvent.eventKind);
 
             this.playerActor.tell(gameEvent, getSelf());
 
