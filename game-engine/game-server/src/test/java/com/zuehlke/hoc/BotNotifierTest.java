@@ -30,18 +30,29 @@ public class BotNotifierTest {
 
     @Before
     public void setUp() throws Exception {
-        this.server
-                .expect(requestTo("http://localhost:2222/update"))
-                .andRespond(withSuccess("{}", MediaType.APPLICATION_JSON));
+
+
     }
 
     @Test
     public void sendPlayerInfo() {
+        this.server
+                .expect(requestTo("http://localhost:2222/update"))
+                .andRespond(withSuccess("{}", MediaType.APPLICATION_JSON));
+
+        botNotifier.sendPlayerInfo(new Player("Winner Bot"));
+        server.verify();
+    }
+
+    @Test
+    public void registerBot() {
+        this.server
+                .expect(requestTo("http://localhost:2222/start"))
+                .andRespond(withSuccess("{}", MediaType.APPLICATION_JSON));
         botNotifier.registerBot(new RegisterMessage()
                 .setName("Winner Bot")
                 .setHostname("localhost")
                 .setPort(2222));
-        botNotifier.sendPlayerInfo(new Player("Winner Bot"));
         server.verify();
     }
 }
