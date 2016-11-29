@@ -10,7 +10,7 @@
 
     <logger name="org.apache.camel" level="warn"/>
 
-    <logger name="org.eclipse.jetty" level="warn"/>
+    <logger name="org.eclipse.jetty" level="error"/>
 
     <root level="debug">
         <appender-ref ref="STDOUT"/>
