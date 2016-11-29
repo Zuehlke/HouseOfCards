@@ -23,7 +23,7 @@ public class GameEvent {
     }
 
     public enum EventKind {
-        START
+        START, CONFIRMATION, NAME_ALREADY_TAKEN, URI_ALREADY_TAKEN, REGISTRATION_CLOSED
     }
 
 }

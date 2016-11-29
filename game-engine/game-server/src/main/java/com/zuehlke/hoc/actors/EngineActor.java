@@ -72,10 +72,11 @@ public class EngineActor implements IEngineActor {
     }
 
     public void registerPlayer(RegisterMessage registerMessage) {
-        this.botNotifier.registerBot(registerMessage);
-        Player player = game.createPlayer(registerMessage.getName());
-        viewNotifier.sendGameInfo(player.getName()+" registered!");
-        sendPlayerInfo();
+        if (this.botNotifier.registerBot(registerMessage)) {
+            Player player = game.createPlayer(registerMessage.getName());
+            viewNotifier.sendGameInfo(player.getName() + " registered!");
+            sendPlayerInfo();
+        }
     }
 
     private void sendPlayerInfo() {

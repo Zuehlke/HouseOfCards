@@ -34,7 +34,6 @@ public class NokerController {
         log.info("Received register call");
         log.info("Register message: {}", registerMessage);
 
-
         IEngineActor gameEng = actorSystem.getGameEngine();
         gameEng.registerPlayer(registerMessage);
     }

@@ -20,7 +20,7 @@ public class RegistrationResponse {
         this.registrationResult = registrationResult;
     }
 
-    private enum Result {
+    public enum Result {
         CONFIRMATION, NAME_ALREADY_TAKEN, URI_ALREADY_TAKEN, REGISTRATION_CLOSED
     }
 }
