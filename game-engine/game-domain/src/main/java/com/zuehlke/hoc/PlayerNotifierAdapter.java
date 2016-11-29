@@ -4,18 +4,26 @@ import com.zuehlke.hoc.model.Match;
 import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.notification.api.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class PlayerNotifierAdapter {
 
     private PlayerNotifier notifier;
+
+    private static final Logger log = LoggerFactory.getLogger(PlayerNotifierAdapter.class.getName());
+
 
     public PlayerNotifierAdapter(PlayerNotifier notifier) {
         this.notifier = notifier;
     }
 
     public void askPlayerForAction(String name, long chipsToCall) {
+        log.info("askPlayerForAction: Player in turn: {}, Chips to call: {}", name, chipsToCall);
         notifier.playersTurn(name, chipsToCall);
     }
 
