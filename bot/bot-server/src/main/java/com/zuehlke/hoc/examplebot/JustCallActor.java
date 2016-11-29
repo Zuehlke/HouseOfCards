@@ -34,17 +34,31 @@ class JustCallActor extends UntypedActor {
         this.httpSender = getContext().system().actorOf(Props.create(HttpSenderActor.class));
 
         RegisterMessage registerMessage = createRegisterMessage(credentials);
-        this.httpSender.tell(registerMessage, ActorRef.noSender());
+        this.httpSender.tell(registerMessage, getSelf());
     }
 
     @Override
     public void onReceive(Object message) throws Throwable {
+
         if(message instanceof GameEvent){
             GameEvent gameEvent = (GameEvent)message;
             log.info("Received message: {}", gameEvent);
+            switch(gameEvent.getEventKind()){
+                case START: log.info("Start game received");
+                    getContext().stop(getSelf());
+                    getContext().system().terminate();
+                    break;
+                case NAME_ALREADY_TAKEN: log.info(String.format("The user name %s is already taken", credentials.getHostname()));
+                    RegisterMessage registerMessageWithAlteredName = createRegisterMessage(credentials);
+                    registerMessageWithAlteredName.setName(String.format("%s_", registerMessageWithAlteredName.getName()));
+                    log.info(String.format("Retry registration with name %s.", registerMessageWithAlteredName.getName()));
+                    this.httpSender.tell(registerMessageWithAlteredName,getSelf());
+                    break;
+                case CONFIRMATION:log.info("Registration confirmed. Wait for game to start");
+                    break;
+                default: log.info("Received unknown RegistrationResponse: %s", gameEvent.getEventKind().toString());
+            }
 
-            getContext().stop(getSelf());
-            getContext().system().terminate();
         }
     }
 
