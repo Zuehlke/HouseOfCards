@@ -27,7 +27,7 @@ public class EngineActor implements IEngineActor {
 
             @Override
             public void playersTurn(String player, long minimumChipsForCall) {
-                viewNotifier.sendGameInfo("Next turn: Player "+player);
+                //viewNotifier.sendGameInfo("Next turn: Player "+player);
 
             }
 
