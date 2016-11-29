@@ -1,7 +1,6 @@
 package com.zuehlke.hoc.actors;
 
 import com.zuehlke.hoc.NokerGame;
-import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.notification.api.PlayerNotifier;
 import com.zuehlke.hoc.notification.api.StartInfo;
 import com.zuehlke.hoc.rest.RegisterMessage;
@@ -22,6 +21,7 @@ public class EngineActor implements IEngineActor {
         game = new NokerGame(2, new PlayerNotifier() {
             @Override
             public void sendCardInfo(String player, int card) {
+                log.info("Send card info");
                 viewNotifier.sendGameInfo("Player "+player+" got card "+card);
             }
 
@@ -33,7 +33,7 @@ public class EngineActor implements IEngineActor {
 
             @Override
             public void broadcastGameStarts(StartInfo info) {
-                log.info("broadcastGameStarts");
+                log.info("Broadcast game start event to all registered players");
                 viewNotifier.sendGameInfo("A new game started: " + info.toString());
                 botNotifier.gameStartEvent();
             }
@@ -73,9 +73,8 @@ public class EngineActor implements IEngineActor {
 
     public void registerPlayer(RegisterMessage registerMessage) {
         if (this.botNotifier.registerBot(registerMessage)) {
-            Player player = game.createPlayer(registerMessage.getName());
-            viewNotifier.sendGameInfo(player.getName() + " registered!");
-            sendPlayerInfo();
+            viewNotifier.sendGameInfo(registerMessage.getName() + " registered!");
+            game.createPlayer(registerMessage.getName());
         }
     }
 
