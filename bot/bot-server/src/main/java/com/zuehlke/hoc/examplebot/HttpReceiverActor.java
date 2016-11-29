@@ -47,8 +47,8 @@ class HttpReceiverActor extends UntypedConsumerActor {
             InputStreamCache inputStreamCache = (InputStreamCache) body;
 
             ObjectMapper objectMapper = new ObjectMapper();
+            //// TODO: 29.11.2016 handle exceptions orruring upon ObbjectMapper:readValue
             GameEvent gameEvent = objectMapper.readValue(inputStreamCache, GameEvent.class);
-            log.debug("received event: {}", gameEvent.eventKind);
 
             this.playerActor.tell(gameEvent, getSelf());
 

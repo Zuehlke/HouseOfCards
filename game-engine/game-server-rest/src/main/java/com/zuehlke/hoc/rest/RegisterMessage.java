@@ -1,19 +1,22 @@
 package com.zuehlke.hoc.rest;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class RegisterMessage {
+    private static final int MIN_PORT_NUMBER = 1;
+    private static final int MAX_PORT_NUMBER = 65535;
 
-    private String name;
+    private String playerName;
     private String hostname;
     private int port;
 
-    public String getName() {
-        return name;
+    public String getPlayerName() {
+        return playerName;
     }
 
-    public RegisterMessage setName(String name) {
-        this.name = name;
+    public RegisterMessage setPlayerName(String playerName) {
+        this.playerName = playerName;
         return this;
     }
 
@@ -42,7 +45,7 @@ public class RegisterMessage {
         else if (!(other instanceof RegisterMessage)) { return false; }
         else {
             RegisterMessage otherBot = (RegisterMessage) other;
-            return Objects.equals(getName(), otherBot.getName()) &&
+            return Objects.equals(getPlayerName(), otherBot.getPlayerName()) &&
                     Objects.equals(getHostname(), otherBot.getHostname()) &&
                     Objects.equals(getPort(), otherBot.getPort());
         }
@@ -50,12 +53,26 @@ public class RegisterMessage {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getHostname(), getPort());
+        return Objects.hash(getPlayerName(), getHostname(), getPort());
     }
 
     @Override
     public String toString() {
         return String.format("%s[%s, %s, %s]",
-                this.getClass().getSimpleName(), getName(), getHostname(), getPort());
+                this.getClass().getSimpleName(), getPlayerName(), getHostname(), getPort());
+    }
+
+    public Optional<String> validate() {
+        Optional<String> returnMessage = Optional.empty();
+        if (playerName == null || playerName.isEmpty()) {
+            returnMessage = Optional.of("player name is empty");
+        }
+        if (hostname == null || hostname.isEmpty()) {
+            returnMessage = Optional.of("hostname name is empty");
+        }
+        if (!(port < MIN_PORT_NUMBER) && !(port < MAX_PORT_NUMBER)) {
+            returnMessage = Optional.of("port is invalid");
+        }
+        return returnMessage;
     }
 }
