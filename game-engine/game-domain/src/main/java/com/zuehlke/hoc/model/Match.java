@@ -93,7 +93,7 @@ public class Match {
         winners.forEach(winner -> winner.setChipsStack(winner.getChipsStack() + wonChipsShare));
 
         cleanHands();
-        notifier.broadcastMatchFinished();
+        notifier.broadcastMatchFinished(winners);
     }
 
     private void cleanHands() {

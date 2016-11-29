@@ -23,11 +23,12 @@ public class PlayerNotifierAdapter {
     }
 
     public void askPlayerForAction(String name, long chipsToCall) {
-        log.info("askPlayerForAction: Player in turn: {}, Chips to call: {}", name, chipsToCall);
+        log.info("Ask player for action: Player in turn: {}, Chips to call: {}", name, chipsToCall);
         notifier.playersTurn(name, chipsToCall);
     }
 
     public void sendCardInfoToPlayer(String name, int card) {
+        log.info("Send card to player: Player: {}, Card: {}", name, card);
         notifier.sendCardInfo(name, card);
     }
 
@@ -40,38 +41,42 @@ public class PlayerNotifierAdapter {
         matchPlayers.forEach(player -> players.add(player.getName()));
         matchPlayers.forEach(player -> startInfo.addPlayerInfo(new PlayerInfo(player.getName(), player.getChipsStack())));
 
+        log.info("Match started: Players: {}", matchPlayers);
         notifier.broadcastGameStarts(startInfo);
     }
 
     public void broadcastPlayerFolded(Player player) {
+        log.info("Player folded: Player: {}", player.getName());
         notifier.broadcastPlayerFolded(player.getName());
     }
 
     public void broadcastPlayerCalled(Player player) {
+        log.info("Player called: Player: {}", player.getName());
         notifier.broadcastPlayerCalled(player.getName());
     }
 
     public void broadcastPlayerRaised(Player player, long raise) {
+        log.info("Player raised: Player: {}, Raise: {}", player.getName(), raise);
         notifier.broadcastPlayerRaised(player.getName(), raise);
     }
 
     public void broadcastRoundStarts(){
-        System.out.println("broadcastRoundStarts");
+        log.info("Round started");
     }
 
     public void broadcastRoundFinished() {
-        System.out.println("broadcastRoundFinished");
+        log.info("Round finished");
     }
 
-    public void broadcastMatchFinished() {
-        System.out.println("broadcastMatchFinished");
+    public void broadcastMatchFinished(List<Player> winners) {
+        log.info("Match finished: Winner(s): {}", winners);
     }
 
     public void broadcastGameFinished() {
-        System.out.println("broadcastGameFinished");
+        log.info("Game finished");
     }
 
     public void broadcastGameStarted() {
-        System.out.println("broadcastGameStarted");
+        log.info("Game started");
     }
 }
