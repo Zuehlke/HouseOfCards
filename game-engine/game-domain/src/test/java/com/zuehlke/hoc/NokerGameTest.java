@@ -17,57 +17,6 @@ import static org.junit.Assert.assertNotNull;
 
 public class NokerGameTest {
 
-    // This method is a demonstration of the interaction between players
-    // and the game domain.
-    @Test
-    public void demo(){
-
-        PlayerNotifier playerNotifier = Mockito.mock(PlayerNotifier.class);
-
-        NokerGame game = new NokerGame(3, playerNotifier);
-
-        Player tobi = game.createPlayer("tobi");
-        Player riki = game.createPlayer("riki");
-        Player trump = game.createPlayer("trump");
-
-
-        // first match
-        // initial players state
-        // Players: [{name='tobi', chipsStack=100},
-        //          {name='riki', chipsStack=100},
-        //          {name='trump', chipsStack=100}]
-
-        // first round
-        game.playerCall(tobi);
-        game.playerCall(riki);
-        game.playerRaise(trump, 10);
-        game.playerCall(tobi);
-        game.playerFold(riki);
-
-        //second round
-        game.playerRaise(tobi,20);
-        game.playerRaise(trump, 20);
-        game.playerCall(tobi);
-
-
-        // second match
-        // example state after first match:
-        // Players: [{name='tobi', chipsStack=50},
-        //          {name='riki', chipsStack=100},
-        //          {name='trump', chipsStack=150}]
-
-        // first round
-        game.playerRaise(riki, 10);
-        game.playerFold(trump);
-        game.playerCall(tobi);
-
-        // second round
-        game.playerRaise(riki, 20);
-        game.playerCall(tobi);
-
-        // ...
-    }
-
 
     @Test(expected = InitGameException.class)
     public void initGameWithTooLittlePlayers() {
