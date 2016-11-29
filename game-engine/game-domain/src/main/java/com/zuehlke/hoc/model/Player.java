@@ -7,7 +7,7 @@ import java.util.List;
 public class Player {
 
     private String name;
-    private long chipsStack;
+    private long chipsStack = 0;
     private List<Integer> hand;
 
     public Player(String name) {
