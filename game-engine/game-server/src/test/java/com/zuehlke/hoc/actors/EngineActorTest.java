@@ -1,8 +1,11 @@
 package com.zuehlke.hoc.actors;
 
-import akka.actor.ActorSystem;
+import com.zuehlke.hoc.rest.RegisterMessage;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 /**
  * @author Lukas Hofmaier
@@ -16,10 +19,21 @@ public class EngineActorTest {
     @Test
     public void registerPlayer() throws Exception {
 
-        // Mock<BotNotifier> botNotifierMock;
+        BotNotifier botNotifierMock = mock(BotNotifier.class);
+        ViewNotifier viewNotifier = mock(ViewNotifier.class);
 
-        ActorSystem system = ActorSystem.create();
-        //   TypedProps<EngineActor> props = new TypedProps<>(IEngineActor.class, () -> new EngineActor(botNotifier, viewNotifier));
+        IEngineActor engineActor = new EngineActor(botNotifierMock, viewNotifier);
+
+        RegisterMessage registerMessage = new RegisterMessage();
+        registerMessage.setPlayerName("hansdampf");
+        registerMessage.setHostname("localhost");
+        registerMessage.setPort(8080);
+
+        engineActor.registerPlayer(registerMessage);
+
+        verify(botNotifierMock).registerBot(registerMessage);
+        verify(viewNotifier);
+
     }
 
 }
