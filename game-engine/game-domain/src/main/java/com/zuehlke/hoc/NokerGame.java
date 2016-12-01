@@ -69,13 +69,13 @@ public class NokerGame {
         ifMatchIsFinishedGoAhead();
     }
 
-    public void playerCall(Player player) {
-        currentMatch.playerCall(player);
-        ifMatchIsFinishedGoAhead();
-    }
-
-    public void playerRaise(Player player, long raise) {
-        currentMatch.playerRaise(player, raise);
+    /**
+     * This method summarizes both moves call and raise.
+     * @param player current player
+     * @param chips  amount of chips to be set into the pot
+     */
+    public void playerSet(Player player, long chips) {
+        currentMatch.playerSet(player, chips);
         ifMatchIsFinishedGoAhead();
     }
 

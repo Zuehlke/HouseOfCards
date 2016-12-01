@@ -3,7 +3,6 @@ package com.zuehlke.hoc;
 import com.zuehlke.hoc.model.Match;
 import com.zuehlke.hoc.model.NokerDeck;
 import com.zuehlke.hoc.model.Player;
-import com.zuehlke.hoc.notification.api.PlayerNotifier;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -57,6 +56,28 @@ public class MatchTest {
         assertEquals(players.size(), nextMatch.getMatchPlayers().size());
     }
 
+
+    @Test
+    public void movesTriggerEvents() {
+        match.startMatch();
+        match.getMatchPlayers().forEach(player -> player.setChipsStack(NokerGame.INITIAL_CHIPS));
+        long raiseAmount = 10;
+
+        Player firstPlayer = players.get(0);
+        Player secondPlayer = players.get(1);
+        Player thirdPlayer = players.get(2);
+
+        match.playerSet(firstPlayer, 0);                // call move
+        match.playerSet(secondPlayer, raiseAmount);     // raise move
+        match.playerFold(thirdPlayer);                  // fold move
+
+        assertEquals(NokerGame.INITIAL_CHIPS, match.getMatchPlayers().get(0).getChipsStack());
+        assertEquals(NokerGame.INITIAL_CHIPS-raiseAmount, match.getMatchPlayers().get(1).getChipsStack());
+
+        Mockito.verify(notifier).broadcastPlayerCalled(firstPlayer);
+        Mockito.verify(notifier).broadcastPlayerRaised(secondPlayer, raiseAmount);
+        Mockito.verify(notifier).broadcastPlayerFolded(thirdPlayer);
+    }
 
     private List<Player> getDummyPlayers() {
         List<Player> players = Arrays.asList(new Player("Tobi"), new Player("Miki"), new Player("Riki"));

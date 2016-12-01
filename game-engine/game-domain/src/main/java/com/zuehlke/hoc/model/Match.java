@@ -64,14 +64,17 @@ public class Match {
         ifRoundIsFinishedGoAhead();
     }
 
-    public void playerCall(Player player) {
-        round.playerCall(player);
+    public void playerSet(Player player, long chips) {
+        if (isRaiseMove(player, chips)) {
+            round.playerRaise(player, chips);
+        } else {
+            round.playerCall(player);
+        }
         ifRoundIsFinishedGoAhead();
     }
 
-    public void playerRaise(Player player, long raise) {
-        round.playerRaise(player, raise);
-        ifRoundIsFinishedGoAhead();
+    private boolean isRaiseMove(Player player, long chips) {
+        return chips > round.getBets().neededChipsToCall(player);
     }
 
     private void ifRoundIsFinishedGoAhead() {
