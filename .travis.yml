@@ -10,9 +10,7 @@ notifications:
   email:
     - 'yannick.streit@zuehlke.com'
     - 'lukas.hofmaier@zuehlke.com'
-    - 'ramon.locher@zuehlke.com'
     - 'leotrim.zulfiu@zuehlke.com'
-    - 'dominic.muelhaupt@zuehlke.com'
 
 before_install:
   - chmod +x gradlew

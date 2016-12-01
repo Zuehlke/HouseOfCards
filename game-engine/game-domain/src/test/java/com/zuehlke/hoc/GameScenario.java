@@ -22,35 +22,35 @@ public class GameScenario {
 
         Player tobi = game.createPlayer("tobi");
         Player riki = game.createPlayer("riki");
-        Player trump = game.createPlayer("trump");
+        Player miki = game.createPlayer("miki");
         // all players registered => game is started
 
 
         // first match
 
         // first round
-        game.playerCall(tobi);
-        game.playerCall(riki);
-        game.playerRaise(trump, 10);
-        game.playerCall(tobi);
+        game.playerSet(tobi, 0);    // check = call
+        game.playerSet(riki, 0);    // check = call
+        game.playerSet(miki, 10);   // raise 10
+        game.playerSet(tobi, 10);   // call
         game.playerFold(riki);
 
         //second round
-        game.playerRaise(tobi,20);
-        game.playerRaise(trump, 20);
-        game.playerCall(tobi);
-
+        game.playerSet(tobi, 20);   // raise 20
+        game.playerSet(miki, 40);   // raise 20 (call: 20 + raise: 20 = 40)
+        game.playerSet(tobi, 20);   // call
 
         // second match
 
         // first round
-        game.playerRaise(riki, 10);
-        game.playerFold(trump);
-        game.playerCall(tobi);
+        game.playerSet(riki, 10);   // raise 10
+        game.playerFold(miki);
+        game.playerSet(tobi, 10);   // call
+
 
         // second round
-        game.playerRaise(riki, 20);
-        game.playerCall(tobi);
+        game.playerSet(riki, 20);   // raise 20
+        game.playerSet(tobi, 20);   // call
 
         // ...
     }
