@@ -36,6 +36,12 @@ public class Match {
         this.firstPlayerIndexInRound = firstPlayerIndexInRound;
     }
 
+    public void startMatch() {
+        notifier.broadcastMatchStart(this);
+        round = new Round(matchPlayers, firstPlayerIndexInRound, deck, notifier);
+        round.startRound();
+    }
+
     public Match createNextMatch(){
         removePlayerWithNoChips();
         return new Match(matchPlayers, BetIterator.nextPlayerIndex(matchPlayers,firstPlayerIndexInRound), deck, notifier);
@@ -51,12 +57,6 @@ public class Match {
             }
         });
         matchPlayers = playerForNextRound;
-    }
-
-    public void startMatch() {
-        notifier.broadcastMatchStart(this);
-        round = new Round(matchPlayers, firstPlayerIndexInRound, deck, notifier);
-        round.startRound();
     }
 
     public void playerFold(Player player) {
@@ -101,7 +101,7 @@ public class Match {
     }
 
     public boolean isFinished(){
-        return round.isFinished() && firstRound == false;
+        return round.isFinished() && !firstRound;
     }
 
     public boolean hasMoreThanOnePlayerChips(){
@@ -111,5 +111,9 @@ public class Match {
 
     public List<Player> getMatchPlayers() {
         return matchPlayers;
+    }
+
+    public Player getFirstPlayerInTurn() {
+        return matchPlayers.get(firstPlayerIndexInRound);
     }
 }

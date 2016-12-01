@@ -53,7 +53,7 @@ public class NokerGame {
         return player;
     }
 
-    public boolean allPlayersJoined() {
+    private boolean allPlayersJoined() {
         return gamePlayers.size() == numOfPlayers;
     }
 

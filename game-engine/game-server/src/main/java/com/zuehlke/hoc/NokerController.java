@@ -1,6 +1,5 @@
 package com.zuehlke.hoc;
 
-import com.zuehlke.hoc.actors.BotNotifier;
 import com.zuehlke.hoc.actors.DefaultActorSystem;
 import com.zuehlke.hoc.actors.IEngineActor;
 import com.zuehlke.hoc.rest.RegisterMessage;
@@ -18,15 +17,11 @@ public class NokerController {
 
     private static final Logger log = LoggerFactory.getLogger(NokerController.class.getName());
 
-    private BotNotifier botNotifier;
-
     private DefaultActorSystem actorSystem;
 
-
     @Autowired
-    public NokerController(DefaultActorSystem actorSystem, BotNotifier botNotifier) {
+    public NokerController(DefaultActorSystem actorSystem) {
         this.actorSystem = actorSystem;
-        this.botNotifier = botNotifier;
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)

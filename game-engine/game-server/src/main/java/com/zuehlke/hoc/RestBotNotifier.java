@@ -37,18 +37,18 @@ public class RestBotNotifier implements BotNotifier {
     public boolean registerBot(RegisterMessage registerMessage) {
         String url = String.format("http://%s:%d/start", registerMessage.getHostname(), registerMessage.getPort());
         GameEvent registrationResponse = new GameEvent();
-        if (bots.containsKey(registerMessage.getName())) {
-            log.info("Name {} is already taken.", registerMessage.getName());
+        if (bots.containsKey(registerMessage.getPlayerName())) {
+            log.info("Name {} is already taken.", registerMessage.getPlayerName());
             registrationResponse.setEventKind(GameEvent.EventKind.NAME_ALREADY_TAKEN);
             log.info("Send NAME_ALREADY_TAKEN message to {}.", url);
             restTemplate.postForObject(url, registrationResponse, String.class);
             return false;
         }
-        log.info("Register bot: " + registerMessage.getName() + " -> " + registerMessage.getHostname() + ":" + registerMessage.getPort());
-        bots.put(registerMessage.getName(), registerMessage);
+        log.info("Register bot: " + registerMessage.getPlayerName() + " -> " + registerMessage.getHostname() + ":" + registerMessage.getPort());
+        bots.put(registerMessage.getPlayerName(), registerMessage);
         log.info("Current bots: " + bots.keySet().stream().reduce("", (a, b) -> a += (b + ", ")));
         registrationResponse.setEventKind(GameEvent.EventKind.RESERVATION_CONFIRMATION);
-        log.info("Send RESERVATION_CONFIRMATION message for team {} to {}", registerMessage.getName(), url);
+        log.info("Send RESERVATION_CONFIRMATION message for team {} to {}", registerMessage.getPlayerName(), url);
         restTemplate.postForObject(url, registrationResponse, String.class);
         return true;
     }
