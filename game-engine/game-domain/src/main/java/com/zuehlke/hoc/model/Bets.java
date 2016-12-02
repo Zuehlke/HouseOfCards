@@ -5,8 +5,9 @@ import com.zuehlke.hoc.NokerGame;
 import java.util.*;
 
 /**
- * The {@link Bets} class provides the functionality to hold the status of the bets in a match.
- * It can be used in all rounds by resetting with the {@link #startNextBetRound()} method.
+ * The {@link Bets} class provides the functionality to hold the status of the bets
+ * of the current match. It can be used in all rounds by resetting the bet round with
+ * the {@link #startNextBetRound()} method.
  */
 public class Bets {
 
