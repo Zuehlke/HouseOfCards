@@ -77,4 +77,13 @@ public class RestBotNotifier implements BotNotifier {
             System.out.println("Send cards to '" + player.getName() + "':" + player.getFirstCard() + "," + player.getSecondCard());
         }
     }
+
+    public void sendInvalidRegistrationMessage(RegisterMessage registerMessage, String errorMsg) {
+        //TODO: errorMsg is not send
+        String url = String.format("http://%s:%d/start", registerMessage.getHostname(), registerMessage.getPort());
+        log.info("send invalid registration message info to {}", url);
+        GameEvent invalidRegMsg = new GameEvent();
+        invalidRegMsg.setEventKind(GameEvent.EventKind.INVALID_REG_MSG);
+        restTemplate.postForObject(url, invalidRegMsg, String.class);
+    }
 }

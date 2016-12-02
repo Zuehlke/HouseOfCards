@@ -6,7 +6,6 @@ import akka.actor.TypedProps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 
 @Component
@@ -21,12 +20,12 @@ public class DefaultActorSystem {
     @Autowired
     public DefaultActorSystem(BotNotifier botNotifier, ViewNotifier viewNotifier, RestTemplateBuilder restBuilder){
         this.system = ActorSystem.create(ACTOR_SYSTEM);
-        this.gameEngine = createGameEngine(botNotifier, viewNotifier, restBuilder.build());
+        this.gameEngine = createGameEngine(botNotifier, viewNotifier);
     }
 
-    private IEngineActor createGameEngine(BotNotifier botNotifier, ViewNotifier viewNotifier, RestTemplate restTemplate) {
+    private IEngineActor createGameEngine(BotNotifier botNotifier, ViewNotifier viewNotifier) {
         TypedProps<EngineActor> props = new TypedProps<>(IEngineActor.class,
-                () -> new EngineActor(botNotifier, viewNotifier, restTemplate));
+                () -> new EngineActor(botNotifier, viewNotifier));
         return TypedActor.get(system).typedActorOf(props, GAME_ENGINE_ACTOR);
     }
 
