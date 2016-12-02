@@ -27,7 +27,6 @@ public class GameScenario {
 
 
         // first match
-
         // first round
         game.playerSet(tobi, 0);    // check = call
         game.playerSet(riki, 0);    // check = call
@@ -40,8 +39,8 @@ public class GameScenario {
         game.playerSet(miki, 40);   // raise 20 (call: 20 + raise: 20 = 40)
         game.playerSet(tobi, 20);   // call
 
-        // second match
 
+        // second match
         // first round
         game.playerSet(riki, 10);   // raise 10
         game.playerFold(miki);
@@ -51,6 +50,13 @@ public class GameScenario {
         // second round
         game.playerSet(riki, 20);   // raise 20
         game.playerSet(tobi, 20);   // call
+
+
+        // third match
+        // first round
+        game.playerSet(miki, 0);
+        game.playerSet(tobi, 0);
+        game.playerSet(riki, 0);
 
         // ...
     }

@@ -1,9 +1,8 @@
 package com.zuehlke.hoc.model;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import com.zuehlke.hoc.NokerGame;
+
+import java.util.*;
 
 /**
  * The {@link Bets} class provides the functionality to hold the status of the bets in a match.
@@ -11,10 +10,12 @@ import java.util.Set;
  */
 public class Bets {
 
-    private final Map<String, Long> bets = new HashMap<>();
-    private final Set<String> foldedPlayer = new HashSet<>();
-    private final Set<String> playerCalled = new HashSet<>();
+    private final Map<Player, Long> bets = new HashMap<>();
+    private final Set<Player> foldedPlayers = new HashSet<>();
+    private final Set<Player> calledPlayers = new HashSet<>();
+    private final Set<Player> activePlayers = new HashSet<>();
     private long highestBet = 0;
+    private long maxRaiseAmount = NokerGame.INITIAL_CHIPS;
 
 
     public long getTotalPot(){
@@ -22,20 +23,21 @@ public class Bets {
     }
 
     public void startNextBetRound(){
-        playerCalled.clear();
+        calledPlayers.clear();
     }
 
     public void playerFolds(Player player) {
-        foldedPlayer.add(player.getName());
-        playerCalled.remove(player.getName());
+        foldedPlayers.add(player);
+        calledPlayers.remove(player);
     }
 
     public void playerCalls(Player player){
-        requiresPlayerHasNotAlreadyFolded(player);
-        requiemsPlayerHasEnoughChipsToCall(player);
-        player.setChipsStack(player.getChipsStack() - neededChipsToCall(player));
-        bets.put(player.getName(), highestBet);
-        playerCalled.add(player.getName());
+        if (!playerHasFolded(player)) {
+            requiemsPlayerHasEnoughChipsToCall(player);
+            player.setChipsStack(player.getChipsStack() - neededChipsToCall(player));
+            bets.put(player, highestBet);
+            calledPlayers.add(player);
+        }
     }
 
     private void requiemsPlayerHasEnoughChipsToCall(Player player) {
@@ -48,42 +50,72 @@ public class Bets {
         return highestBet - getPlayersBet(player);
     }
 
-    public void playerRaise(Player player, long raise){
-        requiresPlayerHasNotAlreadyFolded(player);
-        requiersPlayerHasEnoughtChipsToRaise(player, raise);
-        player.setChipsStack(player.getChipsStack()- neededChipsToRaise(player, raise));
-        bets.put(player.getName(), highestBet + raise);
-        highestBet = highestBet + raise;
-        playerCalled.clear();
-        playerCalled.add(player.getName());
-    }
 
-    private void requiersPlayerHasEnoughtChipsToRaise(Player player, long raise) {
-        if(player.getChipsStack() < neededChipsToRaise(player, raise)){
-            throw new RuntimeException("Player has to less chips!");
+    public void playerRaise(Player player, long raiseAmount){
+        if (!playerHasFolded(player)) {
+            if (isValidRaiseAmount(player, raiseAmount)) {
+                player.setChipsStack(player.getChipsStack() - neededChipsToRaise(player, raiseAmount));
+                bets.put(player, highestBet + raiseAmount);
+                highestBet += raiseAmount;
+                maxRaiseAmount = minChipStackOfActivePlayers(player);
+                calledPlayers.clear();
+                calledPlayers.add(player);
+            } else {
+                // TODO:
+                // Currently if a player places an invalid raise amount
+                // the move is automatically overwritten by a fold move, assuming
+                // that if the player is a bot the bot was not programmed correctly and
+                // the probability is high that future moves will also be incorrect.
+                // As this is not directly a concern of the game domain this should be
+                // handled differently e.g. by notifying the player about the incorrect
+                // raise move.
+                playerFolds(player);
+                // TODO: notify the player that he folded
+            }
         }
     }
+
+    private long minChipStackOfActivePlayers(Player currentPlayer) {
+        activePlayers.clear();
+        calledPlayers.forEach(activePlayers::add);
+        activePlayers.add(currentPlayer);
+
+        long minChipStack = NokerGame.INITIAL_CHIPS;
+        for (Player p : activePlayers) {
+            long playerChipsStack = p.getChipsStack();
+            if (playerChipsStack < minChipStack) {
+                minChipStack = playerChipsStack;
+            }
+        }
+        return minChipStack;
+    }
+
+
+    private boolean playerHasEnoughChipsToRaise(Player player, long raise) {
+        return player.getChipsStack() > neededChipsToRaise(player, raise);
+    }
+
+
+    private boolean isValidRaiseAmount(Player player, long raise) {
+        return raise <= maxRaiseAmount && playerHasEnoughChipsToRaise(player, raise);
+    }
+
 
     private long neededChipsToRaise(Player player, long raise) {
         return (highestBet - getPlayersBet(player)) + raise;
     }
 
-    private void requiresPlayerHasNotAlreadyFolded(Player player){
-        if(foldedPlayer.contains(player.getName())){
-            throw new RuntimeException("Player has already folded!");
-        }
-    }
 
     private long getPlayersBet(Player player){
-        return bets.containsKey(player.getName()) ? bets.get(player.getName()) : 0;
+        return bets.containsKey(player) ? bets.get(player) : 0;
     }
 
     public boolean playerHasFolded(Player player) {
-        return foldedPlayer.contains(player.getName());
+        return foldedPlayers.contains(player);
     }
 
     public boolean playerHasCalled(Player player) {
-        return playerCalled.contains(player.getName());
+        return calledPlayers.contains(player);
     }
 
 }

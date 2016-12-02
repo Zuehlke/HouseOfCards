@@ -22,6 +22,7 @@ public class MatchTest {
     private Match match;
     private PlayerNotifierAdapter notifier;
     private List<Player> players;
+
     private Player tobi;
     private Player miki;
     private Player riki;
@@ -29,7 +30,8 @@ public class MatchTest {
     @Before
     public void setup() {
         notifier = Mockito.mock(PlayerNotifierAdapter.class);
-        players = getDummyPlayers();
+        players = Utils.loadDummyPlayers();
+        players.forEach(player -> player.setChipsStack(10));
         tobi = players.get(0);
         miki = players.get(1);
         riki = players.get(2);
@@ -42,7 +44,7 @@ public class MatchTest {
 
         Mockito.verify(notifier).broadcastMatchStart(match);
         Mockito.verify(notifier).broadcastRoundStarts();
-        Mockito.verify(notifier).askPlayerForAction(getDummyPlayers().get(0).getName(), 0);
+        Mockito.verify(notifier).askPlayerForAction(players.get(0).getName(), 0);
     }
 
     @Test
@@ -144,12 +146,5 @@ public class MatchTest {
 
         Mockito.verify(notifier, times(2)).broadcastRoundFinished();
         Mockito.verify(notifier).broadcastMatchFinished(any());
-    }
-
-
-    private List<Player> getDummyPlayers() {
-        List<Player> players = Arrays.asList(new Player("Tobi"), new Player("Miki"), new Player("Riki"));
-        players.forEach(p -> p.setChipsStack(10));
-        return players;
     }
 }

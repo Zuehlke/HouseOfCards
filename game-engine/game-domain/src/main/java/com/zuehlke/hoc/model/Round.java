@@ -1,5 +1,6 @@
 package com.zuehlke.hoc.model;
 
+import com.zuehlke.hoc.NokerGame;
 import com.zuehlke.hoc.PlayerNotifierAdapter;
 
 import java.util.List;
@@ -17,7 +18,6 @@ public class Round {
     private Player turnOfPlayer;
     private Deck deck;
     private Bets bets;
-
 
 
     public Round(List<Player> players, int firstPlayerIndex, Deck deck, PlayerNotifierAdapter notifier) {
@@ -67,24 +67,32 @@ public class Round {
     }
 
     public void playerFold(Player player){
-        requieresPlayersTurn(player);
-        bets.playerFolds(player);
-        notifier.broadcastPlayerFolded(player);
-        notifyNextPlayerOrBroadcastFinishEvent();
+        if (isPlayersTurn(player)) {
+            bets.playerFolds(player);
+            notifier.broadcastPlayerFolded(player);
+            notifyNextPlayerOrBroadcastFinishEvent();
+        }
     }
 
     public void playerCall(Player player){
-        requieresPlayersTurn(player);
-        bets.playerCalls(player);
-        notifier.broadcastPlayerCalled(player);
-        notifyNextPlayerOrBroadcastFinishEvent();
+        if (isPlayersTurn(player)) {
+            bets.playerCalls(player);
+            notifier.broadcastPlayerCalled(player);
+            notifyNextPlayerOrBroadcastFinishEvent();
+        }
     }
 
-    public void playerRaise(Player player, long raise){
-        requieresPlayersTurn(player);
-        bets.playerRaise(player, raise);
-        notifier.broadcastPlayerRaised(player, raise);
-        notifyNextPlayerOrBroadcastFinishEvent();
+    public void playerRaise(Player player, long raiseAmount){
+        if (isPlayersTurn(player)) {
+            bets.playerRaise(player, raiseAmount);
+            notifier.broadcastPlayerRaised(player, raiseAmount);
+            notifyNextPlayerOrBroadcastFinishEvent();
+        }
+    }
+
+
+    private boolean isPlayersTurn(Player player) {
+        return player.getName().equals(turnOfPlayer.getName());
     }
 
     private void notifyNextPlayerOrBroadcastFinishEvent() {
@@ -93,12 +101,6 @@ public class Round {
             notifier.askPlayerForAction(turnOfPlayer.getName(), bets.neededChipsToCall(turnOfPlayer));
         }else{
             notifier.broadcastRoundFinished();
-        }
-    }
-
-    private void requieresPlayersTurn(Player player) {
-        if(!player.getName().equals(turnOfPlayer.getName())){
-            throw new RuntimeException("Not the turn of the player: "+player.getName());
         }
     }
 

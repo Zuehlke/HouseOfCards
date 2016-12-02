@@ -18,133 +18,116 @@ import static org.junit.Assert.assertTrue;
 public class BetsTest {
 
     private List<Player> players;
+    private Player tobi;
+    private Player miki;
+    private Player riki;
+
     private Bets bets;
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     @Before
-    public void before(){
-        players = players();
+    public void setup(){
         bets = new Bets();
+        players = Utils.loadDummyPlayers();
+
+        tobi = players.get(0);
+        miki = players.get(1);
+        riki = players.get(2);
+
+        tobi.setChipsStack(5);
+        miki.setChipsStack(10);
+        riki.setChipsStack(15);
     }
 
 
     @Test
-    public void folds(){
-        bets.playerFolds(players.get(0));
-        assertEquals(players.get(0).getChipsStack(), 5);
-        assertEquals(0,bets.getTotalPot());
+    public void playerFolds(){
+        bets.playerFolds(tobi);
+        assertEquals(5, tobi.getChipsStack());
+        assertEquals(0, bets.getTotalPot());
+    }
+
+
+    // A check move refers to a call move in a round where no other
+    // player has raised before, therefore the amount of chips to call is 0.
+    @Test
+    public void playerChecks(){
+        bets.playerCalls(tobi);
+        assertEquals(5, tobi.getChipsStack());
+        assertEquals(0, bets.getTotalPot());
     }
 
     @Test
-    public void alreadyFolded(){
-        bets.playerFolds(players.get(0));
-        expected(RuntimeException.class,"Player has already folded!");
-        bets.playerCalls(players.get(0));
-    }
-
-    @Test
-    public void callsNoBets(){
-        bets.playerCalls(players.get(0));
-        assertEquals(players.get(0).getChipsStack(), 5);
-        assertEquals(0,bets.getTotalPot());
-    }
-
-    @Test
-    public void testFirstRaise(){
-        bets.playerRaise(players.get(0), 2);
-        assertEquals(3, players.get(0).getChipsStack());
-        assertEquals(2,bets.getTotalPot());
-    }
-
-    @Test
-    public void toLessChipsToRaise(){
-        expected(RuntimeException.class,"Player has to less chips!");
-        bets.playerRaise(players.get(0), 10);
+    public void firstRaise(){
+        bets.playerRaise(tobi, 2);
+        assertEquals(3, tobi.getChipsStack());
+        assertEquals(2, bets.getTotalPot());
     }
 
     @Test
     public void callAfterRaise(){
-        bets.playerRaise(players.get(0), 2);
-        bets.playerCalls(players.get(1));
-        assertEquals(8, players.get(1).getChipsStack());
-        assertEquals(4,bets.getTotalPot());
+        bets.playerRaise(tobi, 2);
+        bets.playerCalls(miki);
+        assertEquals(8, miki.getChipsStack());
+        assertEquals(4, bets.getTotalPot());
     }
 
-    @Test
-    public void toLessChipsToCall(){
-        bets.playerRaise(players.get(1), 8);
-        expected(RuntimeException.class,"Player has to less chips!");
-        bets.playerCalls(players.get(0));
-    }
+    // TODO: rewrite test
+//    @Test
+//    public void toLessChipsToCall(){
+//        bets.playerRaise(miki, 8);
+//        expected(RuntimeException.class,"Player has to less chips!");
+//        bets.playerCalls(tobi);
+//    }
 
     @Test
     public void reRaise(){
-        bets.playerRaise(players.get(0), 2);
-        bets.playerRaise(players.get(1), 2);
-        assertEquals(3,players.get(0).getChipsStack());
-        assertEquals(6, players.get(1).getChipsStack());
-        assertEquals(6,bets.getTotalPot());
+        bets.playerRaise(tobi, 2);
+        bets.playerRaise(miki, 2);
+        assertEquals(3, tobi.getChipsStack());
+        assertEquals(6, miki.getChipsStack());
+        assertEquals(6, bets.getTotalPot());
     }
 
     @Test
     public void playerHasCalled(){
-        bets.playerCalls(players.get(0));
-        assertTrue(bets.playerHasCalled(players.get(0)));
+        bets.playerCalls(tobi);
+        assertTrue(bets.playerHasCalled(tobi));
 
-        bets.playerFolds(players.get(1));
-        assertFalse(bets.playerHasCalled(players.get(1)));
+        bets.playerFolds(miki);
+        assertFalse(bets.playerHasCalled(miki));
 
-        assertFalse(bets.playerHasCalled(players.get(2)));
+        assertFalse(bets.playerHasCalled(riki));
     }
 
     @Test
     public void playerHasFolded(){
 
-        bets.playerFolds(players.get(1));
-        assertTrue(bets.playerHasFolded(players.get(1)));
+        bets.playerFolds(miki);
+        assertTrue(bets.playerHasFolded(miki));
 
-        bets.playerCalls(players.get(0));
-        assertFalse(bets.playerHasFolded(players.get(0)));
+        bets.playerCalls(tobi);
+        assertFalse(bets.playerHasFolded(tobi));
 
-        assertFalse(bets.playerHasFolded(players.get(2)));
+        assertFalse(bets.playerHasFolded(riki));
     }
 
 
     @Test
     public void startNextBetRound(){
 
-        bets.playerFolds(players.get(1));
-        bets.playerCalls(players.get(0));
-        bets.playerCalls(players.get(2));
+        bets.playerFolds(miki);
+        bets.playerCalls(tobi);
+        bets.playerCalls(riki);
 
         bets.startNextBetRound();
 
-        assertTrue(bets.playerHasFolded(players.get(1)));
-        assertFalse(bets.playerHasFolded(players.get(0)));
-        assertFalse(bets.playerHasFolded(players.get(2)));
+        assertTrue(bets.playerHasFolded(miki));
+        assertFalse(bets.playerHasFolded(tobi));
+        assertFalse(bets.playerHasFolded(riki));
 
-        assertFalse(bets.playerHasCalled(players.get(1)));
-        assertFalse(bets.playerHasCalled(players.get(0)));
-        assertFalse(bets.playerHasCalled(players.get(2)));
-
-
-
-    }
-
-
-
-    private void expected(Class<RuntimeException> ex, String msg) {
-        thrown.expect(ex);
-        thrown.expectMessage(msg);
-    }
-
-    private List<Player> players() {
-        List<Player> players = Arrays.asList(new Player("Tobi"), new Player("Miki"), new Player("Riki"));
-        players.get(0).setChipsStack(5);
-        players.get(1).setChipsStack(10);
-        players.get(2).setChipsStack(15);
-        return players;
+        assertFalse(bets.playerHasCalled(miki));
+        assertFalse(bets.playerHasCalled(tobi));
+        assertFalse(bets.playerHasCalled(riki));
     }
 }
