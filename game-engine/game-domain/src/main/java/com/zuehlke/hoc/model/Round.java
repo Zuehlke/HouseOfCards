@@ -1,22 +1,30 @@
 package com.zuehlke.hoc.model;
 
-import com.zuehlke.hoc.NokerGame;
 import com.zuehlke.hoc.PlayerNotifierAdapter;
 
 import java.util.List;
 
+import static com.zuehlke.hoc.model.Round.RoundNumber.FIRST_ROUND;
+import static com.zuehlke.hoc.model.Round.RoundNumber.SECOND_ROUND;
+
 
 /**
- * This class represents a round of the Noker game.
- * A Noker game has two rounds. In each round, the players
- * are given a card from the deck.
+ * This class represents a round of a Noker game match.
+ * A match has two rounds. In each round, the players
+ * are given one card from the deck.
  */
 public class Round {
+
+    public enum RoundNumber {
+        FIRST_ROUND, SECOND_ROUND;
+    }
 
     private PlayerNotifierAdapter notifier;
     private BetIterator betIterator;
     private Player turnOfPlayer;
     private Deck deck;
+
+    private RoundNumber currentRound = FIRST_ROUND;
     private Bets bets;
 
 
@@ -29,6 +37,7 @@ public class Round {
 
     private Round(){}
 
+
     public Round createSecondRound(){
         Round round = new Round();
         round.notifier = notifier;
@@ -37,6 +46,7 @@ public class Round {
         round.deck = deck;
         bets.startNextBetRound();
         round.bets = bets;
+        round.currentRound = SECOND_ROUND;
         return round;
     }
 
@@ -53,10 +63,13 @@ public class Round {
                 int card = deck.drawCard();
                 p.addCard(card);
                 notifier.sendCardInfoToPlayer(p.getName(), card);
-            };
+            }
         });
     }
 
+    public RoundNumber getCurrentRound() {
+        return currentRound;
+    }
 
     public boolean isFinished(){
         return !betIterator.hasNext();
@@ -102,9 +115,5 @@ public class Round {
         }else{
             notifier.broadcastRoundFinished();
         }
-    }
-
-    public Player getCurrentPlayer() {
-        return  turnOfPlayer;
     }
 }
