@@ -47,7 +47,7 @@ public class BotNotifierTest {
     @Test
     public void registerBot() {
         this.server
-                .expect(requestTo("http://localhost:2222/start"))
+                .expect(requestTo("http://localhost:2222/register_info"))
                 .andRespond(withSuccess("{}", MediaType.APPLICATION_JSON));
         botNotifier.registerBot(new RegisterMessage()
                 .setPlayerName("Winner Bot")

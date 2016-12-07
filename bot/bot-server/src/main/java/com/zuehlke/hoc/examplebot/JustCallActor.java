@@ -5,8 +5,7 @@ import akka.actor.Props;
 import akka.actor.UntypedActor;
 import akka.camel.Camel;
 import akka.camel.CamelExtension;
-import com.zuehlke.hoc.rest.GameEvent;
-import com.zuehlke.hoc.rest.RegisterMessage;
+import com.zuehlke.hoc.rest.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,14 +29,10 @@ class JustCallActor extends UntypedActor {
     }
 
     public void preStart(){
-        Props httpReceiverProps = Props.create(HttpReceiverActor.class, this.credentials, getSelf());
-
         Camel camel = CamelExtension.get(getContext().system());
 
-        ActorRef httpReceiver = getContext().system().actorOf(httpReceiverProps);
-
         try {
-            camel.context().addRoutes(new CustomRouteBuilder(httpReceiver));
+            camel.context().addRoutes(new CustomRouteBuilder(getSelf(), credentials));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -69,6 +64,18 @@ class JustCallActor extends UntypedActor {
                     break;
                 default: log.info("Received unknown RegistrationResponse: %s", gameEvent.getEventKind().toString());
             }
+        }
+        if(message instanceof RegistrationResponse){
+            RegistrationResponse registrationResponse = (RegistrationResponse) message;
+            log.info("received registration response");
+        }
+        if(message instanceof MatchStartedMessage){
+            MatchStartedMessage matchStartedMessage = (MatchStartedMessage) message;
+            log.info("received match_started response. Nr of players {}", matchStartedMessage.getMatch_players().size());
+        }
+        if(message instanceof RoundStartedMessage){
+            RoundStartedMessage roundStartedMessage = (RoundStartedMessage) message;
+            log.info("received round_started response. Nr of players {}", roundStartedMessage.getRound_players().size());
         }
     }
 

@@ -12,7 +12,10 @@ public class EngineActor implements IEngineActor {
 
     EngineActor(BotNotifier botNotifier, ViewNotifier viewNotifier) {
         this.botNotifier = botNotifier;
-        this.game = new NokerGame(2, new WebViewAndBotNotifier(botNotifier, viewNotifier));
+        WebViewAndBotNotifier playerNotifier = new WebViewAndBotNotifier(botNotifier, viewNotifier);
+        this.game = new NokerGame(2, playerNotifier);
+        playerNotifier.setGame(game);
+
     }
 
     public void registerPlayer(RegisterMessage registerMessage) {
