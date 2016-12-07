@@ -34,12 +34,10 @@ class JustCallActor extends UntypedActor {
 
         Camel camel = CamelExtension.get(getContext().system());
 
-        Props matchStartedReceiverProps = Props.create(MatchStartedReceiver.class);
-        ActorRef matchStartertedActor = getContext().system().actorOf(matchStartedReceiverProps);
         ActorRef httpReceiver = getContext().system().actorOf(httpReceiverProps);
 
         try {
-            camel.context().addRoutes(new CustomRouteBuilder(httpReceiver, matchStartertedActor));
+            camel.context().addRoutes(new CustomRouteBuilder(httpReceiver));
         } catch (Exception e) {
             e.printStackTrace();
         }

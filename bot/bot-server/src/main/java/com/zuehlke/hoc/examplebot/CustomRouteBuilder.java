@@ -17,9 +17,8 @@ public class CustomRouteBuilder extends RouteBuilder{
     private String matchstartedActor;
     private ActorRef httpReceiverActorRef;
 
-    public CustomRouteBuilder(ActorRef httpReceiver, ActorRef matchStartedReceiverProps){
+    public CustomRouteBuilder(ActorRef httpReceiver){
         this.httpReceiverUri = CamelPath.toUri(httpReceiver);
-        this.httpReceiverUri = CamelPath.toUri(matchStartedReceiverProps);
         this.httpReceiverActorRef = httpReceiver;
     }
 

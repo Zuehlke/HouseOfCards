@@ -1,6 +1,7 @@
 package com.zuehlke.hoc.examplebot;
 
 import akka.actor.ActorRef;
+import com.zuehlke.hoc.rest.MatchStartedMessage;
 import com.zuehlke.hoc.rest.RegistrationResponse;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
@@ -30,7 +31,7 @@ public class MatchStartedProcessor implements Processor{
 
         InputStreamCache inputStreamCache = (InputStreamCache) exchange.getIn().getBody();
         ObjectMapper objectMapper = new ObjectMapper();
-        Match registrationResponse = objectMapper.readValue(inputStreamCache, RegistrationResponse.class);
+        MatchStartedMessage registrationResponse = objectMapper.readValue(inputStreamCache, MatchStartedMessage.class);
         ask(this.httpReceiverActor, registrationResponse, 1000);
     }
 }
