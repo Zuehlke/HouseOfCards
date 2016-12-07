@@ -71,11 +71,15 @@ class JustCallActor extends UntypedActor {
         }
         if(message instanceof MatchStartedMessage){
             MatchStartedMessage matchStartedMessage = (MatchStartedMessage) message;
-            log.info("received match_started response. Nr of players {}", matchStartedMessage.getMatch_players().size());
+            log.info("received match_started response. Nr of players {}. ", matchStartedMessage.getMatch_players().size());
         }
         if(message instanceof RoundStartedMessage){
             RoundStartedMessage roundStartedMessage = (RoundStartedMessage) message;
             log.info("received round_started response. Nr of players {}", roundStartedMessage.getRound_players().size());
+        }
+        if(message instanceof YourTurnMessage){
+            YourTurnMessage yourTurnMessage = (YourTurnMessage) message;
+            log.info("received card: {}", yourTurnMessage.getYour_cards().get(0));
         }
     }
 
