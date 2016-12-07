@@ -44,8 +44,9 @@ public class WebViewAndBotNotifier implements PlayerNotifier {
     public void playersTurn(String player, long minimumChipsForCall) {
         //viewNotifier.sendGameInfo("Next turn: Player "+player);
         log.info("playersturn");
-        int card = playerState.get(player);
-        botNotifier.sendYourTurn(0, Integer.MAX_VALUE, 100, card, new ArrayList<PlayerInfo>());
+        //playerState.get(player);
+        int[] cards = new int[1];
+        botNotifier.sendYourTurn(player, 0, Integer.MAX_VALUE, 100, cards, new ArrayList<PlayerInfo>());
     }
 
     @Override

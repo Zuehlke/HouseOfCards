@@ -106,15 +106,20 @@ public class RestBotNotifier implements BotNotifier {
                              int minimalBet,
                              int maximalBet,
                              int amountOfCreditsInPot,
-                             int card,
+                             int[] cards,
                              ArrayList<PlayerInfo> activePlayers) {
         RegisterMessage uriAndPort = bots.get(receiver);
         if (uriAndPort == null) {
             log.info("Player {} cannot be associated with a URI", receiver);
         } else {
             String url = String.format("http://%s:%d/yourturn", uriAndPort.getHostname(), uriAndPort.getPort());
+            List<PlayerDTO> playerDTOs = activePlayers.stream().map(x -> new PlayerDTO(x.getName(), x.getChipstack())).collect(Collectors.toList());
             YourTurnMessage yourTurnMessage = new YourTurnMessage();
-
+            yourTurnMessage.setActive_players(playerDTOs);
+            yourTurnMessage.setMinimum_set(minimalBet);
+            yourTurnMessage.setMaximum_set(maximalBet);
+            yourTurnMessage.setPot(amountOfCreditsInPot);
+            yourTurnMessage.setYour_cards(cards);
         }
     }
 
