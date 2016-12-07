@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Message used to notifier a bot to submit a move.
  *
- * @author Lukas Hofmaier
+ * @author Lukas Hofmaier0
  */
 public class YourTurnMessage {
 
