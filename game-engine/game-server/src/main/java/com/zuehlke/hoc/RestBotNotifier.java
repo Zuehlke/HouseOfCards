@@ -103,10 +103,10 @@ public class RestBotNotifier implements BotNotifier {
 
     @Override
     public void sendYourTurn(String receiver,
-                             int minimalBet,
+                             long minimalBet,
                              int maximalBet,
                              int amountOfCreditsInPot,
-                             int[] cards,
+                             List<Integer> cards,
                              ArrayList<PlayerInfo> activePlayers) {
         RegisterMessage uriAndPort = bots.get(receiver);
         if (uriAndPort == null) {

@@ -3,14 +3,15 @@ package com.zuehlke.hoc;
 import com.zuehlke.hoc.actors.BotNotifier;
 import com.zuehlke.hoc.actors.EngineActor;
 import com.zuehlke.hoc.actors.ViewNotifier;
+import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.notification.api.PlayerNotifier;
 import com.zuehlke.hoc.notification.api.StartInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Handles callbacks from <code>NonkerGame</code> instance and forwards notifications to the web view and the registered
@@ -23,30 +24,42 @@ public class WebViewAndBotNotifier implements PlayerNotifier {
     private final static Logger log = LoggerFactory.getLogger(EngineActor.class);
     private final BotNotifier botNotifier;
     private final ViewNotifier viewNotifier;
-    // to send the player a card when playersTurn is called by NokerGame the arguments of the sendCardInfo call is
-    // persisted. Ugly but necessary with the current NokerGame interface.
-    private Map<String, Integer> playerState;
+
+    private NokerGame game;
 
     public WebViewAndBotNotifier(BotNotifier botNotifier, ViewNotifier viewNotifier) {
         this.botNotifier = botNotifier;
         this.viewNotifier = viewNotifier;
-        this.playerState = new HashMap<>();
     }
 
     @Override
     public void sendCardInfo(String player, int card) {
         log.info("Send card info");
         viewNotifier.sendGameInfo("Player " + player + " got card " + card);
-        playerState.put(player, card);
     }
 
     @Override
-    public void playersTurn(String player, long minimumChipsForCall) {
+    public void playersTurn(String playerName, long minimumChipsForCall) {
         //viewNotifier.sendGameInfo("Next turn: Player "+player);
         log.info("playersturn");
         //playerState.get(player);
-        int[] cards = new int[1];
-        botNotifier.sendYourTurn(player, 0, Integer.MAX_VALUE, 100, cards, new ArrayList<PlayerInfo>());
+        Optional<Player> player = game.getPlayer(playerName);
+
+        List<Integer> cards = new ArrayList<>();
+        player.map(x -> {
+                    if (x.getFirstCard() <= 0) {
+                        cards.add(x.getFirstCard());
+                    }
+                    if (x.getSecondCard() <= 0) {
+                        cards.add(x.getSecondCard());
+                    }
+
+                    //TODO: the arguments maximalBet, amountOfCreditsInPot and activePlayers are dummies argument and need to
+                    // be replaced with meanful value as soon the NokerGame API provides the correspondings methods.
+                    botNotifier.sendYourTurn(x.getName(), minimumChipsForCall, Integer.MAX_VALUE, 100, cards, new ArrayList<PlayerInfo>());
+                    return x;
+                }
+        );
     }
 
     @Override
@@ -86,6 +99,10 @@ public class WebViewAndBotNotifier implements PlayerNotifier {
     public void broadcastNextMatch() {
         viewNotifier.sendGameInfo("New match started");
 
+    }
+
+    public void setGame(NokerGame game) {
+        this.game = game;
     }
 
 }

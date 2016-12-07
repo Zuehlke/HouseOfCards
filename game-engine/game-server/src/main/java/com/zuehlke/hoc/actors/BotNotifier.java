@@ -57,5 +57,5 @@ public interface BotNotifier {
      * @param card                 the card that is send to the player
      * @param activePlayers        a list of player that haven't send a fold in the current match.
      */
-    void sendYourTurn(String receiver, int minimalBet, int maximalBet, int amountOfCreditsInPot, int[] card, ArrayList<PlayerInfo> activePlayers);
+    void sendYourTurn(String receiver, long minimalBet, int maximalBet, int amountOfCreditsInPot, List<Integer> cards, ArrayList<PlayerInfo> activePlayers);
 }
