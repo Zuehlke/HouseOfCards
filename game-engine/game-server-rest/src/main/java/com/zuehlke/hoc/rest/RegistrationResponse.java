@@ -1,5 +1,7 @@
 package com.zuehlke.hoc.rest;
 
+import java.util.UUID;
+
 /**
  * Represents a message to confirm or reject a player registration. The competition runner responses with a
  * <code>RegistrationResponse</code> when it receives a <code>RegistrationMessage</code>.
@@ -12,7 +14,7 @@ public class RegistrationResponse {
 
     private Result infoMessage;
     private String playerName;
-    private int token;
+    private UUID uuid;
 
     public Result getInfoMessage() {
         return infoMessage;
@@ -22,12 +24,12 @@ public class RegistrationResponse {
         this.infoMessage = infoMessage;
     }
 
-    public int getToken() {
-        return token;
+    public UUID getUUID() {
+        return uuid;
     }
 
-    public void setToken(int token) {
-        this.token = token;
+    public void setUUID(UUID token) {
+        this.uuid = token;
     }
 
     public String getPlayerName() {
