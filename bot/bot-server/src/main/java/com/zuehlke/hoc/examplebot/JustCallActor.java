@@ -3,6 +3,8 @@ package com.zuehlke.hoc.examplebot;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
+import akka.camel.Camel;
+import akka.camel.CamelExtension;
 import com.zuehlke.hoc.rest.GameEvent;
 import com.zuehlke.hoc.rest.RegisterMessage;
 import org.slf4j.Logger;
@@ -28,8 +30,19 @@ class JustCallActor extends UntypedActor {
     }
 
     public void preStart(){
-        Props httpReceiverProbs = Props.create(HttpReceiverActor.class, this.credentials, getSelf());
-        getContext().system().actorOf(httpReceiverProbs);
+        Props httpReceiverProps = Props.create(HttpReceiverActor.class, this.credentials, getSelf());
+
+        Camel camel = CamelExtension.get(getContext().system());
+
+        Props matchStartedReceiverProps = Props.create(MatchStartedReceiver.class);
+        ActorRef matchStartertedActor = getContext().system().actorOf(matchStartedReceiverProps);
+        ActorRef httpReceiver = getContext().system().actorOf(httpReceiverProps);
+
+        try {
+            camel.context().addRoutes(new CustomRouteBuilder(httpReceiver, matchStartertedActor));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         this.httpSender = getContext().system().actorOf(Props.create(HttpSenderActor.class));
 
