@@ -25,7 +25,16 @@ public interface BotNotifier {
     /**
      * Broadcasts the game start to all bots
      */
-    void gameStartEvent(List<PlayerInfo> players, PlayerInfo deale);
+    void gameStartEvent(List<PlayerInfo> players, PlayerInfo dealer);
+
+    /**
+     * Notify all bots still in the game about a new round.
+     *
+     * @param roundPlayers player that haven't send a fold in the last round.
+     * @param roundNumber  number of the round
+     * @param dealer       player in the role "dealer
+     */
+    void sendRoundStarted(List<PlayerInfo> roundPlayers, int roundNumber, PlayerInfo dealer);
 
     void sendPlayerInfo(Player player);
 

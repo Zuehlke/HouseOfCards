@@ -82,6 +82,29 @@ public class RestBotNotifier implements BotNotifier {
     }
 
     @Override
+    public void sendRoundStarted(List<PlayerInfo> roundPlayers, int roundNumber, PlayerInfo dealer) {
+
+        List<PlayerDTO> playerDTOs = roundPlayers.stream().map(x -> new PlayerDTO(x.getName(), x.getChipstack())).collect(Collectors.toList());
+
+        PlayerDTO dealerDto = new PlayerDTO(dealer.getName(), dealer.getChipstack());
+
+        roundPlayers.stream().forEach(x -> {
+            RegisterMessage registerMessage = bots.get(x.getName());
+            if (registerMessage == null) {
+                log.info("Player {} cannot be associated with a URI", x.getName());
+            } else {
+                String url = String.format("http://%s:%d/round_started", registerMessage.getHostname(), registerMessage.getPort());
+                log.info("send game start to {}", url);
+                RoundStartedMessage roundStartedMessage = new RoundStartedMessage();
+                roundStartedMessage.setRound_players(playerDTOs);
+                roundStartedMessage.setRound_dealier(dealerDto);
+                roundStartedMessage.setRound_number(roundNumber);
+                restTemplate.postForObject(url, roundStartedMessage, String.class);
+            }
+        });
+    }
+
+    @Override
     public void sendPlayerInfo(Player player) {
         RegisterMessage m = bots.get(player.getName());
         if (m != null) {
