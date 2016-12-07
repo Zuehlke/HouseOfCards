@@ -3,3 +3,4 @@ Travis sets up a hook with GitHub to run the build scripts/tests upon specified 
 
 ## Configuration
 The configuration is specified in [.travis.yml](https://github.com/Zuehlke/HouseOfCards/blob/master/.travis.yml).
+
