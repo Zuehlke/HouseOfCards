@@ -14,12 +14,13 @@ public class CustomRouteBuilder extends RouteBuilder{
     private final static Logger log = LoggerFactory.getLogger(CustomRouteBuilder.class);
 
     private String httpReceiverUri;
-    private String matchstartedActor;
     private ActorRef httpReceiverActorRef;
+    private int listeningPort;
 
-    public CustomRouteBuilder(ActorRef httpReceiver){
+    public CustomRouteBuilder(ActorRef httpReceiver, Credentials credentials){
         this.httpReceiverUri = CamelPath.toUri(httpReceiver);
         this.httpReceiverActorRef = httpReceiver;
+        this.listeningPort = credentials.getPort();
     }
 
     public void configure() throws Exception{
@@ -30,11 +31,10 @@ public class CustomRouteBuilder extends RouteBuilder{
         rest("/round_started").post().to("direct:roundstarted");
         rest("/yourturn").post().to("direct:yourturn");
 
-        restConfiguration().component("jetty").port(8081);
+        restConfiguration().component("jetty").port(this.listeningPort);
 
         from("direct:registerinfo").process(new RegisterInfoProcessor(this.httpReceiverActorRef)).transform().constant("aye, captain");
         from("direct:matchstarted").process(new MatchStartedProcessor(this.httpReceiverActorRef)).transform().constant("");
 
     }
-
 }

@@ -2,10 +2,7 @@ package com.zuehlke.hoc;
 
 import com.zuehlke.hoc.actors.BotNotifier;
 import com.zuehlke.hoc.model.Player;
-import com.zuehlke.hoc.rest.GameEvent;
-import com.zuehlke.hoc.rest.MatchStartedMessage;
-import com.zuehlke.hoc.rest.PlayerDTO;
-import com.zuehlke.hoc.rest.RegisterMessage;
+import com.zuehlke.hoc.rest.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -39,11 +37,13 @@ public class RestBotNotifier implements BotNotifier {
      */
     @Override
     public boolean registerBot(RegisterMessage registerMessage) {
-        String url = String.format("http://%s:%d/start", registerMessage.getHostname(), registerMessage.getPort());
-        GameEvent registrationResponse = new GameEvent();
+        String url = String.format("http://%s:%d/register_info", registerMessage.getHostname(), registerMessage.getPort());
+        RegistrationResponse registrationResponse = new RegistrationResponse();
+        registrationResponse.setPlayerName(registerMessage.getPlayerName());
+        registrationResponse.setUUID(UUID.randomUUID());
         if (bots.containsKey(registerMessage.getPlayerName())) {
             log.info("Name {} is already taken.", registerMessage.getPlayerName());
-            registrationResponse.setEventKind(GameEvent.EventKind.NAME_ALREADY_TAKEN);
+            registrationResponse.setInfoMessage(RegistrationResponse.Result.NAME_ALREADY_TAKEN);
             log.info("Send NAME_ALREADY_TAKEN message to {}.", url);
             restTemplate.postForObject(url, registrationResponse, String.class);
             return false;
@@ -51,7 +51,7 @@ public class RestBotNotifier implements BotNotifier {
         log.info("Register bot: " + registerMessage.getPlayerName() + " -> " + registerMessage.getHostname() + ":" + registerMessage.getPort());
         bots.put(registerMessage.getPlayerName(), registerMessage);
         log.info("Current bots: " + bots.keySet().stream().reduce("", (a, b) -> a += (b + ", ")));
-        registrationResponse.setEventKind(GameEvent.EventKind.RESERVATION_CONFIRMATION);
+        registrationResponse.setInfoMessage(RegistrationResponse.Result.CONFIRMATION);
         log.info("Send RESERVATION_CONFIRMATION message for team {} to {}", registerMessage.getPlayerName(), url);
         restTemplate.postForObject(url, registrationResponse, String.class);
         return true;
