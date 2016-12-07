@@ -16,4 +16,13 @@ public class PlayerInfo {
                 ", chipstack=" + chipstack +
                 '}';
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public long getChipstack() {
+        return chipstack;
+    }
+
 }
