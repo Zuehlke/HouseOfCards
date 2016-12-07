@@ -13,9 +13,12 @@ import java.util.List;
 
 /**
  * This class represents a Noker game.
- * To create a game, the number of players must be known.
- * A game takes registrations and moves from players and consists of
- * multiple matches. Matches are played until one player owns the total amount of chips of the game.
+ * A new game takes the number of players as argument. As soon as the expected
+ * number of payers joined the game calling {@link #createPlayer(String)} ()},
+ * the game is started.
+ * A Noker game consists of multiple matches which are played until one player
+ * owns the total amount of chips of the current game. Players place their moves
+ * by calling {@link #playerSet(Player, long)} ()} or {@link #playerFold(Player)} ()}.
  */
 public class NokerGame {
 
@@ -27,23 +30,30 @@ public class NokerGame {
     private final PlayerNotifierAdapter notifier;
     private final List<Player> gamePlayers;
 
-    private int numOfPlayers;
+    private int expectedNumOfPlayers;
     private Match currentMatch;
 
 
-    public NokerGame(int numOfPlayers, PlayerNotifier notifier) {
+    public NokerGame(int expectedNumOfPlayers, PlayerNotifier notifier) {
         this.notifier = new PlayerNotifierAdapter(notifier);
-        if (numOfPlayers < MIN_NUM_OF_PLAYERS) {
+        if (expectedNumOfPlayers < MIN_NUM_OF_PLAYERS) {
             throw new InitGameException(
                     String.format("A Noker game requires at least %d gamePlayers", MIN_NUM_OF_PLAYERS));
-        } else if (numOfPlayers > MAX_NUM_OF_PLAYERS) {
+        } else if (expectedNumOfPlayers > MAX_NUM_OF_PLAYERS) {
             throw new InitGameException(
                     String.format("A Noker game can have a maximum of %d gamePlayers", MAX_NUM_OF_PLAYERS));
         }
-        this.numOfPlayers = numOfPlayers;
+        this.expectedNumOfPlayers = expectedNumOfPlayers;
         this.gamePlayers = new ArrayList<>();
     }
 
+
+    /**
+     * Adds a player to the current game. If the expected number of
+     * players joined, the game is started automatically.
+     * @param playerName name of the joining player
+     * @return player object of the registered player
+     */
     public Player createPlayer(String playerName) {
         Player player = new Player(playerName);
         gamePlayers.add(player);
@@ -54,13 +64,13 @@ public class NokerGame {
     }
 
     private boolean allPlayersJoined() {
-        return gamePlayers.size() == numOfPlayers;
+        return gamePlayers.size() == expectedNumOfPlayers;
     }
 
     private void startGame() {
         notifier.broadcastGameStarted();
         gamePlayers.forEach(player -> player.setChipsStack(INITIAL_CHIPS));
-        currentMatch = new Match(gamePlayers, new NokerDeck(),notifier);
+        currentMatch = new Match(gamePlayers, new NokerDeck(), notifier);
         currentMatch.startMatch();
     }
 
@@ -70,7 +80,8 @@ public class NokerGame {
     }
 
     /**
-     * This method summarizes both moves call and raise.
+     * This method summarizes both moves call and raise. The move
+     * is handled according to the set amount of chips.
      * @param player current player
      * @param chips  amount of chips to be set into the pot
      */

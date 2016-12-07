@@ -7,47 +7,57 @@ import java.util.List;
 
 
 /**
- * This class represents a match of a game.
- * A match consists of two consecutive rounds of betting.
+ * This class represents a match of a Noker game. A match consists
+ * of two consecutive rounds of betting. Each time a new match is
+ * started the player order is rotated by one and the deck is re-
+ * shuffled.
  */
 public class Match {
 
     private List<Player> matchPlayers;
-    private boolean firstRound = true;
-    private int firstPlayerIndexInRound;
-    private Round round;
     private Deck deck;
     private PlayerNotifierAdapter notifier;
 
+    private int firstPlayerOfRoundIndex = 0;
+    private Round round;
+
 
     public Match(List<Player> matchPlayers, Deck deck, PlayerNotifierAdapter notifier) {
+        init(matchPlayers, deck, notifier);
+    }
+
+    private Match(List<Player> matchPlayers, int firstPlayerOfRoundIndex, Deck deck, PlayerNotifierAdapter notifier) {
+        init(matchPlayers, deck, notifier);
+        this.firstPlayerOfRoundIndex = firstPlayerOfRoundIndex;
+    }
+
+    private void init(List<Player> matchPlayers, Deck deck, PlayerNotifierAdapter notifier) {
         this.notifier = notifier;
         this.deck = deck;
         deck.shuffle();
         this.matchPlayers = matchPlayers;
-        this.firstPlayerIndexInRound = 0;
     }
 
-    private Match(List<Player> matchPlayers, int firstPlayerIndexInRound, Deck deck, PlayerNotifierAdapter notifier) {
-        this.notifier = notifier;
-        this.deck = deck;
-        deck.shuffle();
-        this.matchPlayers = matchPlayers;
-        this.firstPlayerIndexInRound = firstPlayerIndexInRound;
-    }
-
+    /**
+     * Creates and starts a new round.
+     */
     public void startMatch() {
         notifier.broadcastMatchStart(this);
-        round = new Round(matchPlayers, firstPlayerIndexInRound, deck, notifier);
+        round = new Round(matchPlayers, firstPlayerOfRoundIndex, deck, notifier);
         round.startRound();
     }
 
+    /**
+     * Creates a new match where the players that lost all of
+     * their chips are excluded.
+     * @return the next match of the game
+     */
     public Match createNextMatch(){
-        removePlayerWithNoChips();
-        return new Match(matchPlayers, BetIterator.nextPlayerIndex(matchPlayers,firstPlayerIndexInRound), deck, notifier);
+        removePlayersWithNoChips();
+        return new Match(matchPlayers, BetIterator.nextPlayerIndex(matchPlayers, firstPlayerOfRoundIndex), deck, notifier);
     }
 
-    private void removePlayerWithNoChips() {
+    private void removePlayersWithNoChips() {
         List<Player> playerForNextRound = new ArrayList<>();
         matchPlayers.forEach(p -> {
             if(p.getChipsStack() > 0){
@@ -58,6 +68,7 @@ public class Match {
         });
         matchPlayers = playerForNextRound;
     }
+
 
     public void playerFold(Player player) {
         round.playerFold(player);
@@ -78,12 +89,11 @@ public class Match {
     }
 
     private void ifRoundIsFinishedGoAhead() {
-        if(round.isFinished()){
-            if(firstRound) {
+        if (round.isFinished()){
+            if (round.getCurrentRound() == Round.RoundNumber.FIRST_ROUND) {
                 round = round.createSecondRound();
                 round.startRound();
-                firstRound = false;
-            }else{
+            } else {
                 showdown();
             }
         }
@@ -100,11 +110,11 @@ public class Match {
     }
 
     private void cleanHands() {
-            matchPlayers.forEach(p -> p.cleanHand());
+            matchPlayers.forEach(Player::cleanHand);
     }
 
     public boolean isFinished(){
-        return round.isFinished() && !firstRound;
+        return round.isFinished() && round.getCurrentRound() == Round.RoundNumber.SECOND_ROUND;
     }
 
     public boolean hasMoreThanOnePlayerChips(){
@@ -117,6 +127,6 @@ public class Match {
     }
 
     public Player getFirstPlayerInTurn() {
-        return matchPlayers.get(firstPlayerIndexInRound);
+        return matchPlayers.get(firstPlayerOfRoundIndex);
     }
 }

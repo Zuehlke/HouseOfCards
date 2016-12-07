@@ -79,4 +79,5 @@ public class PlayerNotifierAdapter {
     public void broadcastGameStarted() {
         log.info("Game started");
     }
+
 }
