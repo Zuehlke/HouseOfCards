@@ -2,6 +2,8 @@ package com.zuehlke.hoc.examplebot;
 
 import akka.actor.ActorSystem;
 import akka.actor.Props;
+import akka.camel.Camel;
+import akka.camel.CamelExtension;
 
 /**
  * Command line application to start a bot. The bot will register itself at the competition runner and play the noker
@@ -20,8 +22,8 @@ public class BotApplication {
 
             ActorSystem system = ActorSystem.create();
 
-            Props playerProbs = Props.create(JustCallActor.class, new Credentials(teamname, uri, port));
-            system.actorOf(playerProbs);
+            Props playerProps = Props.create(JustCallActor.class, new Credentials(teamname, uri, port));
+            system.actorOf(playerProps);
 
         } else {
             System.out.println("Usage: nokerbot <competitionrunner URI> <teamname> <listening port>");
