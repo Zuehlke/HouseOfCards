@@ -15,6 +15,11 @@ public class PlayerDTO {
         this.stack = chipsStack;
     }
 
+    public PlayerDTO() {
+        this.name = "";
+        this.stack = 0;
+    }
+
     public String getName() {
         return name;
     }
