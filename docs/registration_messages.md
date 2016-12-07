@@ -1,6 +1,6 @@
-## Overview
+# Registration messages
 
-![](https://github.com/Zuehlke/HouseOfCards/blob/dfe7e8465ad4300a9c1642234fa94a46f8001140/screenshots/msgs_in_registration_phase.png)
+![](images/msgs_in_registration_phase.png)
 
 ## Game-server endpoints
 ### /register

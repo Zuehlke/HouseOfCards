@@ -1,3 +1,5 @@
+# Project structure
+
 Here you can find descriptions to all the gradle modules.
 
 * **bot**: sample bot written in java with akka

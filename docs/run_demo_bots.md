@@ -1,5 +1,6 @@
 # Testdrive the competition runner
-In order to smoke test the game-engine (competition runner) we provide two bots that will register for a game and act on messages received from the game-engine. This is a step by step description to run the test.
+In order to smoke test the game-engine (competition runner) we provide two bots that will register for a game and act on
+messages received from the game-engine. This is a step by step description to run the test.
 
 Start the game-engine with the following commands:
 1. Change to the directory. HouseOfCards/game-engine/game-server
@@ -13,6 +14,7 @@ Start the game-engine with the following commands:
 7. Click "Run". This will start a bot that registers itself at the game-engine and listens on the TCP http://localhost:8081
 8. Repeat steps 4-7 to start a second bot that listens on port 8082 by providing the corresponding argument.
 
-As soon as the game-engine receives two registrations it will broadcast a GameEvent message telling the bots to start the game. Upon receiving the GameEvent message both bots will acknowledge the reception and shutdown.
+As soon as the game-engine receives two registrations it will broadcast a GameEvent message telling the bots to start the game.
+Upon receiving the GameEvent message both bots will acknowledge the reception and shutdown.
 
-![](https://github.com/Zuehlke/HouseOfCards/blob/master/screenshots/arguments-test-bot.PNG)
+![](images/arguments-test-bot.png)
