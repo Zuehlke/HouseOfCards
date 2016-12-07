@@ -10,14 +10,32 @@ package com.zuehlke.hoc.rest;
  */
 public class RegistrationResponse {
 
-    private Result registrationResult;
+    private Result infoMessage;
+    private String playerName;
+    private int token;
 
-    public Result getRegistrationResult() {
-        return registrationResult;
+    public Result getInfoMessage() {
+        return infoMessage;
     }
 
-    public void setRegistrationResult(Result registrationResult) {
-        this.registrationResult = registrationResult;
+    public void setInfoMessage(Result infoMessage) {
+        this.infoMessage = infoMessage;
+    }
+
+    public int getToken() {
+        return token;
+    }
+
+    public void setToken(int token) {
+        this.token = token;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
     }
 
     public enum Result {
