@@ -3,6 +3,8 @@ package com.zuehlke.hoc;
 import com.zuehlke.hoc.actors.BotNotifier;
 import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.rest.GameEvent;
+import com.zuehlke.hoc.rest.MatchStartedMessage;
+import com.zuehlke.hoc.rest.PlayerDTO;
 import com.zuehlke.hoc.rest.RegisterMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +14,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class RestBotNotifier implements BotNotifier {
@@ -54,15 +58,26 @@ public class RestBotNotifier implements BotNotifier {
     }
 
     @Override
-    public void gameStartEvent() {
-        log.debug("Send start event to all bots.");
+    public void gameStartEvent(List<PlayerInfo> players, PlayerInfo dealer) {
+        log.debug("Send match started event to all bots.");
 
-        bots.values().stream().forEach(x -> {
-            String url = String.format("http://%s:%d/start", x.getHostname(), x.getPort());
-            log.info("send game start to {}", url);
-            GameEvent startEvent = new GameEvent();
-            startEvent.setEventKind(GameEvent.EventKind.START);
-            restTemplate.postForObject(url, startEvent, String.class);
+        List<PlayerDTO> matchPlayers = players.stream().map(x -> new PlayerDTO(x.getName(), x.getChipstack())).collect(Collectors.toList());
+
+        PlayerDTO dealerDto = new PlayerDTO(dealer.getName(), dealer.getChipstack());
+
+        matchPlayers.stream().forEach(x -> {
+            RegisterMessage registerMessage = bots.get(x.getName());
+            if (registerMessage == null) {
+                log.info("Player {} cannot be associated with a URI", x.getName());
+            } else {
+                String url = String.format("http://%s:%d/match_started", registerMessage.getHostname(), registerMessage.getPort());
+                log.info("send game start to {}", url);
+                MatchStartedMessage startEvent = new MatchStartedMessage();
+                startEvent.setMatch_players(matchPlayers);
+                startEvent.setDealer(dealerDto);
+                startEvent.setYour_money(x.getStack());
+                restTemplate.postForObject(url, startEvent, String.class);
+            }
         });
     }
 

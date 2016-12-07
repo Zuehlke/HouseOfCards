@@ -1,7 +1,10 @@
 package com.zuehlke.hoc.actors;
 
+import com.zuehlke.hoc.PlayerInfo;
 import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.rest.RegisterMessage;
+
+import java.util.List;
 
 /**
  * Defines the interface to the bots. Is used by <code>EngineActor</code> to send messages to the bots. Maps names to
@@ -22,7 +25,7 @@ public interface BotNotifier {
     /**
      * Broadcasts the game start to all bots
      */
-    void gameStartEvent();
+    void gameStartEvent(List<PlayerInfo> players, PlayerInfo deale);
 
     void sendPlayerInfo(Player player);
 

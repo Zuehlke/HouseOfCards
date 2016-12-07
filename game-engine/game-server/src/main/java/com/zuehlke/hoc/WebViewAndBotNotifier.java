@@ -34,14 +34,14 @@ public class WebViewAndBotNotifier implements PlayerNotifier {
     @Override
     public void playersTurn(String player, long minimumChipsForCall) {
         //viewNotifier.sendGameInfo("Next turn: Player "+player);
-
+        log.info("playersturn");
     }
 
     @Override
     public void broadcastGameStarts(StartInfo info) {
         log.info("Broadcast game start event to all registered players");
         viewNotifier.sendGameInfo("A new game started: " + info.toString());
-        botNotifier.gameStartEvent();
+        botNotifier.gameStartEvent(info.getPlayerInfos(), info.getPlayerInfos().get(0));
     }
 
     @Override
