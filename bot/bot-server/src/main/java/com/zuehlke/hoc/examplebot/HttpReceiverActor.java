@@ -1,9 +1,12 @@
 package com.zuehlke.hoc.examplebot;
 
 import akka.actor.ActorRef;
+import akka.actor.UntypedActor;
 import akka.camel.CamelMessage;
 import akka.camel.javaapi.UntypedConsumerActor;
 import com.zuehlke.hoc.rest.GameEvent;
+import com.zuehlke.hoc.rest.RegisterMessage;
+import com.zuehlke.hoc.rest.RegistrationResponse;
 import org.apache.camel.converter.stream.InputStreamCache;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
@@ -15,7 +18,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Lukas Hofmaier
  */
-class HttpReceiverActor extends UntypedConsumerActor {
+class HttpReceiverActor extends UntypedActor {
 
     private final static Logger log = LoggerFactory.getLogger(HttpReceiverActor.class);
 
@@ -26,35 +29,43 @@ class HttpReceiverActor extends UntypedConsumerActor {
     private ActorRef playerActor;
 
     public HttpReceiverActor(Credentials credentials, ActorRef playerActor) {
-        this.endpointUri = String.format("jetty:http://%s:%d/start", credentials.getHostname(), credentials.getPort());
+        this.endpointUri = String.format("jetty:http://%s:%d/register_info", credentials.getHostname(), credentials.getPort());
+        log.info("called ctor");
         log.debug("Receiver listens on {}", this.endpointUri);
         this.playerActor = playerActor;
     }
 
+    /*
     @Override
     public String getEndpointUri() {
         return this.endpointUri;
     }
+    */
 
     @Override
     public void onReceive(Object message) throws Throwable {
-        //incomming HTTP request are sent as CamelMessage to the mailbox of this actor
+        //incoming HTTP request are sent as CamelMessage to the mailbox of this actor
         if (message instanceof CamelMessage) {
             CamelMessage camelMessage = (CamelMessage) message;
-
+            log.info("received post request");
             //retrieve json from HTTP Request and convert it into a RegistrationResponse
             Object body = camelMessage.body();
             InputStreamCache inputStreamCache = (InputStreamCache) body;
+            camelMessage.getHeaders().get("messagetype");
 
             ObjectMapper objectMapper = new ObjectMapper();
-            //// TODO: 29.11.2016 handle exceptions orruring upon ObbjectMapper:readValue
-            GameEvent gameEvent = objectMapper.readValue(inputStreamCache, GameEvent.class);
+            //// TODO: 29.11.2016 handle exceptions occurring upon ObjectMapper:readValue
+            RegistrationResponse gameEvent = objectMapper.readValue(inputStreamCache, RegistrationResponse.class);
 
             this.playerActor.tell(gameEvent, getSelf());
 
             //return a message to the sender. This will return a HTTP response to the HTTP request sender
             // and close the TCP stream
             getSender().tell("aye, captain!", getSelf());
+        }
+        if(message instanceof RegistrationResponse){
+            RegistrationResponse registrationResponse = (RegistrationResponse)message;
+            log.info("received registration response");
         }
     }
 }
