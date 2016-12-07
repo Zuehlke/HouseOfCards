@@ -9,6 +9,10 @@ import com.zuehlke.hoc.notification.api.PlayerNotifier;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static java.util.Optional.of;
 
 
 /**
@@ -25,7 +29,7 @@ public class NokerGame {
     public final static long INITIAL_CHIPS = 100;
     public final static int MIN_NUM_OF_PLAYERS = 2;
     public final static int CARDS_PER_PLAYER = 2;
-    public static final int MAX_NUM_OF_PLAYERS = NokerDeck.NUM_CARDS_OF_SINGLE_DECK/CARDS_PER_PLAYER;
+    public static final int MAX_NUM_OF_PLAYERS = NokerDeck.NUM_CARDS_OF_SINGLE_DECK / CARDS_PER_PLAYER;
 
     private final PlayerNotifierAdapter notifier;
     private final List<Player> gamePlayers;
@@ -51,13 +55,14 @@ public class NokerGame {
     /**
      * Adds a player to the current game. If the expected number of
      * players joined, the game is started automatically.
+     *
      * @param playerName name of the joining player
      * @return player object of the registered player
      */
     public Player createPlayer(String playerName) {
         Player player = new Player(playerName);
         gamePlayers.add(player);
-        if(allPlayersJoined()){
+        if (allPlayersJoined()) {
             startGame();
         }
         return player;
@@ -82,6 +87,7 @@ public class NokerGame {
     /**
      * This method summarizes both moves call and raise. The move
      * is handled according to the set amount of chips.
+     *
      * @param player current player
      * @param chips  amount of chips to be set into the pot
      */
@@ -90,12 +96,24 @@ public class NokerGame {
         ifMatchIsFinishedGoAhead();
     }
 
+    /**
+     * Returns a player with the name defined by the argument. If the playername is unknown the method return an empty
+     * optional.
+     *
+     * @param playername name of the demanded player.
+     * @return an Optional that contains the player with the defined name.
+     */
+    public Optional<Player> getPlayer(String playername) {
+        List<Player> filterResult = gamePlayers.stream().filter(x -> x.getName().equals(playername)).collect(Collectors.toList());
+        return filterResult.size() == 1 ? of(filterResult.get(0)) : Optional.empty();
+    }
+
     private void ifMatchIsFinishedGoAhead() {
-        if(currentMatch.isFinished()){
-            if(currentMatch.hasMoreThanOnePlayerChips()){
+        if (currentMatch.isFinished()) {
+            if (currentMatch.hasMoreThanOnePlayerChips()) {
                 currentMatch = currentMatch.createNextMatch();
                 currentMatch.startMatch();
-            }else{
+            } else {
                 notifier.broadcastGameFinished();
             }
         }

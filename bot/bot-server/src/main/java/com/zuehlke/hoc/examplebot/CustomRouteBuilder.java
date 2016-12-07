@@ -35,6 +35,7 @@ public class CustomRouteBuilder extends RouteBuilder{
 
         from("direct:registerinfo").process(new RegisterInfoProcessor(this.httpReceiverActorRef)).transform().constant("aye, captain");
         from("direct:matchstarted").process(new MatchStartedProcessor(this.httpReceiverActorRef)).transform().constant("");
+        from("direct:roundstarted").process(new RoundStartedProcessor(this.httpReceiverActorRef)).transform().constant("");
 
     }
 }

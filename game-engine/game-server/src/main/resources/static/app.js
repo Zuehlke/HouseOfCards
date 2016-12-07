@@ -23,8 +23,12 @@ function connect() {
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         setConnected(true);
-        var register_channel = stompClient.subscribe('/user/topic/poker_register', function (currentState) {
-            addToList(JSON.parse(currentState.body).message);
+        var register_channel = stompClient.subscribe('/user/topic/poker_register', function (gameHistory) {
+
+            JSON.parse(gameHistory.body).forEach(function (gameMsg) {
+                addToList(gameMsg);
+            });
+
             register_channel.unsubscribe();
             stompClient.subscribe('/topic/poker_updates', function (update) {
                 addToList(JSON.parse(update.body).message);

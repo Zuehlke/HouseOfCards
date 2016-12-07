@@ -9,17 +9,17 @@ import java.util.List;
  */
 public class YourTurnMessage {
 
-    private int[] your_cards;
+    private List<Integer> your_cards;
     private List<PlayerDTO> active_players;
-    private int minimum_set;
+    private long minimum_set;
     private int maximum_set;
     private int pot;
 
-    public int getMinimum_set() {
+    public long getMinimum_set() {
         return minimum_set;
     }
 
-    public void setMinimum_set(int minimum_set) {
+    public void setMinimum_set(long minimum_set) {
         this.minimum_set = minimum_set;
     }
 
@@ -47,11 +47,11 @@ public class YourTurnMessage {
         this.active_players = active_players;
     }
 
-    public int[] getYour_cards() {
+    public List<Integer> getYour_cards() {
         return your_cards;
     }
 
-    public void setYour_cards(int[] your_cards) {
+    public void setYour_cards(List<Integer> your_cards) {
         this.your_cards = your_cards;
     }
 }

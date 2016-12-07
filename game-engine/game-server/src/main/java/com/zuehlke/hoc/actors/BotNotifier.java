@@ -4,6 +4,7 @@ import com.zuehlke.hoc.PlayerInfo;
 import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.rest.RegisterMessage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,7 +26,16 @@ public interface BotNotifier {
     /**
      * Broadcasts the game start to all bots
      */
-    void gameStartEvent(List<PlayerInfo> players, PlayerInfo deale);
+    void gameStartEvent(List<PlayerInfo> players, PlayerInfo dealer);
+
+    /**
+     * Notify all bots still in the game about a new round.
+     *
+     * @param roundPlayers player that haven't send a fold in the last round.
+     * @param roundNumber  number of the round
+     * @param dealer       player in the role "dealer
+     */
+    void sendRoundStarted(List<PlayerInfo> roundPlayers, int roundNumber, PlayerInfo dealer);
 
     void sendPlayerInfo(Player player);
 
@@ -37,4 +47,15 @@ public interface BotNotifier {
      */
     void sendInvalidRegistrationMessage(RegisterMessage registerMessage, String errorMsg);
 
+    /**
+     * Invites a player to send its move and sends him a card.
+     *
+     * @param receiver             represented as string
+     * @param minimalBet           minimal bet allowed at the current game state
+     * @param maximalBet           maximal bet allowed at the current game state
+     * @param amountOfCreditsInPot amount of money currently in the pot
+     * @param card                 the card that is send to the player
+     * @param activePlayers        a list of player that haven't send a fold in the current match.
+     */
+    void sendYourTurn(String receiver, long minimalBet, int maximalBet, int amountOfCreditsInPot, List<Integer> cards, ArrayList<PlayerInfo> activePlayers);
 }
