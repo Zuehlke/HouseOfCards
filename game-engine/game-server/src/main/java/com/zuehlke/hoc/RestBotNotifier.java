@@ -120,6 +120,9 @@ public class RestBotNotifier implements BotNotifier {
             yourTurnMessage.setMaximum_set(maximalBet);
             yourTurnMessage.setPot(amountOfCreditsInPot);
             yourTurnMessage.setYour_cards(cards);
+
+            log.info("Request bet or fold from player: {}", receiver);
+            restTemplate.postForObject(url, yourTurnMessage, String.class);
         }
     }
 
