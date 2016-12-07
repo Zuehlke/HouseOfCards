@@ -8,7 +8,12 @@ package com.zuehlke.hoc.rest;
 public class PlayerDTO {
 
     private String name;
-    private int stack;
+    private long stack;
+
+    public PlayerDTO(String name, long chipsStack) {
+        this.name = name;
+        this.stack = chipsStack;
+    }
 
     public String getName() {
         return name;
@@ -18,7 +23,7 @@ public class PlayerDTO {
         this.name = name;
     }
 
-    public int getStack() {
+    public long getStack() {
         return stack;
     }
 
