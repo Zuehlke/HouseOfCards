@@ -11,7 +11,7 @@ public class MatchStartedMessage {
 
     private List<PlayerDTO> match_players;
     private PlayerDTO dealer;
-    private int your_money;
+    private long your_money;
 
     public List<PlayerDTO> getMatch_players() {
         return match_players;
@@ -30,11 +30,11 @@ public class MatchStartedMessage {
     }
 
 
-    public int getYour_money() {
+    public long getYour_money() {
         return your_money;
     }
 
-    public void setYour_money(int your_money) {
+    public void setYour_money(long your_money) {
         this.your_money = your_money;
     }
 
