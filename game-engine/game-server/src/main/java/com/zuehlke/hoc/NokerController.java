@@ -32,4 +32,9 @@ public class NokerController {
         IEngineActor gameEng = actorSystem.getGameEngine();
         gameEng.registerPlayer(registerMessage);
     }
+
+    @RequestMapping(value = "/set", method = RequestMethod.POST)
+    public void set(@RequestBody String registerMessage) {
+        log.info("Received set call");
+    }
 }
