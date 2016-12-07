@@ -8,6 +8,10 @@ import com.zuehlke.hoc.notification.api.StartInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Handles callbacks from <code>NonkerGame</code> instance and forwards notifications to the web view and the registered
  * bots.
@@ -19,22 +23,29 @@ public class WebViewAndBotNotifier implements PlayerNotifier {
     private final static Logger log = LoggerFactory.getLogger(EngineActor.class);
     private final BotNotifier botNotifier;
     private final ViewNotifier viewNotifier;
+    // to send the player a card when playersTurn is called by NokerGame the arguments of the sendCardInfo call is
+    // persisted. Ugly but necessary with the current NokerGame interface.
+    private Map<String, Integer> playerState;
 
     public WebViewAndBotNotifier(BotNotifier botNotifier, ViewNotifier viewNotifier) {
         this.botNotifier = botNotifier;
         this.viewNotifier = viewNotifier;
+        this.playerState = new HashMap<>();
     }
 
     @Override
     public void sendCardInfo(String player, int card) {
         log.info("Send card info");
         viewNotifier.sendGameInfo("Player " + player + " got card " + card);
+        playerState.put(player, card);
     }
 
     @Override
     public void playersTurn(String player, long minimumChipsForCall) {
         //viewNotifier.sendGameInfo("Next turn: Player "+player);
         log.info("playersturn");
+        int card = playerState.get(player);
+        botNotifier.sendYourTurn(0, Integer.MAX_VALUE, 100, card, new ArrayList<PlayerInfo>());
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.zuehlke.hoc.PlayerInfo;
 import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.rest.RegisterMessage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,4 +47,15 @@ public interface BotNotifier {
      */
     void sendInvalidRegistrationMessage(RegisterMessage registerMessage, String errorMsg);
 
+    /**
+     * Invites a player to send its move and sends him a card.
+     *
+     * @param receiver             represented as string
+     * @param minimalBet           minimal bet allowed at the current game state
+     * @param maximalBet           maximal bet allowed at the current game state
+     * @param amountOfCreditsInPot amount of money currently in the pot
+     * @param card                 the card that is send to the player
+     * @param activePlayers        a list of player that haven't send a fold in the current match.
+     */
+    void sendYourTurn(String receiver, int minimalBet, int maximalBet, int amountOfCreditsInPot, int card, ArrayList<PlayerInfo> activePlayers);
 }

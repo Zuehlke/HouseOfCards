@@ -10,10 +10,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -105,6 +102,23 @@ public class RestBotNotifier implements BotNotifier {
     }
 
     @Override
+    public void sendYourTurn(String receiver,
+                             int minimalBet,
+                             int maximalBet,
+                             int amountOfCreditsInPot,
+                             int card,
+                             ArrayList<PlayerInfo> activePlayers) {
+        RegisterMessage uriAndPort = bots.get(receiver);
+        if (uriAndPort == null) {
+            log.info("Player {} cannot be associated with a URI", receiver);
+        } else {
+            String url = String.format("http://%s:%d/yourturn", uriAndPort.getHostname(), uriAndPort.getPort());
+            YourTurnMessage yourTurnMessage = new YourTurnMessage();
+
+        }
+    }
+
+    @Override
     public void sendPlayerInfo(Player player) {
         RegisterMessage m = bots.get(player.getName());
         if (m != null) {
@@ -124,4 +138,6 @@ public class RestBotNotifier implements BotNotifier {
         invalidRegMsg.setEventKind(GameEvent.EventKind.INVALID_REG_MSG);
         restTemplate.postForObject(url, invalidRegMsg, String.class);
     }
+
+
 }
