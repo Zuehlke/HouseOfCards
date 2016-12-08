@@ -23,14 +23,10 @@ public interface PlayerNotifier {
      * @param dealer  the player who has the dealer button in the current match
      */
     void matchStarted(List<Player> players, Player dealer);
-    void broadcastPlayerRaised(String playerName, long amount);
-    void broadcastPlayerCalled(String playerName);
-    void broadcastPlayerFolded(String playerName);
-    void broadcastNextRound();
+
     void broadcastNextMatch();
     void broadcastNextRound();
 
-    void playersTurn(String player, long minimumChipsForCall, NokerGame nokerGame);
     void broadcastMatchFinished(List<Player> matchWinners, long pot);
     void broadcastShowdown(List<Player> players);
     void broadcastGameFinished(Player player);

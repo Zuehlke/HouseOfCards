@@ -43,6 +43,7 @@ public class PlayerNotifierAdapter {
     }
 
     public void broadcastPlayerFolded(Player player) {
+        notifier.broadcastPlayerFolded(player);
         log.info("Player folded: Player: {}", player.getName());
     }
 

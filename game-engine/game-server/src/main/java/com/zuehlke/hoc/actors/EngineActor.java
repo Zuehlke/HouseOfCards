@@ -2,6 +2,7 @@ package com.zuehlke.hoc.actors;
 
 import com.zuehlke.hoc.NokerGame;
 import com.zuehlke.hoc.WebViewAndBotNotifier;
+import com.zuehlke.hoc.rest.FoldMessage;
 import com.zuehlke.hoc.rest.RegisterMessage;
 import com.zuehlke.hoc.rest.SetMessage;
 
@@ -10,14 +11,16 @@ import java.util.Optional;
 
 public class EngineActor implements IEngineActor {
 
+    private static final int NUM_OF_GAME_PLAYERS = 2;
+
     private final NokerGame game;
     private final BotNotifier botNotifier;
+
 
     EngineActor(BotNotifier botNotifier, ViewNotifier viewNotifier) {
         this.botNotifier = botNotifier;
         WebViewAndBotNotifier playerNotifier = new WebViewAndBotNotifier(botNotifier, viewNotifier);
-        this.game = new NokerGame(2, playerNotifier);
-
+        this.game = new NokerGame(NUM_OF_GAME_PLAYERS, playerNotifier);
     }
 
     public void registerPlayer(RegisterMessage registerMessage) {
@@ -30,14 +33,16 @@ public class EngineActor implements IEngineActor {
     }
 
     @Override
-    public void setBet(SetMessage setMessage) {
-        Optional<String> playerNameOptional = this.botNotifier.getPlayer(setMessage.getUuid());
+    public void fold(FoldMessage foldMessage) {
+        Optional<String> playerName = botNotifier.getPlayerNameByUuid(foldMessage.getUuid());
+        playerName.flatMap(game::getPlayer).ifPresent(game::playerFold);
+    }
 
-        playerNameOptional.flatMap(x1 -> {
-            return this.game.getPlayer(x1);
-        }).map(x -> {
-            game.playerSet(x, setMessage.getAmount());
-            return x;
+    @Override
+    public void setBet(SetMessage setMessage) {
+        Optional<String> playerNameOptional = this.botNotifier.getPlayerNameByUuid(setMessage.getUuid());
+        playerNameOptional.flatMap(this.game::getPlayer).ifPresent(player -> {
+            game.playerSet(player, setMessage.getAmount());
         });
     }
 }

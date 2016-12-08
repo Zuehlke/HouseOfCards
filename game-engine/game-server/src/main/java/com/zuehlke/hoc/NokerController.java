@@ -2,6 +2,7 @@ package com.zuehlke.hoc;
 
 import com.zuehlke.hoc.actors.DefaultActorSystem;
 import com.zuehlke.hoc.actors.IEngineActor;
+import com.zuehlke.hoc.rest.FoldMessage;
 import com.zuehlke.hoc.rest.RegisterMessage;
 import com.zuehlke.hoc.rest.SetMessage;
 import org.slf4j.Logger;
@@ -34,7 +35,15 @@ public class NokerController {
         gameEng.registerPlayer(registerMessage);
     }
 
-    @RequestMapping(value = "/set", method = RequestMethod.POST)
+    @RequestMapping(value = "/fold", method = RequestMethod.POST)
+    public void fold(@RequestBody FoldMessage foldMessage) {
+        log.info("Received fold move");
+        log.info("Fold message: {}", foldMessage);
+
+        IEngineActor gameEng = actorSystem.getGameEngine();
+        gameEng.fold(foldMessage);
+    }
+
     public void set(@RequestBody SetMessage setMessage) {
         log.info("player with uuid {} called set with an amount of {}", setMessage.getUuid(), setMessage.getAmount());
         IEngineActor gameEng = actorSystem.getGameEngine();

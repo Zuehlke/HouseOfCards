@@ -60,29 +60,7 @@ public class WebViewAndBotNotifier implements PlayerNotifier {
 
     @Override
     public void matchStarted(List<Player> players, Player dealer) {
-        log.info("Broadcast match started to all registered players");
-        viewNotifier.sendGameInfo("A new game started");
-        // botNotifier.sendMatchStartedMessage(info.getPlayerInfos(), info.getPlayerInfos().get(0));
-        // botNotifier.sendRoundStarted(info.getPlayerInfos(), 0, info.getPlayerInfos().get(0));
-    }
-
-    @Override
-    public void broadcastPlayerRaised(String playerName, long amount) {
-        viewNotifier.sendGameInfo("Player " + playerName + " raised");
-        log.info("{} raised {}", playerName, amount);
-    }
-
-    @Override
-    public void broadcastPlayerCalled(String playerName) {
-        viewNotifier.sendGameInfo("Player " + playerName + " called");
-
-
-    }
-
-    @Override
-    public void broadcastPlayerFolded(String playerName) {
-        viewNotifier.sendGameInfo("Player " + playerName + " folded");
-
+        log.info("A new match started");
     }
 
     @Override
@@ -97,4 +75,29 @@ public class WebViewAndBotNotifier implements PlayerNotifier {
 
     }
 
+    @Override
+    public void broadcastMatchFinished(List<Player> matchWinners, long pot) {
+
+    }
+
+    @Override
+    public void broadcastShowdown(List<Player> players) {
+
+    }
+
+    @Override
+    public void broadcastGameFinished(Player player) {
+
+    }
+
+    @Override
+    public void broadcastPlayerFolded(Player player) {
+        botNotifier.playerFolded(player.getName());
+        log.info("Player folded: {}", player.getName());
+    }
+
+    @Override
+    public void broadcastPlayerSet(Player player, long amount) {
+
+    }
 }

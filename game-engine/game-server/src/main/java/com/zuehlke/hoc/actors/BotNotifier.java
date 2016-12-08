@@ -31,7 +31,7 @@ public interface BotNotifier {
      * @param playerUUID UUID set upon registration of the bot.
      * @return name of the player
      */
-    Optional<String> getPlayer(UUID playerUUID);
+    Optional<String> getPlayerNameByUuid(UUID playerUUID);
 
     /**
      * Broadcasts the game start to all bots
@@ -68,4 +68,6 @@ public interface BotNotifier {
      * @param activePlayers        a list of player that haven't send a fold in the current match.
      */
     void sendYourTurn(String receiver, long minimalBet, int maximalBet, int amountOfCreditsInPot, List<Integer> cards, ArrayList<PlayerInfo> activePlayers);
+
+    void playerFolded(String playerName);
 }
