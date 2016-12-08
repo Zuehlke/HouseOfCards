@@ -5,9 +5,11 @@ import akka.actor.Props;
 import akka.actor.UntypedActor;
 import akka.camel.Camel;
 import akka.camel.CamelExtension;
-import com.zuehlke.hoc.rest.*;
 import com.zuehlke.hoc.rest.bot2server.SetMessage;
 import com.zuehlke.hoc.rest.server2bot.MatchStartedMessage;
+import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
+import com.zuehlke.hoc.rest.server2bot.RegistrationInfoMessage;
+import com.zuehlke.hoc.rest.server2bot.RoundStartedMessage;
 import com.zuehlke.hoc.rest.server2bot.YourTurnMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,8 +54,8 @@ class JustCallActor extends UntypedActor {
     @Override
     public void onReceive(Object message) throws Throwable {
 
-        if(message instanceof RegistrationResponse){
-            RegistrationResponse registrationResponse = (RegistrationResponse) message;
+        if(message instanceof RegistrationInfoMessage){
+            RegistrationInfoMessage registrationResponse = (RegistrationInfoMessage) message;
             log.info("received registration response. UUID: {}", registrationResponse.getUUID());
             this.uuid = registrationResponse.getUUID();
 

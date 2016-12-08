@@ -2,8 +2,7 @@ package com.zuehlke.hoc;
 
 
 import com.zuehlke.hoc.actors.BotNotifier;
-import com.zuehlke.hoc.model.Player;
-import com.zuehlke.hoc.rest.RegisterMessage;
+import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

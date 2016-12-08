@@ -1,4 +1,4 @@
-package com.zuehlke.hoc.rest;
+package com.zuehlke.hoc.rest.bot2server;
 
 import java.util.Objects;
 import java.util.Optional;

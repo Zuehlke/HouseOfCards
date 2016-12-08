@@ -2,11 +2,10 @@ package com.zuehlke.hoc;
 
 import com.zuehlke.hoc.actors.BotNotifier;
 import com.zuehlke.hoc.model.Player;
-import com.zuehlke.hoc.rest.*;
-import com.zuehlke.hoc.rest.server2bot.MatchStartedMessage;
-import com.zuehlke.hoc.rest.server2bot.Message;
-import com.zuehlke.hoc.rest.server2bot.YourTurnMessage;
-import com.zuehlke.hoc.rest.server2bot.FoldMessage;
+import com.zuehlke.hoc.rest.GameEvent;
+import com.zuehlke.hoc.rest.PlayerDTO;
+import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
+import com.zuehlke.hoc.rest.server2bot.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,29 +23,10 @@ import static java.util.Optional.of;
 @Component
 public class RestBotNotifier implements BotNotifier {
 
-    private enum Endpoints {
-        PLAYER_FOLDED("player_folded"),
-        PLAYER_SET("player_set"),
-        MATCH_STARTED("match_started"),
-        ROUND_STARTED("round_started"),
-        YOUR_TURN("your_turn"),
-        SHOWDOWN("showdown"),
-        MATCH_FINISHED("match_finished"),
-        GAME_FINISHED("game_finished");
-
-        private final String url;
-        Endpoints(String url) {
-            this.url = url;
-        }
-    }
-
-
     private static final Logger log = LoggerFactory.getLogger(RestBotNotifier.class.getName());
-
     private final Map<String, RegisterMessage> bots = new HashMap<>();
     private final Map<UUID, String> uuid2Bot = new HashMap<>();
     private final RestTemplate restTemplate;
-
     @Autowired
     public RestBotNotifier(RestTemplateBuilder restBuilder) {
         restTemplate = restBuilder.build();
@@ -61,14 +41,14 @@ public class RestBotNotifier implements BotNotifier {
     @Override
     public boolean registerBot(RegisterMessage registerMessage) {
         String url = String.format("http://%s:%d/register_info", registerMessage.getHostname(), registerMessage.getPort());
-        RegistrationResponse registrationResponse = new RegistrationResponse();
+        RegistrationInfoMessage registrationResponse = new RegistrationInfoMessage();
         registrationResponse.setPlayerName(registerMessage.getPlayerName());
         UUID uuid = UUID.randomUUID();
         uuid2Bot.put(uuid, registerMessage.getPlayerName());
         registrationResponse.setUUID(uuid);
         if (bots.containsKey(registerMessage.getPlayerName())) {
             log.info("Name {} is already taken.", registerMessage.getPlayerName());
-            registrationResponse.setInfoMessage(RegistrationResponse.Result.NAME_ALREADY_TAKEN);
+            registrationResponse.setInfoMessage(RegistrationInfoMessage.Result.NAME_ALREADY_TAKEN);
             log.info("Send NAME_ALREADY_TAKEN message to {}.", url);
             restTemplate.postForObject(url, registrationResponse, String.class);
             return false;
@@ -76,7 +56,7 @@ public class RestBotNotifier implements BotNotifier {
         log.info("Register bot: " + registerMessage.getPlayerName() + " -> " + registerMessage.getHostname() + ":" + registerMessage.getPort());
         bots.put(registerMessage.getPlayerName(), registerMessage);
         log.info("Current bots: " + bots.keySet().stream().reduce("", (a, b) -> a += (b + ", ")));
-        registrationResponse.setInfoMessage(RegistrationResponse.Result.CONFIRMATION);
+        registrationResponse.setInfoMessage(RegistrationInfoMessage.Result.CONFIRMATION);
         log.info("Send RESERVATION_CONFIRMATION message for team {} to {}", registerMessage.getPlayerName(), url);
         restTemplate.postForObject(url, registrationResponse, String.class);
         return true;
@@ -174,7 +154,6 @@ public class RestBotNotifier implements BotNotifier {
         log.info("Player {} folded - broadcast to all active players", playerName);
     }
 
-
     public void sendInvalidRegistrationMessage(RegisterMessage registerMessage, String errorMsg) {
         //TODO: errorMsg is not send
         String url = String.format("http://%s:%d/start", registerMessage.getHostname(), registerMessage.getPort());
@@ -183,7 +162,6 @@ public class RestBotNotifier implements BotNotifier {
         invalidRegMsg.setEventKind(GameEvent.EventKind.INVALID_REG_MSG);
         restTemplate.postForObject(url, invalidRegMsg, String.class);
     }
-
 
     /**
      * Broadcasts a message to all registered bots.
@@ -194,5 +172,23 @@ public class RestBotNotifier implements BotNotifier {
             String url = String.format("http://%s:%d/%s", bot.getHostname(), bot.getPort(), endpoint);
             restTemplate.postForObject(url, message, String.class);
         });
+    }
+
+
+    private enum Endpoints {
+        PLAYER_FOLDED("player_folded"),
+        PLAYER_SET("player_set"),
+        MATCH_STARTED("match_started"),
+        ROUND_STARTED("round_started"),
+        YOUR_TURN("your_turn"),
+        SHOWDOWN("showdown"),
+        MATCH_FINISHED("match_finished"),
+        GAME_FINISHED("game_finished");
+
+        private final String url;
+
+        Endpoints(String url) {
+            this.url = url;
+        }
     }
 }

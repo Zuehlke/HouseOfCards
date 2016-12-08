@@ -3,7 +3,7 @@ package com.zuehlke.hoc;
 import com.zuehlke.hoc.actors.DefaultActorSystem;
 import com.zuehlke.hoc.actors.IEngineActor;
 import com.zuehlke.hoc.rest.bot2server.FoldMessage;
-import com.zuehlke.hoc.rest.RegisterMessage;
+import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
 import com.zuehlke.hoc.rest.bot2server.SetMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

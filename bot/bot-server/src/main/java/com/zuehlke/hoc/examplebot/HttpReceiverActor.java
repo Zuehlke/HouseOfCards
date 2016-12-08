@@ -3,10 +3,7 @@ package com.zuehlke.hoc.examplebot;
 import akka.actor.ActorRef;
 import akka.actor.UntypedActor;
 import akka.camel.CamelMessage;
-import akka.camel.javaapi.UntypedConsumerActor;
-import com.zuehlke.hoc.rest.GameEvent;
-import com.zuehlke.hoc.rest.RegisterMessage;
-import com.zuehlke.hoc.rest.RegistrationResponse;
+import com.zuehlke.hoc.rest.server2bot.RegistrationInfoMessage;
 import org.apache.camel.converter.stream.InputStreamCache;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
@@ -55,7 +52,7 @@ class HttpReceiverActor extends UntypedActor {
 
             ObjectMapper objectMapper = new ObjectMapper();
             //// TODO: 29.11.2016 handle exceptions occurring upon ObjectMapper:readValue
-            RegistrationResponse gameEvent = objectMapper.readValue(inputStreamCache, RegistrationResponse.class);
+            RegistrationInfoMessage gameEvent = objectMapper.readValue(inputStreamCache, RegistrationInfoMessage.class);
 
             this.playerActor.tell(gameEvent, getSelf());
 
@@ -63,8 +60,8 @@ class HttpReceiverActor extends UntypedActor {
             // and close the TCP stream
             getSender().tell("aye, captain!", getSelf());
         }
-        if(message instanceof RegistrationResponse){
-            RegistrationResponse registrationResponse = (RegistrationResponse)message;
+        if(message instanceof RegistrationInfoMessage){
+            RegistrationInfoMessage registrationResponse = (RegistrationInfoMessage)message;
             log.info("received registration response");
         }
     }

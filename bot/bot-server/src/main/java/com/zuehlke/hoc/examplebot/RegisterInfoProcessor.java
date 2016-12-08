@@ -2,7 +2,7 @@ package com.zuehlke.hoc.examplebot;
 
 import akka.actor.ActorRef;
 import static akka.pattern.Patterns.ask;
-import com.zuehlke.hoc.rest.RegistrationResponse;
+import com.zuehlke.hoc.rest.server2bot.RegistrationInfoMessage;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
@@ -36,7 +36,7 @@ public class RegisterInfoProcessor implements Processor {
 
         ObjectMapper objectMapper = new ObjectMapper();
         //// TODO: 29.11.2016 handle exceptions occurring upon ObjectMapper:readValue
-        RegistrationResponse registrationResponse = objectMapper.readValue(inputStreamCache, RegistrationResponse.class);
+        RegistrationInfoMessage registrationResponse = objectMapper.readValue(inputStreamCache, RegistrationInfoMessage.class);
         log.info("received registration. player: {}", registrationResponse.getPlayerName());
         ask(this.httpReceiverActor, registrationResponse, 1000);
 

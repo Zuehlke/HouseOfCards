@@ -1,4 +1,4 @@
-package com.zuehlke.hoc.rest;
+package com.zuehlke.hoc.rest.server2bot;
 
 import java.util.UUID;
 
@@ -10,7 +10,7 @@ import java.util.UUID;
  *
  * @author Lukas Hofmaier
  */
-public class RegistrationResponse {
+public class RegistrationInfoMessage {
 
     private Result infoMessage;
     private String playerName;

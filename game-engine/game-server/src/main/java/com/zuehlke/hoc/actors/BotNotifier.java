@@ -2,7 +2,7 @@ package com.zuehlke.hoc.actors;
 
 import com.zuehlke.hoc.PlayerInfo;
 import com.zuehlke.hoc.model.Player;
-import com.zuehlke.hoc.rest.RegisterMessage;
+import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
 
 import java.util.List;
 import java.util.Optional;
