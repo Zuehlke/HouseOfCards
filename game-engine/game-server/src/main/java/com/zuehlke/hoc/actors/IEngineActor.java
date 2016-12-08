@@ -1,8 +1,8 @@
 package com.zuehlke.hoc.actors;
 
-import com.zuehlke.hoc.rest.FoldMessage;
+import com.zuehlke.hoc.rest.bot2server.FoldMessage;
 import com.zuehlke.hoc.rest.RegisterMessage;
-import com.zuehlke.hoc.rest.SetMessage;
+import com.zuehlke.hoc.rest.bot2server.SetMessage;
 
 public interface IEngineActor {
 

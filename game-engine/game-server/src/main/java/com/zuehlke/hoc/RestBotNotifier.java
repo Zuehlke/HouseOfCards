@@ -3,6 +3,10 @@ package com.zuehlke.hoc;
 import com.zuehlke.hoc.actors.BotNotifier;
 import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.rest.*;
+import com.zuehlke.hoc.rest.server2bot.MatchStartedMessage;
+import com.zuehlke.hoc.rest.server2bot.Message;
+import com.zuehlke.hoc.rest.server2bot.YourTurnMessage;
+import com.zuehlke.hoc.rest.server2bot.FoldMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,23 @@ import static java.util.Optional.of;
 
 @Component
 public class RestBotNotifier implements BotNotifier {
+
+    private enum Endpoints {
+        PLAYER_FOLDED("player_folded"),
+        PLAYER_SET("player_set"),
+        MATCH_STARTED("match_started"),
+        ROUND_STARTED("round_started"),
+        YOUR_TURN("your_turn"),
+        SHOWDOWN("showdown"),
+        MATCH_FINISHED("match_finished"),
+        GAME_FINISHED("game_finished");
+
+        private final String url;
+        Endpoints(String url) {
+            this.url = url;
+        }
+    }
+
 
     private static final Logger log = LoggerFactory.getLogger(RestBotNotifier.class.getName());
 
@@ -144,8 +165,11 @@ public class RestBotNotifier implements BotNotifier {
     }
 
     @Override
-    public void playerFolded(String playerName) {
-        log.info("Player {} folded", playerName);
+    public void sendPlayerFolded(String playerName) {
+        FoldMessage foldMessage = new FoldMessage();
+        foldMessage.setPlayerName(playerName);
+        broadcastMessage(foldMessage, Endpoints.PLAYER_FOLDED.url);
+        log.info("Player {} folded - broadcast to all active players", playerName);
     }
 
     @Override
@@ -170,4 +194,14 @@ public class RestBotNotifier implements BotNotifier {
     }
 
 
+    /**
+     * Broadcasts a message to all registered bots.
+     * @param message the message containing the information to be transmitted
+     */
+    private void broadcastMessage(Message message, String endpoint) {
+        bots.values().forEach(bot -> {
+            String url = String.format("http://%s:%d/%s", bot.getHostname(), bot.getPort(), endpoint);
+            restTemplate.postForObject(url, message, String.class);
+        });
+    }
 }

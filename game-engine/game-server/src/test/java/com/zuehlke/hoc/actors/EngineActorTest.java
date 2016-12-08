@@ -1,6 +1,6 @@
 package com.zuehlke.hoc.actors;
 
-import com.zuehlke.hoc.rest.FoldMessage;
+import com.zuehlke.hoc.rest.bot2server.FoldMessage;
 import com.zuehlke.hoc.rest.RegisterMessage;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,7 +44,7 @@ public class EngineActorTest {
         registerPlayer("player2", "localhost", 8081);
 
         engineActor.fold(foldMessage);
-        verify(botNotifierMock).playerFolded("player1");
+        verify(botNotifierMock).sendPlayerFolded("player1");
     }
 
 

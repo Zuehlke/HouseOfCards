@@ -1,10 +1,8 @@
 package com.zuehlke.hoc.examplebot;
 
 import akka.actor.ActorRef;
-import com.zuehlke.hoc.rest.MatchStartedMessage;
-import com.zuehlke.hoc.rest.RegistrationResponse;
+import com.zuehlke.hoc.rest.server2bot.MatchStartedMessage;
 import org.apache.camel.Exchange;
-import org.apache.camel.Message;
 import org.apache.camel.Processor;
 import org.apache.camel.converter.stream.InputStreamCache;
 import org.codehaus.jackson.map.ObjectMapper;

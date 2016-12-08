@@ -1,4 +1,6 @@
-package com.zuehlke.hoc.rest;
+package com.zuehlke.hoc.rest.server2bot;
+
+import com.zuehlke.hoc.rest.PlayerDTO;
 
 import java.util.List;
 
@@ -7,7 +9,7 @@ import java.util.List;
  *
  * @author Lukas Hofmaier0
  */
-public class YourTurnMessage {
+public class YourTurnMessage implements Message {
 
     private List<Integer> your_cards;
     private List<PlayerDTO> active_players;

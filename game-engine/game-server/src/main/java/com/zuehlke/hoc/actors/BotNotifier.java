@@ -56,7 +56,12 @@ public interface BotNotifier {
      */
     void sendInvalidRegistrationMessage(RegisterMessage registerMessage, String errorMsg);
 
-    void playerFolded(String playerName);
+
+    /**
+     * Broadcasts a message to all bots about the player who folded.
+     * @param playerName the player who placed a fold move
+     */
+    void sendPlayerFolded(String playerName);
 
     /**
      * Invites a player to send its move and sends him a card.

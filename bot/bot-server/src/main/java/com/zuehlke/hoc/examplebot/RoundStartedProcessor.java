@@ -1,7 +1,6 @@
 package com.zuehlke.hoc.examplebot;
 
 import akka.actor.ActorRef;
-import com.zuehlke.hoc.rest.MatchStartedMessage;
 import com.zuehlke.hoc.rest.RoundStartedMessage;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
