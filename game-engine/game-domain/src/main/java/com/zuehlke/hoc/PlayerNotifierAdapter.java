@@ -24,12 +24,10 @@ public class PlayerNotifierAdapter {
 
     public void askPlayerForAction(String name, long chipsToCall) {
         log.info("Ask player for action: Player in turn: {}, Chips to call: {}", name, chipsToCall);
-        notifier.playersTurn(name, chipsToCall);
     }
 
     public void sendCardInfoToPlayer(String name, int card) {
         log.info("Send card to player: Player: {}, Card: {}", name, card);
-        notifier.sendCardInfo(name, card);
     }
 
     public void broadcastMatchStart(Match match) {
@@ -42,22 +40,18 @@ public class PlayerNotifierAdapter {
         matchPlayers.forEach(player -> startInfo.addPlayerInfo(new PlayerInfo(player.getName(), player.getChipsStack())));
 
         log.info("Match started: Players: {}", matchPlayers);
-        notifier.broadcastGameStarts(startInfo);
     }
 
     public void broadcastPlayerFolded(Player player) {
         log.info("Player folded: Player: {}", player.getName());
-        notifier.broadcastPlayerFolded(player.getName());
     }
 
     public void broadcastPlayerCalled(Player player) {
         log.info("Player called: Player: {}", player.getName());
-        notifier.broadcastPlayerCalled(player.getName());
     }
 
     public void broadcastPlayerRaised(Player player, long raise) {
         log.info("Player raised: Player: {}, Raise: {}", player.getName(), raise);
-        notifier.broadcastPlayerRaised(player.getName(), raise);
     }
 
     public void broadcastRoundStarts(){
