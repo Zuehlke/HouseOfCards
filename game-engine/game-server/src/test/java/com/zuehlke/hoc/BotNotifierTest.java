@@ -34,15 +34,6 @@ public class BotNotifierTest {
 
     }
 
-    @Test
-    public void sendPlayerInfo() {
-        this.server
-                .expect(requestTo("http://localhost:2222/update"))
-                .andRespond(withSuccess("{}", MediaType.APPLICATION_JSON));
-
-        botNotifier.sendPlayerInfo(new Player("Winner Bot"));
-        server.verify();
-    }
 
     @Test
     public void registerBot() {
