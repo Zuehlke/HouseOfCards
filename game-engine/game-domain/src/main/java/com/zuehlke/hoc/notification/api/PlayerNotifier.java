@@ -38,7 +38,6 @@ public interface PlayerNotifier {
      * @param roundNumber an integer that indicates the order of the round
      */
     void roundStarted(List<Player> players, Player dealer, int roundNumber);
-    void broadcastNextRound();
 
     void broadcastMatchFinished(List<Player> matchWinners, long pot);
     void broadcastShowdown(List<Player> players);
