@@ -13,12 +13,15 @@ import org.springframework.web.client.RestTemplate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.Optional.of;
+
 @Component
 public class RestBotNotifier implements BotNotifier {
 
     private static final Logger log = LoggerFactory.getLogger(RestBotNotifier.class.getName());
 
     private final Map<String, RegisterMessage> bots = new HashMap<>();
+    private final Map<UUID, String> uuid2Bot = new HashMap<>();
     private final RestTemplate restTemplate;
 
     @Autowired
@@ -37,7 +40,9 @@ public class RestBotNotifier implements BotNotifier {
         String url = String.format("http://%s:%d/register_info", registerMessage.getHostname(), registerMessage.getPort());
         RegistrationResponse registrationResponse = new RegistrationResponse();
         registrationResponse.setPlayerName(registerMessage.getPlayerName());
-        registrationResponse.setUUID(UUID.randomUUID());
+        UUID uuid = UUID.randomUUID();
+        uuid2Bot.put(uuid, registerMessage.getPlayerName());
+        registrationResponse.setUUID(uuid);
         if (bots.containsKey(registerMessage.getPlayerName())) {
             log.info("Name {} is already taken.", registerMessage.getPlayerName());
             registrationResponse.setInfoMessage(RegistrationResponse.Result.NAME_ALREADY_TAKEN);
@@ -52,6 +57,11 @@ public class RestBotNotifier implements BotNotifier {
         log.info("Send RESERVATION_CONFIRMATION message for team {} to {}", registerMessage.getPlayerName(), url);
         restTemplate.postForObject(url, registrationResponse, String.class);
         return true;
+    }
+
+    @Override
+    public Optional<String> getPlayer(UUID playerUUID) {
+        return uuid2Bot.get(playerUUID) != null ? of(uuid2Bot.get(playerUUID)) : Optional.empty();
     }
 
     @Override

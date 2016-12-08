@@ -6,6 +6,8 @@ import com.zuehlke.hoc.rest.RegisterMessage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Defines the interface to the bots. Is used by <code>EngineActor</code> to send messages to the bots. Maps names to
@@ -22,6 +24,14 @@ public interface BotNotifier {
      * @return true if the name was not already taken.
      */
     boolean registerBot(RegisterMessage registerMessage);
+
+    /**
+     * Retrieve the player name given an UUID
+     *
+     * @param playerUUID UUID set upon registration of the bot.
+     * @return name of the player
+     */
+    Optional<String> getPlayer(UUID playerUUID);
 
     /**
      * Broadcasts the game start to all bots
