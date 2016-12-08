@@ -5,7 +5,6 @@ import com.zuehlke.hoc.actors.EngineActor;
 import com.zuehlke.hoc.actors.ViewNotifier;
 import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.notification.api.PlayerNotifier;
-import com.zuehlke.hoc.notification.api.StartInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +24,7 @@ public class WebViewAndBotNotifier implements PlayerNotifier {
     private final BotNotifier botNotifier;
     private final ViewNotifier viewNotifier;
 
-    private NokerGame game;
+    //private NokerGame game;
 
     public WebViewAndBotNotifier(BotNotifier botNotifier, ViewNotifier viewNotifier) {
         this.botNotifier = botNotifier;
@@ -39,7 +38,7 @@ public class WebViewAndBotNotifier implements PlayerNotifier {
     }
 
     @Override
-    public void playersTurn(String playerName, long minimumChipsForCall) {
+    public void playersTurn(String playerName, long minimumChipsForCall, NokerGame game) {
         //viewNotifier.sendGameInfo("Next turn: Player "+player);
         log.info("playersTurn: player: {}", playerName);
         Optional<Player> player = game.getPlayer(playerName);
@@ -60,11 +59,11 @@ public class WebViewAndBotNotifier implements PlayerNotifier {
     }
 
     @Override
-    public void matchStarted(StartInfo info) {
-        log.info("Broadcast game start event to all registered players");
-        viewNotifier.sendGameInfo("A new game started: " + info.toString());
-        botNotifier.sendMatchStartedMessage(info.getPlayerInfos(), info.getPlayerInfos().get(0));
-        botNotifier.sendRoundStarted(info.getPlayerInfos(), 0, info.getPlayerInfos().get(0));
+    public void matchStarted(List<Player> players, Player dealer) {
+        log.info("Broadcast match started to all registered players");
+        viewNotifier.sendGameInfo("A new game started");
+        // botNotifier.sendMatchStartedMessage(info.getPlayerInfos(), info.getPlayerInfos().get(0));
+        // botNotifier.sendRoundStarted(info.getPlayerInfos(), 0, info.getPlayerInfos().get(0));
     }
 
     @Override
@@ -99,7 +98,6 @@ public class WebViewAndBotNotifier implements PlayerNotifier {
     }
 
     public void setGame(NokerGame game) {
-        this.game = game;
     }
 
 }

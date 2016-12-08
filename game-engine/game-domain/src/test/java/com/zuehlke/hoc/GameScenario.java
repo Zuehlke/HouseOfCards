@@ -3,11 +3,12 @@ package com.zuehlke.hoc;
 
 import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.notification.api.PlayerNotifier;
-import com.zuehlke.hoc.notification.api.StartInfo;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 
 /**
@@ -75,13 +76,13 @@ public class GameScenario {
             }
 
             @Override
-            public void playersTurn(String player, long minimumChipsForCall) {
+            public void playersTurn(String player, long minimumChipsForCall, NokerGame game) {
 
                 log.info("called playersTurn. player: {}", player);
             }
 
             @Override
-            public void matchStarted(StartInfo info) {
+            public void matchStarted(List<Player> player, Player dealer) {
                 log.info("called matchStarted");
             }
 
