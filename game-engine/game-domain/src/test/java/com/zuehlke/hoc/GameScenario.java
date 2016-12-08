@@ -67,66 +67,66 @@ public class GameScenario {
         // ...
     }
 
-    @Test
-    public void testMatchStarted() {
-        PlayerNotifier playerNotifier = new PlayerNotifier() {
-            @Override
-            public void sendCardInfo(String player, int card) {
-                log.info("called sendCardInfo");
-            }
-
-            @Override
-            public void playersTurn(String player, long minimumChipsForCall, NokerGame game) {
-
-                log.info("called playersTurn. player: {}", player);
-            }
-
-            @Override
-            public void matchStarted(List<Player> player, Player dealer) {
-                log.info("called matchStarted");
-            }
-
-            @Override
-            public void broadcastPlayerRaised(String playerName, long amount) {
-                log.info("called broadcastPlayerRaised");
-            }
-
-            @Override
-            public void broadcastPlayerCalled(String playerName) {
-                log.info("called broadcastPlayerCalled");
-            }
-
-            @Override
-            public void broadcastPlayerFolded(String playerName) {
-                log.info("called broadcastPlayerFolded");
-            }
-
-            @Override
-            public void broadcastNextRound() {
-                log.info("called broadcastNext Round");
-            }
-
-            @Override
-            public void broadcastNextMatch() {
-                log.info("called broadcastNextMatch");
-            }
-        };
-
-
-        NokerGame game = new NokerGame(3, playerNotifier);
-
-        Player tobi = game.createPlayer("tobi");
-        Player riki = game.createPlayer("riki");
-        Player miki = game.createPlayer("miki");
-
-        //now its tobis turn
-        game.playerSet(tobi, 0);
-        game.playerSet(riki, 0);
-        game.playerSet(miki, 0);
-
-        game.playerSet(tobi, 0);
-        game.playerSet(riki, 0);
-        game.playerSet(miki, 0);
-
-    }
+//    @Test
+//    public void testMatchStarted() {
+//        PlayerNotifier playerNotifier = new PlayerNotifier() {
+//            @Override
+//            public void sendCardInfo(String player, int card) {
+//                log.info("called sendCardInfo");
+//            }
+//
+//            @Override
+//            public void playersTurn(String player, long minimumChipsForCall, NokerGame game) {
+//
+//                log.info("called playersTurn. player: {}", player);
+//            }
+//
+//            @Override
+//            public void matchStarted(List<Player> player, Player dealer) {
+//                log.info("called matchStarted");
+//            }
+//
+//            @Override
+//            public void broadcastPlayerRaised(String playerName, long amount) {
+//                log.info("called broadcastPlayerRaised");
+//            }
+//
+//            @Override
+//            public void broadcastPlayerCalled(String playerName) {
+//                log.info("called broadcastPlayerCalled");
+//            }
+//
+//            @Override
+//            public void broadcastPlayerFolded(String playerName) {
+//                log.info("called broadcastPlayerFolded");
+//            }
+//
+//            @Override
+//            public void broadcastNextRound() {
+//                log.info("called broadcastNext Round");
+//            }
+//
+//            @Override
+//            public void broadcastNextMatch() {
+//                log.info("called broadcastNextMatch");
+//            }
+//        };
+//
+//
+//        NokerGame game = new NokerGame(3, playerNotifier);
+//
+//        Player tobi = game.createPlayer("tobi");
+//        Player riki = game.createPlayer("riki");
+//        Player miki = game.createPlayer("miki");
+//
+//        //now its tobis turn
+//        game.playerSet(tobi, 0);
+//        game.playerSet(riki, 0);
+//        game.playerSet(miki, 0);
+//
+//        game.playerSet(tobi, 0);
+//        game.playerSet(riki, 0);
+//        game.playerSet(miki, 0);
+//
+//    }
 }

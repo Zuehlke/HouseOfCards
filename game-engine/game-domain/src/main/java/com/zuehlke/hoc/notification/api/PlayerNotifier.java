@@ -1,6 +1,9 @@
 package com.zuehlke.hoc.notification.api;
 
 
+import java.util.List;
+
+import com.zuehlke.hoc.NokerGame;
 import com.zuehlke.hoc.model.Player;
 
 import java.util.List;
@@ -34,16 +37,13 @@ public interface PlayerNotifier {
     void broadcastPlayerCalled(String playerName);
     void broadcastPlayerFolded(String playerName);
     void broadcastNextMatch();
-
     void broadcastNextRound();
 
+    void playersTurn(String player, long minimumChipsForCall, NokerGame nokerGame);
     void broadcastMatchFinished(List<Player> matchWinners, long pot);
-
     void broadcastShowdown(List<Player> players);
-
     void broadcastGameFinished(Player player);
 
     void broadcastPlayerFolded(Player player);
-
     void broadcastPlayerSet(Player player, long amount);
 }

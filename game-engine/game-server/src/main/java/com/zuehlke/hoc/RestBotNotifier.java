@@ -60,7 +60,7 @@ public class RestBotNotifier implements BotNotifier {
     }
 
     @Override
-    public Optional<String> getPlayer(UUID playerUUID) {
+    public Optional<String> getPlayerNameByUuid(UUID playerUUID) {
         return uuid2Bot.get(playerUUID) != null ? of(uuid2Bot.get(playerUUID)) : Optional.empty();
     }
 
@@ -141,6 +141,11 @@ public class RestBotNotifier implements BotNotifier {
             log.info("Request bet or fold from player: {}", player.getName());
             restTemplate.postForObject(url, yourTurnMessage, String.class);
         }
+    }
+
+    @Override
+    public void playerFolded(String playerName) {
+        log.info("Player {} folded", playerName);
     }
 
     @Override
