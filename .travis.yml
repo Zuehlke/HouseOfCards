@@ -14,9 +14,11 @@ notifications:
 
 before_install:
   - chmod +x gradlew
+
+before_script:
   - npm install
 
-after_install:
+after_success:
   - npm run docs:publish
 
 before_cache:
