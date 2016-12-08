@@ -41,21 +41,18 @@ public class WebViewAndBotNotifier implements PlayerNotifier {
     @Override
     public void playersTurn(String playerName, long minimumChipsForCall) {
         //viewNotifier.sendGameInfo("Next turn: Player "+player);
-        log.info("playersturn");
-        //playerState.get(player);
+        log.info("playersTurn: player: {}", playerName);
         Optional<Player> player = game.getPlayer(playerName);
-
         List<Integer> cards = new ArrayList<>();
         player.map(x -> {
-                    if (x.getFirstCard() <= 0) {
+            if (x.getFirstCard() >= 0) {
                         cards.add(x.getFirstCard());
                     }
-                    if (x.getSecondCard() <= 0) {
+            if (x.getSecondCard() >= 0) {
                         cards.add(x.getSecondCard());
                     }
-
                     //TODO: the arguments maximalBet, amountOfCreditsInPot and activePlayers are dummies argument and need to
-                    // be replaced with meanful value as soon the NokerGame API provides the correspondings methods.
+            // be replaced with meaningful value as soon the NokerGame API provides the correspondings methods.
                     botNotifier.sendYourTurn(x.getName(), minimumChipsForCall, Integer.MAX_VALUE, 100, cards, new ArrayList<PlayerInfo>());
                     return x;
                 }
