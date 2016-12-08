@@ -65,7 +65,7 @@ public class RestBotNotifier implements BotNotifier {
     }
 
     @Override
-    public void gameStartEvent(List<PlayerInfo> players, PlayerInfo dealer) {
+    public void sendMatchStartedMessage(List<PlayerInfo> players, PlayerInfo dealer) {
         log.debug("Send match started event to all bots.");
 
         List<PlayerDTO> matchPlayers = players.stream().map(x -> new PlayerDTO(x.getName(), x.getChipstack())).collect(Collectors.toList());
