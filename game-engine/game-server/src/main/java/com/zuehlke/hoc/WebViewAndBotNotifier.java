@@ -8,12 +8,10 @@ import com.zuehlke.hoc.notification.api.PlayerNotifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
- * Handles callbacks from <code>NonkerGame</code> instance and forwards notifications to the web view and the registered
+ * Handles callbacks from <code>NokerGame</code> instance and forwards notifications to the web view and the registered
  * bots.
  *
  * @author Lukas Hofmaier
@@ -38,25 +36,15 @@ public class WebViewAndBotNotifier implements PlayerNotifier {
     }
 
     @Override
-    public void playersTurn(String playerName, long minimumChipsForCall, NokerGame game) {
+    public void requestBet(Player player, long lowerBound, long upperBound, long amountInPot, List<Player> activePlayers) {
         //viewNotifier.sendGameInfo("Next turn: Player "+player);
-        log.info("playersTurn: player: {}", playerName);
-        Optional<Player> player = game.getPlayer(playerName);
-        List<Integer> cards = new ArrayList<>();
-        player.map(x -> {
-            if (x.getFirstCard() >= 0) {
-                        cards.add(x.getFirstCard());
-                    }
-            if (x.getSecondCard() >= 0) {
-                        cards.add(x.getSecondCard());
-                    }
-                    //TODO: the arguments maximalBet, amountOfCreditsInPot and activePlayers are dummies argument and need to
-            // be replaced with meaningful value as soon the NokerGame API provides the correspondings methods.
-                    botNotifier.sendYourTurn(x.getName(), minimumChipsForCall, Integer.MAX_VALUE, 100, cards, new ArrayList<PlayerInfo>());
-                    return x;
-                }
-        );
+        log.info("requestBet: player: {}", player.getName());
+
+
+        botNotifier.sendYourTurn(player, lowerBound, upperBound, amountInPot, activePlayers);
     }
+        )
+}
 
     @Override
     public void matchStarted(List<Player> players, Player dealer) {

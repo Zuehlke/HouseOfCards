@@ -4,7 +4,6 @@ import com.zuehlke.hoc.PlayerInfo;
 import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.rest.RegisterMessage;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -60,12 +59,11 @@ public interface BotNotifier {
     /**
      * Invites a player to send its move and sends him a card.
      *
-     * @param receiver             represented as string
-     * @param minimalBet           minimal bet allowed at the current game state
-     * @param maximalBet           maximal bet allowed at the current game state
-     * @param amountOfCreditsInPot amount of money currently in the pot
-     * @param card                 the card that is send to the player
+     * @param player               receiver of the request
+     * @param lowerBound           minimal bet allowed at the current game state
+     * @param upperBound           maximal bet allowed at the current game state
+     * @param amountInPot          amount of money currently in the pot
      * @param activePlayers        a list of player that haven't send a fold in the current match.
      */
-    void sendYourTurn(String receiver, long minimalBet, int maximalBet, int amountOfCreditsInPot, List<Integer> cards, ArrayList<PlayerInfo> activePlayers);
+    void sendYourTurn(Player player, long lowerBound, long upperBound, long amountInPot, List<Player> activePlayers);
 }

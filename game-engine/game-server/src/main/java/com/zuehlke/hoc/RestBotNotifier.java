@@ -112,26 +112,33 @@ public class RestBotNotifier implements BotNotifier {
     }
 
     @Override
-    public void sendYourTurn(String receiver,
-                             long minimalBet,
-                             int maximalBet,
-                             int amountOfCreditsInPot,
-                             List<Integer> cards,
-                             ArrayList<PlayerInfo> activePlayers) {
-        RegisterMessage uriAndPort = bots.get(receiver);
+    public void sendYourTurn(Player player, long minimalBet, long maximalBet, long amountOfCreditsInPot, List<Player> activePlayers) {
+        RegisterMessage uriAndPort = bots.get(player.getName());
         if (uriAndPort == null) {
-            log.info("Player {} cannot be associated with a URI", receiver);
+            log.info("Player {} cannot be associated with a URI", player.getName());
         } else {
             String url = String.format("http://%s:%d/yourturn", uriAndPort.getHostname(), uriAndPort.getPort());
-            List<PlayerDTO> playerDTOs = activePlayers.stream().map(x -> new PlayerDTO(x.getName(), x.getChipstack())).collect(Collectors.toList());
+            //create YourTurn message
             YourTurnMessage yourTurnMessage = new YourTurnMessage();
-            yourTurnMessage.setActive_players(playerDTOs);
             yourTurnMessage.setMinimum_set(minimalBet);
             yourTurnMessage.setMaximum_set(maximalBet);
             yourTurnMessage.setPot(amountOfCreditsInPot);
+
+            //set the list of active players in message
+            List<PlayerDTO> playerDTOs = activePlayers.stream().map(x -> new PlayerDTO(x.getName(), x.getChipsStack())).collect(Collectors.toList());
+            yourTurnMessage.setActive_players(playerDTOs);
+
+            //set the cards of the player in message
+            List<Integer> cards = new ArrayList<>();
+            if (player.getFirstCard() >= 0) {
+                cards.add(player.getFirstCard());
+            }
+            if (player.getSecondCard() >= 0) {
+                cards.add(player.getSecondCard());
+            }
             yourTurnMessage.setYour_cards(cards);
 
-            log.info("Request bet or fold from player: {}", receiver);
+            log.info("Request bet or fold from player: {}", player.getName());
             restTemplate.postForObject(url, yourTurnMessage, String.class);
         }
     }
