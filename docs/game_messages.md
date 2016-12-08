@@ -65,7 +65,7 @@ Content:
 
 "round_dealer" is used when the actual dealer has folded in the first round.
 
-### /yourturn
+### /your_turn
 Content:
 ```
 {
@@ -100,14 +100,6 @@ Content:
 }
 ```
 
-### /round_finished
-Content:
-```
-{
-    NO CONTENT
-}
-```
-
 ### /showdown
 Content:
 ```
@@ -138,3 +130,12 @@ Use-cases:
 1. If a player that is not the active player sends a message, that message is ignored. -> no response.
 1. If the active player sends an invalid message (invalid set amount or unknown message) then the player automatically folds (too low amount or too high amount doesn't matter).
 1. If the active player does not response after a predefined period of time, the player automatically folds.
+
+
+### /game_finished
+Content:
+```
+{
+    winner: [player1]
+}
+```
