@@ -29,7 +29,15 @@ public interface PlayerNotifier {
      */
     void matchStarted(List<Player> players, Player dealer);
 
-    void roundStarted();
+    /**
+     * Is called when a new round begins.
+     *
+     * @param players     a list of all players that participate in this match and that haven't folded in the previous
+     *                    round
+     * @param dealer      the player who has the dealer button in the current match
+     * @param roundNumber an integer that indicates the order of the round
+     */
+    void roundStarted(List<Player> players, Player dealer, int roundNumber);
     void broadcastNextRound();
 
     void broadcastMatchFinished(List<Player> matchWinners, long pot);

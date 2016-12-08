@@ -48,7 +48,7 @@ public class WebViewAndBotNotifier implements PlayerNotifier {
     }
 
     @Override
-    public void roundStarted() {
+    public void roundStarted(List<Player> players, Player dealer, int roundNumber) {
         viewNotifier.sendGameInfo("New match started");
 
     }
