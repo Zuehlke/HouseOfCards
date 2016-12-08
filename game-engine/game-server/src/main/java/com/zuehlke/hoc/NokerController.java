@@ -3,6 +3,7 @@ package com.zuehlke.hoc;
 import com.zuehlke.hoc.actors.DefaultActorSystem;
 import com.zuehlke.hoc.actors.IEngineActor;
 import com.zuehlke.hoc.rest.RegisterMessage;
+import com.zuehlke.hoc.rest.SetMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,9 @@ public class NokerController {
     }
 
     @RequestMapping(value = "/set", method = RequestMethod.POST)
-    public void set(@RequestBody String registerMessage) {
-        log.info("Received set call");
+    public void set(@RequestBody SetMessage setMessage) {
+        log.info("player with uuid {} called set with an amount of {}", setMessage.getUuid(), setMessage.getAmount());
+        IEngineActor gameEng = actorSystem.getGameEngine();
+        gameEng.setBet(setMessage);
     }
 }
