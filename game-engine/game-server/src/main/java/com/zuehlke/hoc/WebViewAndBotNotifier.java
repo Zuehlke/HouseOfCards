@@ -30,21 +30,11 @@ public class WebViewAndBotNotifier implements PlayerNotifier {
     }
 
     @Override
-    public void sendCardInfo(String player, int card) {
-        log.info("Send card info");
-        viewNotifier.sendGameInfo("Player " + player + " got card " + card);
-    }
-
-    @Override
     public void requestBet(Player player, long lowerBound, long upperBound, long amountInPot, List<Player> activePlayers) {
         //viewNotifier.sendGameInfo("Next turn: Player "+player);
         log.info("requestBet: player: {}", player.getName());
-
-
         botNotifier.sendYourTurn(player, lowerBound, upperBound, amountInPot, activePlayers);
     }
-        )
-}
 
     @Override
     public void matchStarted(List<Player> players, Player dealer) {

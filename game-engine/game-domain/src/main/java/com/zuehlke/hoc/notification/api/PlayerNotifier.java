@@ -1,16 +1,11 @@
 package com.zuehlke.hoc.notification.api;
 
 
-import java.util.List;
-
-import com.zuehlke.hoc.NokerGame;
 import com.zuehlke.hoc.model.Player;
 
 import java.util.List;
 
 public interface PlayerNotifier {
-
-    void sendCardInfo(String player, int card);
 
     /**
      * Is called when a players bet is requested. After this call the <code>NokerGame</code> instance expects
@@ -33,13 +28,10 @@ public interface PlayerNotifier {
      * @param dealer  the player who has the dealer button in the current match
      */
     void matchStarted(List<Player> players, Player dealer);
-    void broadcastPlayerRaised(String playerName, long amount);
-    void broadcastPlayerCalled(String playerName);
-    void broadcastPlayerFolded(String playerName);
+
     void broadcastNextMatch();
     void broadcastNextRound();
 
-    void playersTurn(String player, long minimumChipsForCall, NokerGame nokerGame);
     void broadcastMatchFinished(List<Player> matchWinners, long pot);
     void broadcastShowdown(List<Player> players);
     void broadcastGameFinished(Player player);

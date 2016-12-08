@@ -4,7 +4,6 @@ import com.zuehlke.hoc.PlayerInfo;
 import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.rest.RegisterMessage;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -57,6 +56,8 @@ public interface BotNotifier {
      */
     void sendInvalidRegistrationMessage(RegisterMessage registerMessage, String errorMsg);
 
+    void playerFolded(String playerName);
+
     /**
      * Invites a player to send its move and sends him a card.
      *
@@ -66,8 +67,5 @@ public interface BotNotifier {
      * @param amountInPot          amount of money currently in the pot
      * @param activePlayers        a list of player that haven't send a fold in the current match.
      */
-    void sendYourTurn(String receiver, long minimalBet, int maximalBet, int amountOfCreditsInPot, List<Integer> cards, ArrayList<PlayerInfo> activePlayers);
-
-    void playerFolded(String playerName);
     void sendYourTurn(Player player, long lowerBound, long upperBound, long amountInPot, List<Player> activePlayers);
 }

@@ -8,8 +8,6 @@ import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
 
 /**
  * This class demonstrates a game scenario and

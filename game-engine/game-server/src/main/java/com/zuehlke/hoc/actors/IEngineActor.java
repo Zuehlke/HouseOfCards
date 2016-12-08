@@ -9,5 +9,6 @@ public interface IEngineActor {
     void registerPlayer(RegisterMessage registerMessage);
 
     void setBet(SetMessage setMessage);
+
     void fold(FoldMessage foldMessage);
 }

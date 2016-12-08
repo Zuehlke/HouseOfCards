@@ -2,8 +2,8 @@ package com.zuehlke.hoc;
 
 import com.zuehlke.hoc.model.Match;
 import com.zuehlke.hoc.model.Player;
-import com.zuehlke.hoc.notification.api.*;
-
+import com.zuehlke.hoc.notification.api.PlayerNotifier;
+import com.zuehlke.hoc.notification.api.StartInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,9 +13,8 @@ import java.util.List;
 
 public class PlayerNotifierAdapter {
 
-    private PlayerNotifier notifier;
-
     private static final Logger log = LoggerFactory.getLogger(PlayerNotifierAdapter.class.getName());
+    private PlayerNotifier notifier;
 
 
     public PlayerNotifierAdapter(PlayerNotifier notifier) {
