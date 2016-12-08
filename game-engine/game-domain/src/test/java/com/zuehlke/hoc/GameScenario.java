@@ -105,8 +105,8 @@ public class GameScenario {
 //            }
 //
 //            @Override
-//            public void broadcastNextMatch() {
-//                log.info("called broadcastNextMatch");
+//            public void roundStarted() {
+//                log.info("called roundStarted");
 //            }
 //        };
 //

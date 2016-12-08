@@ -29,7 +29,7 @@ public interface PlayerNotifier {
      */
     void matchStarted(List<Player> players, Player dealer);
 
-    void broadcastNextMatch();
+    void roundStarted();
     void broadcastNextRound();
 
     void broadcastMatchFinished(List<Player> matchWinners, long pot);
