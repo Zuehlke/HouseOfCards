@@ -68,25 +68,24 @@ public class RestBotNotifier implements BotNotifier {
     }
 
     @Override
-    public void sendMatchStartedMessage(List<PlayerInfo> players, PlayerInfo dealer) {
+    public void sendMatchStartedMessage(List<Player> players, Player dealer) {
         log.debug("Send match started event to all bots.");
 
-        List<PlayerDTO> matchPlayers = players.stream().map(x -> new PlayerDTO(x.getName(), x.getChipstack())).collect(Collectors.toList());
-
-        PlayerDTO dealerDto = new PlayerDTO(dealer.getName(), dealer.getChipstack());
-
-        matchPlayers.forEach(x -> {
-            RegisterMessage registerMessage = bots.get(x.getName());
-            if (registerMessage == null) {
-                log.info("Player {} cannot be associated with a URI", x.getName());
+        players.stream().forEach(p -> {
+            if (bots.get(p.getName()) == null) {
+                log.info("Player {} cannot be associated with a URI", p.getName());
             } else {
-                String url = String.format("http://%s:%d/match_started", registerMessage.getHostname(), registerMessage.getPort());
+                //create MatchStarted message
+                MatchStartedMessage matchStartedMessage = new MatchStartedMessage();
+                List<PlayerDTO> matchPlayers = players.stream().map(x -> new PlayerDTO(x.getName(), x.getChipsStack())).collect(Collectors.toList());
+                matchStartedMessage.setMatch_players(matchPlayers);
+                PlayerDTO dealerDto = new PlayerDTO(dealer.getName(), dealer.getChipsStack());
+                matchStartedMessage.setDealer(dealerDto);
+                matchStartedMessage.setYour_money(p.getChipsStack());
+
+                String url = String.format("http://%s:%d/match_started", bots.get(p.getName()).getHostname(), bots.get(p.getName()).getPort());
                 log.info("send game start to {}", url);
-                MatchStartedMessage startEvent = new MatchStartedMessage();
-                startEvent.setMatch_players(matchPlayers);
-                startEvent.setDealer(dealerDto);
-                startEvent.setYour_money(x.getStack());
-                restTemplate.postForObject(url, startEvent, String.class);
+                restTemplate.postForObject(url, matchStartedMessage, String.class);
             }
         });
     }
