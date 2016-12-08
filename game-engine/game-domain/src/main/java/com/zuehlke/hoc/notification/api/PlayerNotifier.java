@@ -9,9 +9,17 @@ public interface PlayerNotifier {
 
     void sendCardInfo(String player, int card);
 
+
     void playersTurn(String player, long minimumChipsForCall, NokerGame nokerGame);
 
-    void matchStarted(List<Player> player, Player dealer);
+    /**
+     * Is called when a new match is started. E.g. after all players called <code>createPlayer</code> or after a match
+     * is finished.
+     *
+     * @param players a list of all players that participate in this match
+     * @param dealer  the player who has the dealer button in the current match
+     */
+    void matchStarted(List<Player> players, Player dealer);
     void broadcastPlayerRaised(String playerName, long amount);
     void broadcastPlayerCalled(String playerName);
     void broadcastPlayerFolded(String playerName);
