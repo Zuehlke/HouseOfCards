@@ -17,7 +17,6 @@ public class EngineActor implements IEngineActor {
         this.botNotifier = botNotifier;
         WebViewAndBotNotifier playerNotifier = new WebViewAndBotNotifier(botNotifier, viewNotifier);
         this.game = new NokerGame(2, playerNotifier);
-        playerNotifier.setGame(game);
 
     }
 
