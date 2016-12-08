@@ -19,6 +19,8 @@ import java.util.stream.Collectors;
 
 import static java.util.Optional.of;
 
+
+
 @Component
 public class RestBotNotifier implements BotNotifier {
 
@@ -93,7 +95,7 @@ public class RestBotNotifier implements BotNotifier {
 
         PlayerDTO dealerDto = new PlayerDTO(dealer.getName(), dealer.getChipstack());
 
-        matchPlayers.stream().forEach(x -> {
+        matchPlayers.forEach(x -> {
             RegisterMessage registerMessage = bots.get(x.getName());
             if (registerMessage == null) {
                 log.info("Player {} cannot be associated with a URI", x.getName());
@@ -116,12 +118,12 @@ public class RestBotNotifier implements BotNotifier {
 
         PlayerDTO dealerDto = new PlayerDTO(dealer.getName(), dealer.getChipstack());
 
-        roundPlayers.stream().forEach(x -> {
+        roundPlayers.forEach(x -> {
             RegisterMessage registerMessage = bots.get(x.getName());
             if (registerMessage == null) {
                 log.info("Player {} cannot be associated with a URI", x.getName());
             } else {
-                String url = String.format("http://%s:%d/round_started", registerMessage.getHostname(), registerMessage.getPort());
+                String url = String.format("http://%s:%d/%s", registerMessage.getHostname(), registerMessage.getPort(), Endpoints.ROUND_STARTED.url);
                 log.info("send game start to {}", url);
                 RoundStartedMessage roundStartedMessage = new RoundStartedMessage();
                 roundStartedMessage.setRound_players(playerDTOs);
@@ -138,7 +140,7 @@ public class RestBotNotifier implements BotNotifier {
         if (uriAndPort == null) {
             log.info("Player {} cannot be associated with a URI", player.getName());
         } else {
-            String url = String.format("http://%s:%d/yourturn", uriAndPort.getHostname(), uriAndPort.getPort());
+            String url = String.format("http://%s:%d/%s", uriAndPort.getHostname(), uriAndPort.getPort(), Endpoints.YOUR_TURN.url);
             //create YourTurn message
             YourTurnMessage yourTurnMessage = new YourTurnMessage();
             yourTurnMessage.setMinimum_set(minimalBet);
@@ -172,17 +174,6 @@ public class RestBotNotifier implements BotNotifier {
         log.info("Player {} folded - broadcast to all active players", playerName);
     }
 
-    @Override
-    public void sendPlayerInfo(Player player) {
-        RegisterMessage m = bots.get(player.getName());
-        if (m != null) {
-            String response = restTemplate.postForObject(String.format("http://%s:%d/update", m.getHostname(), m.getPort()),
-                    player,
-                    String.class);
-
-            System.out.println("Send cards to '" + player.getName() + "':" + player.getFirstCard() + "," + player.getSecondCard());
-        }
-    }
 
     public void sendInvalidRegistrationMessage(RegisterMessage registerMessage, String errorMsg) {
         //TODO: errorMsg is not send
