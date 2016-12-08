@@ -12,8 +12,8 @@ public class YourTurnMessage {
     private List<Integer> your_cards;
     private List<PlayerDTO> active_players;
     private long minimum_set;
-    private int maximum_set;
-    private int pot;
+    private long maximum_set;
+    private long pot;
 
     public long getMinimum_set() {
         return minimum_set;
@@ -23,19 +23,19 @@ public class YourTurnMessage {
         this.minimum_set = minimum_set;
     }
 
-    public int getMaximum_set() {
+    public long getMaximum_set() {
         return maximum_set;
     }
 
-    public void setMaximum_set(int maximum_set) {
+    public void setMaximum_set(long maximum_set) {
         this.maximum_set = maximum_set;
     }
 
-    public int getPot() {
+    public long getPot() {
         return pot;
     }
 
-    public void setPot(int pot) {
+    public void setPot(long pot) {
         this.pot = pot;
     }
 
