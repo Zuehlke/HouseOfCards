@@ -14,6 +14,10 @@ notifications:
 
 before_install:
   - chmod +x gradlew
+  - npm install
+
+after_install:
+  - npm run docs:publish
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
