@@ -76,7 +76,8 @@ public class GameScenario {
 
             @Override
             public void playersTurn(String player, long minimumChipsForCall) {
-                log.info("called playersTurn");
+
+                log.info("called playersTurn. player: {}", player);
             }
 
             @Override
@@ -116,6 +117,15 @@ public class GameScenario {
         Player tobi = game.createPlayer("tobi");
         Player riki = game.createPlayer("riki");
         Player miki = game.createPlayer("miki");
+
+        //now its tobis turn
+        game.playerSet(tobi, 0);
+        game.playerSet(riki, 0);
+        game.playerSet(miki, 0);
+
+        game.playerSet(tobi, 0);
+        game.playerSet(riki, 0);
+        game.playerSet(miki, 0);
 
     }
 }
