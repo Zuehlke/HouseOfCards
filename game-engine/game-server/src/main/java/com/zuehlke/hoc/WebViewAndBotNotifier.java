@@ -97,7 +97,4 @@ public class WebViewAndBotNotifier implements PlayerNotifier {
 
     }
 
-    public void setGame(NokerGame game) {
-    }
-
 }
