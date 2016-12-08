@@ -64,7 +64,8 @@ public class WebViewAndBotNotifier implements PlayerNotifier {
 
     @Override
     public void broadcastPlayerFolded(Player player) {
-        botNotifier.playerFolded(player.getName());
+        botNotifier.sendPlayerFolded(player.getName());
+        // TODO: inform viewNotifier
         log.info("Player folded: {}", player.getName());
     }
 

@@ -6,6 +6,9 @@ import akka.actor.UntypedActor;
 import akka.camel.Camel;
 import akka.camel.CamelExtension;
 import com.zuehlke.hoc.rest.*;
+import com.zuehlke.hoc.rest.bot2server.SetMessage;
+import com.zuehlke.hoc.rest.server2bot.MatchStartedMessage;
+import com.zuehlke.hoc.rest.server2bot.YourTurnMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
