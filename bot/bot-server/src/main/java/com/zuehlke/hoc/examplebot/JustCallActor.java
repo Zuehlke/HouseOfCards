@@ -71,7 +71,7 @@ class JustCallActor extends UntypedActor {
         }
         if(message instanceof MatchStartedMessage){
             MatchStartedMessage matchStartedMessage = (MatchStartedMessage) message;
-            log.info("received match_started response. Nr of players {}. ", matchStartedMessage.getMatch_players().size());
+            log.info("received match_started response. Nr of players {} . Initial credit: {}", matchStartedMessage.getMatch_players().size(), matchStartedMessage.getYour_money());
         }
         if(message instanceof RoundStartedMessage){
             RoundStartedMessage roundStartedMessage = (RoundStartedMessage) message;
@@ -79,7 +79,10 @@ class JustCallActor extends UntypedActor {
         }
         if(message instanceof YourTurnMessage){
             YourTurnMessage yourTurnMessage = (YourTurnMessage) message;
-            log.info("received card: {}", yourTurnMessage.getYour_cards().get(0));
+            log.info("received card: {}, minimal bet is {}", yourTurnMessage.getYour_cards().get(0), yourTurnMessage.getMinimum_set());
+            SetMessage setMessage = new SetMessage();
+            setMessage.setAmount(yourTurnMessage.getMinimum_set());
+            this.httpSender.tell(setMessage, getSelf());
         }
     }
 
