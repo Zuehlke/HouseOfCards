@@ -1,12 +1,19 @@
-WebSockets is an advanced technology that makes it possible to open an interactive communication session between the user's browser and a server. WebSockets use TCP for communcation.
+# Websockets with Spring Boot
 
-In this project, a thin layer on top of the websocket protocol is used called **STOMP** (**S**imple **T**ext-**O**rientated **M**essaging **P**rotocol). This defines a common protocol for every client who wants to communicate with any STOMP message broker.
-STOMP with spring uses channels to recieve and broadcast messages to clients. A client has to subscribe to a channel to get messages from the broker.
+WebSockets is an advanced technology that makes it possible to open an interactive communication session between the
+user's browser and a server. WebSockets use TCP for communcation.
+
+In this project, a thin layer on top of the websocket protocol is used called **STOMP** (**S**imple **T**ext-
+**O**rientated **M**essaging **P**rotocol).
+This defines a common protocol for every client who wants to communicate with any STOMP message broker.
+STOMP with spring uses channels to recieve and broadcast messages to clients. A client has to subscribe to a channel
+to get messages from the broker.
 
 ## Using Websockets in spring
 ### Backend
 
 1. Add needed dependencies to gradle.build
+
 ```
 compile('org.springframework:spring-messaging')
 compile('org.springframework.boot:spring-boot-starter-websocket')

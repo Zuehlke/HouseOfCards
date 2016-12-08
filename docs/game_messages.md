@@ -1,6 +1,6 @@
-## Overview
+# Game messages
 
-![](https://github.com/Zuehlke/HouseOfCards/blob/master/screenshots/msgs_in_game_phase.png)
+![](images/msgs_in_game_phase.png)
 
 ## Game-server endpoints
 

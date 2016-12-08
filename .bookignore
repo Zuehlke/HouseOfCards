@@ -1,0 +1,14 @@
+
+# Directories
+bot/
+game-engine/
+gradle/
+
+
+# Files
+build.gradle
+.travis.yml
+game-server.bat
+gradlew
+gradlew.bat
+settings.gradle

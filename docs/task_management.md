@@ -1,5 +1,9 @@
-Tasks are managed as [GitHub issues](https://github.com/Zuehlke/HouseOfCards/issues). Additionally, we use [Waffle.io](https://waffle.io/Zuehlke/HouseOfCards) in order to ease the Scrum planning.
-GitHub commits should usually be linked to the corresponding issue. If a commit resolves an issue, make it clear and automatically close the issue by adding the following to the commit message:
+# Task management
+
+Tasks are managed as [GitHub issues](https://github.com/Zuehlke/HouseOfCards/issues). Additionally, we use
+[Waffle.io](https://waffle.io/Zuehlke/HouseOfCards) in order to ease the Scrum planning.
+GitHub commits should usually be linked to the corresponding issue. If a commit resolves an issue, make it clear and
+automatically close the issue by adding the following to the commit message:
 > resolves #issueNo
 
 where issueNo is the id of the issue and resolves could be replaced by any of the issue-closing keywords (as defined by GitHub).
@@ -26,16 +30,14 @@ These are the different task types:
 
 ## System Area (blue)
 System area labels are used mostly to make clear which part of the system / team is responsible for the particular task.
-These tags usually represent a module of the system (see _Responsibilities of Modules_ in this [Wiki](https://github.com/Zuehlke/HouseOfCards/wiki)):
+These tags usually represent a module of the system (see [Project Structure](project_structure.md)):
 * **bot-domain**
 * **bot-server**
 * **game-domain**
-* **game-sever-rest**
 * **game-server**
+* **game-sever-rest**
 * **team**
   * module that is responsible for user and team management (doesn't yet exist as of today)
-* **web-view**
-  * JavaScript component to show the game – located in the static resources of game-server
 
 ## Issue Type (white)
 When a GitHub issue doesn't represent a task, it is assigned an issue type:
