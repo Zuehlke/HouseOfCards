@@ -60,7 +60,7 @@ public class WebViewAndBotNotifier implements PlayerNotifier {
     }
 
     @Override
-    public void broadcastGameStarts(StartInfo info) {
+    public void matchStarted(StartInfo info) {
         log.info("Broadcast game start event to all registered players");
         viewNotifier.sendGameInfo("A new game started: " + info.toString());
         botNotifier.sendMatchStartedMessage(info.getPlayerInfos(), info.getPlayerInfos().get(0));

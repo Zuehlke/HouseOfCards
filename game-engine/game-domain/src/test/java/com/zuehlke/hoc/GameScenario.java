@@ -81,8 +81,8 @@ public class GameScenario {
             }
 
             @Override
-            public void broadcastGameStarts(StartInfo info) {
-                log.info("called broadcastGameStarts");
+            public void matchStarted(StartInfo info) {
+                log.info("called matchStarted");
             }
 
             @Override
