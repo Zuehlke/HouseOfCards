@@ -9,6 +9,8 @@ import com.zuehlke.hoc.rest.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.UUID;
+
 /**
  * Reacts on messages from the competition runner and decides the next move. This actor will register itself and
  * afterward it will send the move "call" if it has enough credit. When the game is over it will terminated the
@@ -23,6 +25,7 @@ class JustCallActor extends UntypedActor {
     private ActorRef httpSender;
 
     private final Credentials credentials;
+    private UUID uuid;
 
     public JustCallActor(Credentials credentials){
         this.credentials = credentials;
@@ -46,28 +49,11 @@ class JustCallActor extends UntypedActor {
     @Override
     public void onReceive(Object message) throws Throwable {
 
-        if(message instanceof GameEvent){
-            GameEvent gameEvent = (GameEvent)message;
-            log.info("Received message: {}", gameEvent);
-            switch(gameEvent.getEventKind()){
-                case START: log.info("Start game received");
-                    getContext().stop(getSelf());
-                    getContext().system().terminate();
-                    break;
-                case NAME_ALREADY_TAKEN: log.info(String.format("The user name %s is already taken", credentials.getHostname()));
-                    RegisterMessage registerMessageWithAlteredName = createRegisterMessage(credentials);
-                    registerMessageWithAlteredName.setPlayerName(String.format("%s_", registerMessageWithAlteredName.getPlayerName()));
-                    log.info(String.format("Retry registration with name %s.", registerMessageWithAlteredName.getPlayerName()));
-                    this.httpSender.tell(registerMessageWithAlteredName,getSelf());
-                    break;
-                case RESERVATION_CONFIRMATION:log.info("Registration confirmed. Wait for game to start");
-                    break;
-                default: log.info("Received unknown RegistrationResponse: %s", gameEvent.getEventKind().toString());
-            }
-        }
         if(message instanceof RegistrationResponse){
             RegistrationResponse registrationResponse = (RegistrationResponse) message;
-            log.info("received registration response");
+            log.info("received registration response. UUID: {}", registrationResponse.getUUID());
+            this.uuid = registrationResponse.getUUID();
+
         }
         if(message instanceof MatchStartedMessage){
             MatchStartedMessage matchStartedMessage = (MatchStartedMessage) message;
@@ -82,6 +68,7 @@ class JustCallActor extends UntypedActor {
             log.info("received card: {}, minimal bet is {}", yourTurnMessage.getYour_cards().get(0), yourTurnMessage.getMinimum_set());
             SetMessage setMessage = new SetMessage();
             setMessage.setAmount(yourTurnMessage.getMinimum_set());
+            setMessage.setUuid(this.uuid);
             this.httpSender.tell(setMessage, getSelf());
         }
     }

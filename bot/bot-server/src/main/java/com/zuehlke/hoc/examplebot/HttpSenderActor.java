@@ -44,7 +44,7 @@ class HttpSenderActor extends UntypedActor {
             HttpRequest request = HttpRequest.POST("http://localhost:8080/noker/set").withEntity(ContentTypes.APPLICATION_JSON, serializedSetMessage);
             Http.get(getContext().system())
                     .singleRequest(request, materializer);
-            log.info("Send set message: Amount: {}", setMessage.getAmount());
+            log.info("Send set message: Amount: {}, UUID: {}", setMessage.getAmount(), setMessage.getUuid());
         }
     }
 }
