@@ -27,6 +27,7 @@ public class RestBotNotifier implements BotNotifier {
     private final Map<String, RegisterMessage> bots = new HashMap<>();
     private final Map<UUID, String> uuid2Bot = new HashMap<>();
     private final RestTemplate restTemplate;
+
     @Autowired
     public RestBotNotifier(RestTemplateBuilder restBuilder) {
         restTemplate = restBuilder.build();
@@ -76,18 +77,23 @@ public class RestBotNotifier implements BotNotifier {
                 log.info("Player {} cannot be associated with a URI", p.getName());
             } else {
                 //create MatchStarted message
-                MatchStartedMessage matchStartedMessage = new MatchStartedMessage();
-                List<PlayerDTO> matchPlayers = players.stream().map(x -> new PlayerDTO(x.getName(), x.getChipsStack())).collect(Collectors.toList());
-                matchStartedMessage.setMatch_players(matchPlayers);
-                PlayerDTO dealerDto = new PlayerDTO(dealer.getName(), dealer.getChipsStack());
-                matchStartedMessage.setDealer(dealerDto);
-                matchStartedMessage.setYour_money(p.getChipsStack());
+                MatchStartedMessage matchStartedMessage = buildMatchStartedMessage(players, dealer, p);
 
                 String url = String.format("http://%s:%d/match_started", bots.get(p.getName()).getHostname(), bots.get(p.getName()).getPort());
                 log.info("send game start to {}", url);
                 restTemplate.postForObject(url, matchStartedMessage, String.class);
             }
         });
+    }
+
+    private MatchStartedMessage buildMatchStartedMessage(List<Player> players, Player dealer, Player p) {
+        MatchStartedMessage matchStartedMessage = new MatchStartedMessage();
+        List<PlayerDTO> matchPlayers = players.stream().map(x -> new PlayerDTO(x.getName(), x.getChipsStack())).collect(Collectors.toList());
+        matchStartedMessage.setMatch_players(matchPlayers);
+        PlayerDTO dealerDto = new PlayerDTO(dealer.getName(), dealer.getChipsStack());
+        matchStartedMessage.setDealer(dealerDto);
+        matchStartedMessage.setYour_money(p.getChipsStack());
+        return matchStartedMessage;
     }
 
     @Override
