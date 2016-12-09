@@ -98,18 +98,8 @@ public class RestBotNotifier implements BotNotifier {
 
     @Override
     public void sendRoundStarted(List<PlayerInfo> roundPlayers, int roundNumber, PlayerInfo dealer) {
-
-        roundPlayers.forEach(x -> {
-            RegisterMessage registerMessage = bots.get(x.getName());
-            if (registerMessage == null) {
-                log.info("Player {} cannot be associated with a URI", x.getName());
-            } else {
-                String url = String.format("http://%s:%d/%s", registerMessage.getHostname(), registerMessage.getPort(), Endpoints.ROUND_STARTED.url);
-                log.info("send game start to {}", url);
-                RoundStartedMessage roundStartedMessage = buildRoundStartedMessage(roundPlayers, roundNumber, dealer);
-                restTemplate.postForObject(url, roundStartedMessage, String.class);
-            }
-        });
+        RoundStartedMessage roundStartedMessage = buildRoundStartedMessage(roundPlayers, roundNumber, dealer);
+        broadcastMessage(roundStartedMessage, Endpoints.ROUND_STARTED.url);
     }
 
     private RoundStartedMessage buildRoundStartedMessage(List<PlayerInfo> roundPlayers, int roundNumber, PlayerInfo dealer) {
@@ -186,7 +176,6 @@ public class RestBotNotifier implements BotNotifier {
             restTemplate.postForObject(url, message, String.class);
         });
     }
-
 
     private enum Endpoints {
         PLAYER_FOLDED("player_folded"),

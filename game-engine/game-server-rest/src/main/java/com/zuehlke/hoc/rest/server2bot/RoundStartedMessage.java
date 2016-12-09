@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author Lukas Hofmaier
  */
-public class RoundStartedMessage {
+public class RoundStartedMessage implements Message {
 
     private int round_number;
     private List<PlayerDTO> round_players;
