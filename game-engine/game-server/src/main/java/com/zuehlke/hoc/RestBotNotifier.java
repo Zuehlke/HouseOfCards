@@ -70,46 +70,22 @@ public class RestBotNotifier implements BotNotifier {
 
     @Override
     public void sendMatchStarted(List<Player> players, Player dealer) {
-        log.debug("Send match started event to all bots.");
-
         players.stream().forEach(p -> {
             if (bots.get(p.getName()) == null) {
                 log.info("Player {} cannot be associated with a URI", p.getName());
             } else {
-                //create MatchStarted message
                 MatchStartedMessage matchStartedMessage = buildMatchStartedMessage(players, dealer, p);
-
                 String url = String.format("http://%s:%d/match_started", bots.get(p.getName()).getHostname(), bots.get(p.getName()).getPort());
-                log.info("send game start to {}", url);
+                log.info("Send match_started to {}. Money: {}, Dealer: {}", url, matchStartedMessage.getYour_money(), matchStartedMessage.getDealer());
                 restTemplate.postForObject(url, matchStartedMessage, String.class);
             }
         });
-    }
-
-    private MatchStartedMessage buildMatchStartedMessage(List<Player> players, Player dealer, Player p) {
-        MatchStartedMessage matchStartedMessage = new MatchStartedMessage();
-        List<PlayerDTO> matchPlayers = players.stream().map(x -> new PlayerDTO(x.getName(), x.getChipsStack())).collect(Collectors.toList());
-        matchStartedMessage.setMatch_players(matchPlayers);
-        PlayerDTO dealerDto = new PlayerDTO(dealer.getName(), dealer.getChipsStack());
-        matchStartedMessage.setDealer(dealerDto);
-        matchStartedMessage.setYour_money(p.getChipsStack());
-        return matchStartedMessage;
     }
 
     @Override
     public void broadcastRoundStarted(List<PlayerInfo> roundPlayers, int roundNumber, PlayerInfo dealer) {
         RoundStartedMessage roundStartedMessage = buildRoundStartedMessage(roundPlayers, roundNumber, dealer);
         broadcastMessage(roundStartedMessage, Endpoints.ROUND_STARTED.url);
-    }
-
-    private RoundStartedMessage buildRoundStartedMessage(List<PlayerInfo> roundPlayers, int roundNumber, PlayerInfo dealer) {
-        RoundStartedMessage roundStartedMessage = new RoundStartedMessage();
-        List<PlayerDTO> playerDTOs = roundPlayers.stream().map(x -> new PlayerDTO(x.getName(), x.getChipstack())).collect(Collectors.toList());
-        roundStartedMessage.setRound_players(playerDTOs);
-        PlayerDTO dealerDto = new PlayerDTO(dealer.getName(), dealer.getChipstack());
-        roundStartedMessage.setRound_dealier(dealerDto);
-        roundStartedMessage.setRound_number(roundNumber);
-        return roundStartedMessage;
     }
 
     @Override
@@ -119,34 +95,10 @@ public class RestBotNotifier implements BotNotifier {
             log.info("Player {} cannot be associated with a URI", player.getName());
         } else {
             String url = String.format("http://%s:%d/%s", uriAndPort.getHostname(), uriAndPort.getPort(), Endpoints.YOUR_TURN.url);
-            //create YourTurn message
             YourTurnMessage yourTurnMessage = buildYourTurnMessage(player, minimalBet, maximalBet, amountOfCreditsInPot, activePlayers);
-
             log.info("Request bet or fold from player: {}", player.getName());
             restTemplate.postForObject(url, yourTurnMessage, String.class);
         }
-    }
-
-    private YourTurnMessage buildYourTurnMessage(Player player, long minimalBet, long maximalBet, long amountOfCreditsInPot, List<Player> activePlayers) {
-        YourTurnMessage yourTurnMessage = new YourTurnMessage();
-        yourTurnMessage.setMinimum_set(minimalBet);
-        yourTurnMessage.setMaximum_set(maximalBet);
-        yourTurnMessage.setPot(amountOfCreditsInPot);
-
-        //set the list of active players in message
-        List<PlayerDTO> playerDTOs = activePlayers.stream().map(x -> new PlayerDTO(x.getName(), x.getChipsStack())).collect(Collectors.toList());
-        yourTurnMessage.setActive_players(playerDTOs);
-
-        //set the cards of the player in message
-        List<Integer> cards = new ArrayList<>();
-        if (player.getFirstCard() >= 0) {
-            cards.add(player.getFirstCard());
-        }
-        if (player.getSecondCard() >= 0) {
-            cards.add(player.getSecondCard());
-        }
-        yourTurnMessage.setYour_cards(cards);
-        return yourTurnMessage;
     }
 
     @Override
@@ -175,6 +127,48 @@ public class RestBotNotifier implements BotNotifier {
             String url = String.format("http://%s:%d/%s", bot.getHostname(), bot.getPort(), endpoint);
             restTemplate.postForObject(url, message, String.class);
         });
+    }
+
+    private MatchStartedMessage buildMatchStartedMessage(List<Player> players, Player dealer, Player p) {
+        MatchStartedMessage matchStartedMessage = new MatchStartedMessage();
+        List<PlayerDTO> matchPlayers = players.stream().map(x -> new PlayerDTO(x.getName(), x.getChipsStack())).collect(Collectors.toList());
+        matchStartedMessage.setMatch_players(matchPlayers);
+        PlayerDTO dealerDto = new PlayerDTO(dealer.getName(), dealer.getChipsStack());
+        matchStartedMessage.setDealer(dealerDto);
+        matchStartedMessage.setYour_money(p.getChipsStack());
+        return matchStartedMessage;
+    }
+
+    private RoundStartedMessage buildRoundStartedMessage(List<PlayerInfo> roundPlayers, int roundNumber, PlayerInfo dealer) {
+        RoundStartedMessage roundStartedMessage = new RoundStartedMessage();
+        List<PlayerDTO> playerDTOs = roundPlayers.stream().map(x -> new PlayerDTO(x.getName(), x.getChipstack())).collect(Collectors.toList());
+        roundStartedMessage.setRound_players(playerDTOs);
+        PlayerDTO dealerDto = new PlayerDTO(dealer.getName(), dealer.getChipstack());
+        roundStartedMessage.setRound_dealier(dealerDto);
+        roundStartedMessage.setRound_number(roundNumber);
+        return roundStartedMessage;
+    }
+
+    private YourTurnMessage buildYourTurnMessage(Player player, long minimalBet, long maximalBet, long amountOfCreditsInPot, List<Player> activePlayers) {
+        YourTurnMessage yourTurnMessage = new YourTurnMessage();
+        yourTurnMessage.setMinimum_set(minimalBet);
+        yourTurnMessage.setMaximum_set(maximalBet);
+        yourTurnMessage.setPot(amountOfCreditsInPot);
+
+        //set the list of active players in message
+        List<PlayerDTO> playerDTOs = activePlayers.stream().map(x -> new PlayerDTO(x.getName(), x.getChipsStack())).collect(Collectors.toList());
+        yourTurnMessage.setActive_players(playerDTOs);
+
+        //set the cards of the player in message
+        List<Integer> cards = new ArrayList<>();
+        if (player.getFirstCard() >= 0) {
+            cards.add(player.getFirstCard());
+        }
+        if (player.getSecondCard() >= 0) {
+            cards.add(player.getSecondCard());
+        }
+        yourTurnMessage.setYour_cards(cards);
+        return yourTurnMessage;
     }
 
     private enum Endpoints {
