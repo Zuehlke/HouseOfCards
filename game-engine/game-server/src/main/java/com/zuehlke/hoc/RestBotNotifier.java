@@ -35,6 +35,7 @@ class RestBotNotifier implements BotNotifier {
 
     @Override
     public boolean registerBot(RegisterMessage registerMessage) {
+        /*
         String url = String.format("http://%s:%d/register_info", registerMessage.getHostname(), registerMessage.getPort());
         RegistrationInfoMessage registrationResponse = new RegistrationInfoMessage();
         registrationResponse.setPlayerName(registerMessage.getPlayerName());
@@ -53,7 +54,7 @@ class RestBotNotifier implements BotNotifier {
         log.info("Current bots: " + bots.keySet().stream().reduce("", (a, b) -> a += (b + ", ")));
         registrationResponse.setInfoMessage(RegistrationInfoMessage.Result.CONFIRMATION);
         log.info("Send RESERVATION_CONFIRMATION message for team {} to {}", registerMessage.getPlayerName(), url);
-        restTemplate.postForObject(url, registrationResponse, String.class);
+        restTemplate.postForObject(url, registrationResponse, String.class);*/
         return true;
     }
 
@@ -68,10 +69,11 @@ class RestBotNotifier implements BotNotifier {
 
     @Override
     public void sendRegistrationInfo(RegistrationInfoMessage registrationResponse) {
+        log.info("Send RegistrationInfo");
         Optional<String> urlOptional = this.botRegistrationService.getUriByPlayerName(registrationResponse.getPlayerName());
         urlOptional.ifPresent(url -> {
             log.info("Send ReservationInfo message for player {} to {}", registrationResponse.getPlayerName(), url);
-            this.restTemplate.postForObject(url + "/register_info", registrationResponse, String.class);
+            this.restTemplate.postForObject("http://" + url + "/register_info", registrationResponse, String.class);
         });
     }
 
@@ -84,15 +86,15 @@ class RestBotNotifier implements BotNotifier {
     @Override
     public void broadcastMatchStarted(List<Player> players, Player dealer) {
         players.forEach(p -> {
-            if (bots.get(p.getName()) == null) {
-                log.info("Player {} cannot be associated with a URI", p.getName());
-            } else {
-                MatchStartedMessage matchStartedMessage = buildMatchStartedMessage(players, dealer, p);
-                String url = String.format("http://%s:%d/%s", bots.get(p.getName()).getHostname(), bots.get(p.getName()).getPort(), Endpoints.MATCH_STARTED.url);
-                log.info("Send match_started to {}. Money: {}, Dealer: {}", url, matchStartedMessage.getYour_money(), matchStartedMessage.getDealer());
-                restTemplate.postForObject(url, matchStartedMessage, String.class);
-            }
-        });
+                    botRegistrationService.getUriByPlayerName(p.getName()).ifPresent(url -> {
+                                MatchStartedMessage matchStartedMessage = buildMatchStartedMessage(players, dealer, p);
+                                String targetUrl = String.format("http://%s/%s", url, Endpoints.MATCH_STARTED.url);
+                                log.info("Send match_started to {}. Money: {}, Dealer: {}", targetUrl, matchStartedMessage.getYour_money(), matchStartedMessage.getDealer());
+                                restTemplate.postForObject(targetUrl, matchStartedMessage, String.class);
+                            }
+                    );
+                }
+        );
     }
 
     @Override
@@ -103,15 +105,16 @@ class RestBotNotifier implements BotNotifier {
 
     @Override
     public void sendTurnRequest(Player player, long minimalBet, long maximalBet, long amountOfCreditsInPot, List<Player> activePlayers) {
-        RegisterMessage uriAndPort = bots.get(player.getName());
-        if (uriAndPort == null) {
-            log.info("Player {} cannot be associated with a URI", player.getName());
-        } else {
-            String url = String.format("http://%s:%d/%s", uriAndPort.getHostname(), uriAndPort.getPort(), Endpoints.YOUR_TURN.url);
-            TurnRequestMessage turnRequestMessage = buildYourTurnMessage(player, minimalBet, maximalBet, amountOfCreditsInPot, activePlayers);
-            log.info("Request bet or fold from player: {}", player.getName());
-            restTemplate.postForObject(url, turnRequestMessage, String.class);
-        }
+        botRegistrationService.getUriByPlayerName(player.getName()).ifPresent(uri -> {
+                    log.info("target uri: {}", uri);
+                    log.info("endpoint is: {}", Endpoints.YOUR_TURN);
+                    String url = String.format("http://%s/%s", uri, Endpoints.YOUR_TURN.url);
+                    log.info("url is {}", url);
+                    TurnRequestMessage turnRequestMessage = buildYourTurnMessage(player, minimalBet, maximalBet, amountOfCreditsInPot, activePlayers);
+                    log.info("Request bet or fold from player: {}", player.getName());
+                    restTemplate.postForObject(url, turnRequestMessage, String.class);
+                }
+        );
     }
 
     @Override
@@ -212,7 +215,7 @@ class RestBotNotifier implements BotNotifier {
      */
     private void broadcastMessage(Message message, String endpoint) {
         bots.values().forEach(bot -> {
-            String url = String.format("http://%s:%d/%s", bot.getHostname(), bot.getPort(), endpoint);
+            String url = String.format("http://%s/%s", botRegistrationService.getUriByPlayerName(bot.getPlayerName()), endpoint);
             restTemplate.postForObject(url, message, String.class);
         });
     }

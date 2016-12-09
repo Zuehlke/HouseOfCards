@@ -1,7 +1,6 @@
 package com.zuehlke.hoc;
 
 import com.zuehlke.hoc.actors.BotNotifier;
-import com.zuehlke.hoc.actors.EngineActor;
 import com.zuehlke.hoc.actors.ViewNotifier;
 import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.notification.api.NokerGameObserver;
@@ -18,7 +17,7 @@ import java.util.List;
  */
 public class WebViewAndBotNotifier implements NokerGameObserver {
 
-    private final static Logger log = LoggerFactory.getLogger(EngineActor.class);
+    private final static Logger log = LoggerFactory.getLogger(WebViewAndBotNotifier.class);
     private final BotNotifier botNotifier;
     private final ViewNotifier viewNotifier;
 

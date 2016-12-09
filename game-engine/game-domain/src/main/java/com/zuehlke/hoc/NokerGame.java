@@ -6,6 +6,8 @@ import com.zuehlke.hoc.model.Match;
 import com.zuehlke.hoc.model.NokerDeck;
 import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.notification.api.NokerGameObserver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +32,11 @@ public class NokerGame {
     public final static int MIN_NUM_OF_PLAYERS = 2;
     public final static int CARDS_PER_PLAYER = 2;
     public static final int MAX_NUM_OF_PLAYERS = NokerDeck.NUM_CARDS_OF_SINGLE_DECK / CARDS_PER_PLAYER;
-
+    private static final Logger log = LoggerFactory.getLogger(NokerGame.class.getName());
     private final NokerGameObserverAdapter notifier;
     private final List<Player> gamePlayers;
-
     private int expectedNumOfPlayers;
     private Match currentMatch;
-
 
     public NokerGame(int expectedNumOfPlayers, NokerGameObserver notifier) {
         this.notifier = new NokerGameObserverAdapter(notifier);
@@ -62,7 +62,10 @@ public class NokerGame {
     public Player createPlayer(String playerName) {
         Player player = new Player(playerName);
         gamePlayers.add(player);
+        log.info("create Player");
+
         if (allPlayersJoined()) {
+            log.info("start game");
             startGame();
         }
         return player;
@@ -73,6 +76,7 @@ public class NokerGame {
     }
 
     private void startGame() {
+        System.out.println("start game");
         notifier.broadcastGameStarted();
         gamePlayers.forEach(player -> player.setChipsStack(INITIAL_CHIPS));
         currentMatch = new Match(gamePlayers, new NokerDeck(), notifier);

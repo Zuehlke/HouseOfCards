@@ -26,7 +26,7 @@ public class CustomRouteBuilder extends RouteBuilder{
     public void configure() throws Exception{
         //from("jetty:http://localhost:8081/register_info").to(this.httpReceiverUri);
 
-        rest("/register_info").post().to("direct:registerinfo");
+        rest("/register_info").post().to("direct:registerinfo" + listeningPort);
         rest("/match_started").post().to("direct:matchstarted");
         rest("/round_started").post().to("direct:roundstarted");
         rest("/your_turn").post().to("direct:yourturn");
@@ -37,7 +37,7 @@ public class CustomRouteBuilder extends RouteBuilder{
 
         restConfiguration().component("jetty").port(this.listeningPort);
 
-        from("direct:registerinfo").process(new RegisterInfoProcessor(this.httpReceiverActorRef)).transform().constant("aye, captain");
+        from("direct:registerinfo" + listeningPort).process(new RegisterInfoProcessor(this.httpReceiverActorRef)).transform().constant("aye, captain");
         from("direct:matchstarted").process(new MatchStartedProcessor(this.httpReceiverActorRef)).transform().constant("");
         from("direct:roundstarted").process(new RoundStartedProcessor(this.httpReceiverActorRef)).transform().constant("");
         from("direct:yourturn").process(new YourTurnProcessor(this.httpReceiverActorRef)).transform().constant("");
