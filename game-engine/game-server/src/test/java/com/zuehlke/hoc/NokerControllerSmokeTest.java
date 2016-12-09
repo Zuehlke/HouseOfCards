@@ -8,8 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Lukas Hofmaier
@@ -19,20 +18,20 @@ import static org.mockito.Mockito.verify;
 public class NokerControllerSmokeTest {
 
     EngineActor engineActor = mock(EngineActor.class);
-
     ActorService actorService = mock(ActorService.class);
 
     private NokerController nokerController = new NokerController(actorService);
 
     @Test
     public void register() {
+        when(actorService.getGameEngine()).thenReturn(engineActor);
         assertThat(nokerController).isNotNull();
         RegisterMessage registerMessage = new RegisterMessage();
         registerMessage.setPlayerName("The Hosts");
         registerMessage.setHostname("localhost");
         registerMessage.setPort(8080);
         nokerController.register(registerMessage);
-        verify(actorService.getGameEngine());
-
+        verify(actorService).getGameEngine();
+        verify(engineActor).registerPlayer(registerMessage);
     }
 }
