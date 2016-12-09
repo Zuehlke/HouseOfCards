@@ -37,7 +37,6 @@ public class Round {
 
     private Round(){}
 
-
     public Round createSecondRound(){
         Round round = new Round();
         round.notifier = notifier;
@@ -54,7 +53,7 @@ public class Round {
         notifier.broadcastRoundStarts();
         dealCard();
         turnOfPlayer = betIterator.next();
-        notifier.askPlayerForAction(turnOfPlayer.getName(), 0);
+        notifier.askPlayerForAction(turnOfPlayer.getName(), 0, bets.getMaxRaiseAmount());
     }
 
     public void dealCard() {
@@ -111,8 +110,8 @@ public class Round {
     private void notifyNextPlayerOrBroadcastFinishEvent() {
         if(betIterator.hasNext()){
             turnOfPlayer = betIterator.next();
-            notifier.askPlayerForAction(turnOfPlayer.getName(), bets.neededChipsToCall(turnOfPlayer));
-        }else{
+            notifier.askPlayerForAction(turnOfPlayer.getName(), bets.neededChipsToCall(turnOfPlayer), bets.getMaxRaiseAmount());
+        } else{
             notifier.broadcastRoundFinished();
         }
     }

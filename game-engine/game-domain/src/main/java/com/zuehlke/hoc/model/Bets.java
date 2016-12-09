@@ -1,6 +1,6 @@
 package com.zuehlke.hoc.model;
 
-import com.zuehlke.hoc.NokerGame;
+import com.zuehlke.hoc.NokerSettings;
 
 import java.util.*;
 
@@ -16,8 +16,7 @@ public class Bets {
     private final Set<Player> calledPlayers = new HashSet<>();
     private final Set<Player> activePlayers = new HashSet<>();
     private long highestBet = 0;
-    private long maxRaiseAmount = NokerGame.INITIAL_CHIPS;
-
+    private long maxRaiseAmount = NokerSettings.INITIAL_CHIPS - NokerSettings.BLIND;
 
     public long getTotalPot(){
         return bets.values().stream().mapToLong(l -> l).sum();
@@ -48,17 +47,21 @@ public class Bets {
     }
 
     public long neededChipsToCall(Player player) {
-        return highestBet - getPlayersBet(player);
+        return highestBet - (getPlayersBet(player) - NokerSettings.BLIND);
     }
 
+    public void withdrawBlindFromPlayer(Player player) {
+        player.decreaseChipsStack(NokerSettings.BLIND);
+        bets.put(player, NokerSettings.BLIND);
+    }
 
     public void playerRaise(Player player, long raiseAmount){
         if (!playerHasFolded(player)) {
             if (isValidRaiseAmount(player, raiseAmount)) {
                 player.setChipsStack(player.getChipsStack() - neededChipsToRaise(player, raiseAmount));
-                bets.put(player, highestBet + raiseAmount);
+                bets.put(player, bets.get(player) + raiseAmount);
                 highestBet += raiseAmount;
-                maxRaiseAmount = minChipStackOfActivePlayers(player);
+                maxRaiseAmount = minChipStackOfActivePlayers();
                 calledPlayers.clear();
                 calledPlayers.add(player);
             } else {
@@ -76,12 +79,8 @@ public class Bets {
         }
     }
 
-    private long minChipStackOfActivePlayers(Player currentPlayer) {
-        activePlayers.clear();
-        calledPlayers.forEach(activePlayers::add);
-        activePlayers.add(currentPlayer);
-
-        long minChipStack = NokerGame.INITIAL_CHIPS;
+    private long minChipStackOfActivePlayers() {
+        long minChipStack = NokerSettings.INITIAL_CHIPS - NokerSettings.BLIND;
         for (Player p : activePlayers) {
             long playerChipsStack = p.getChipsStack();
             if (playerChipsStack < minChipStack) {
@@ -91,19 +90,16 @@ public class Bets {
         return minChipStack;
     }
 
-
-    private boolean playerHasEnoughChipsToRaise(Player player, long raise) {
-        return player.getChipsStack() > neededChipsToRaise(player, raise);
-    }
-
-
     private boolean isValidRaiseAmount(Player player, long raise) {
         return raise <= maxRaiseAmount && playerHasEnoughChipsToRaise(player, raise);
     }
 
+    private boolean playerHasEnoughChipsToRaise(Player player, long raise) {
+        return raise <= player.getChipsStack();
+    }
 
     private long neededChipsToRaise(Player player, long raise) {
-        return (highestBet - getPlayersBet(player)) + raise;
+        return (getPlayersBet(player) - NokerSettings.BLIND) + raise;
     }
 
 
@@ -119,4 +115,19 @@ public class Bets {
         return calledPlayers.contains(player);
     }
 
+    public Set<Player> getActivePlayers() {
+        return activePlayers;
+    }
+
+    public Set<Player> getFoldedPlayers() {
+        return foldedPlayers;
+    }
+
+    public long getMaxRaiseAmount() {
+        return maxRaiseAmount;
+    }
+
+    public long getHighestBet() {
+        return highestBet;
+    }
 }

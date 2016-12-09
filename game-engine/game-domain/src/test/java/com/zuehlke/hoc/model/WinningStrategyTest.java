@@ -47,6 +47,7 @@ public class WinningStrategyTest {
     @Test
     public void onlyOnePair() {
         matchPlayers.forEach(Player::cleanHand);
+
         tobi.addCard(11);
         tobi.addCard(13);
 

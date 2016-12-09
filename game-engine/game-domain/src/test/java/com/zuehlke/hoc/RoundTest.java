@@ -10,15 +10,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-/**
- * Created by bolli on 26.11.2016.
- */
+
 public class RoundTest {
-
-
-
-
 
     private List<Player> players;
     private Deck deck;
@@ -40,29 +36,33 @@ public class RoundTest {
 
     @Test
     public void startRounds(){
-
         Round round = new Round(players, 0, deck, notifier);
 
         round.startRound();
 
-        assertEquals(1, tobi.getFirstCard());
-        assertEquals(2, miki.getFirstCard());
-        assertEquals(3, riki.getFirstCard());
+        assertTrue(tobi.getFirstCard().isPresent());
+        assertTrue(miki.getFirstCard().isPresent());
+        assertTrue(riki.getFirstCard().isPresent());
 
-        assertEquals(-1, tobi.getSecondCard());
-        assertEquals(-1, miki.getSecondCard());
-        assertEquals(-1, miki.getSecondCard());
+        assertFalse(tobi.getSecondCard().isPresent());
+        assertFalse(miki.getSecondCard().isPresent());
+        assertFalse(riki.getSecondCard().isPresent());
+
+        tobi.getFirstCard().ifPresent(card -> assertEquals(1, card.intValue()));
+        miki.getFirstCard().ifPresent(card -> assertEquals(2, card.intValue()));
+        riki.getFirstCard().ifPresent(card -> assertEquals(3, card.intValue()));
 
         round = round.createSecondRound();
         round.startRound();
 
-        assertEquals(1, tobi.getFirstCard());
-        assertEquals(2, miki.getFirstCard());
-        assertEquals(3, riki.getFirstCard());
+        tobi.getFirstCard().ifPresent(card -> assertEquals(1, card.intValue()));
+        miki.getFirstCard().ifPresent(card -> assertEquals(2, card.intValue()));
+        riki.getFirstCard().ifPresent(card -> assertEquals(3, card.intValue()));
 
-        assertEquals(4, tobi.getSecondCard());
-        assertEquals(5, miki.getSecondCard());
-        assertEquals(6, riki.getSecondCard());
+
+        tobi.getSecondCard().ifPresent(card -> assertEquals(4, card.intValue()));
+        miki.getSecondCard().ifPresent(card -> assertEquals(5, card.intValue()));
+        riki.getSecondCard().ifPresent(card -> assertEquals(6, card.intValue()));
     }
 
     @Test
@@ -78,7 +78,7 @@ public class RoundTest {
         inOrder.verify(notifier).sendCardInfoToPlayer(tobi.getName(), 1);
         inOrder.verify(notifier).sendCardInfoToPlayer(miki.getName(), 2);
         inOrder.verify(notifier).sendCardInfoToPlayer(riki.getName(), 3);
-        inOrder.verify(notifier).askPlayerForAction(tobi.getName(), 0);
+        inOrder.verify(notifier).askPlayerForAction(tobi.getName(), 0, 0);
 
         round = round.createSecondRound();
         round.startRound();
@@ -87,7 +87,7 @@ public class RoundTest {
         inOrder.verify(notifier).sendCardInfoToPlayer(tobi.getName(), 4);
         inOrder.verify(notifier).sendCardInfoToPlayer(miki.getName(), 5);
         inOrder.verify(notifier).sendCardInfoToPlayer(riki.getName(), 6);
-        inOrder.verify(notifier).askPlayerForAction(players().get(0).getName(), 0);
+        inOrder.verify(notifier).askPlayerForAction(players().get(0).getName(), 0, 0);
     }
 
     @Test
@@ -101,16 +101,16 @@ public class RoundTest {
         inOrder.verify(notifier).sendCardInfoToPlayer(tobi.getName(), 1);
         inOrder.verify(notifier).sendCardInfoToPlayer(miki.getName(), 2);
         inOrder.verify(notifier).sendCardInfoToPlayer(riki.getName(), 3);
-        inOrder.verify(notifier).askPlayerForAction(tobi.getName(), 0);
+        inOrder.verify(notifier).askPlayerForAction(tobi.getName(), 0, 0);
 
         round.playerCall(tobi);
-        inOrder.verify(notifier).askPlayerForAction(miki.getName(), 0);
+        inOrder.verify(notifier).askPlayerForAction(miki.getName(), 0, 0);
         round.playerCall(miki);
-        inOrder.verify(notifier).askPlayerForAction(riki.getName(), 0);
+        inOrder.verify(notifier).askPlayerForAction(riki.getName(), 0, 0);
         round.playerRaise(riki, 2);
-        inOrder.verify(notifier).askPlayerForAction(tobi.getName(), 2);
+        inOrder.verify(notifier).askPlayerForAction(tobi.getName(), 2, 0);
         round.playerCall(tobi);
-        inOrder.verify(notifier).askPlayerForAction(miki.getName(), 2);
+        inOrder.verify(notifier).askPlayerForAction(miki.getName(), 2, 0);
         round.playerFold(miki);
         inOrder.verify(notifier).broadcastRoundFinished();
 
@@ -130,16 +130,16 @@ public class RoundTest {
         inOrder.verify(notifier).sendCardInfoToPlayer(tobi.getName(), 1);
         inOrder.verify(notifier).sendCardInfoToPlayer(miki.getName(), 2);
         inOrder.verify(notifier).sendCardInfoToPlayer(riki.getName(), 3);
-        inOrder.verify(notifier).askPlayerForAction(tobi.getName(), 0);
+        inOrder.verify(notifier).askPlayerForAction(tobi.getName(), 0, 0);
 
         round.playerCall(tobi);
-        inOrder.verify(notifier).askPlayerForAction(miki.getName(), 0);
+        inOrder.verify(notifier).askPlayerForAction(miki.getName(), 0, 0);
         round.playerRaise(miki, 1);
-        inOrder.verify(notifier).askPlayerForAction(riki.getName(), 1);
+        inOrder.verify(notifier).askPlayerForAction(riki.getName(), 1, 0);
         round.playerRaise(riki, 2);
-        inOrder.verify(notifier).askPlayerForAction(tobi.getName(), 3);
+        inOrder.verify(notifier).askPlayerForAction(tobi.getName(), 3, 0);
         round.playerFold(tobi);
-        inOrder.verify(notifier).askPlayerForAction(miki.getName(), 2);
+        inOrder.verify(notifier).askPlayerForAction(miki.getName(), 2, 0);
         round.playerCall(miki);
         inOrder.verify(notifier).broadcastRoundFinished();
 

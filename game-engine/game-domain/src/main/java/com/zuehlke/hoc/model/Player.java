@@ -1,41 +1,43 @@
 package com.zuehlke.hoc.model;
 
 
-import java.util.ArrayList;
-import java.util.List;
+import com.zuehlke.hoc.Exceptions.ExceedHandSizeException;
+
+import java.util.Optional;
 
 public class Player {
 
     private String name;
     private long chipsStack = 0;
-    private List<Integer> hand;
+    private Optional<Integer> firstCard;
+    private Optional<Integer> secondCard;
 
     public Player(String name) {
-        hand = new ArrayList<>();
+        cleanHand();
         this.name = name;
     }
 
     public void cleanHand() {
-        hand.clear();
+        firstCard = Optional.empty();
+        secondCard = Optional.empty();
     }
 
     public void addCard(int card) {
-        hand.add(card);
+        if (!firstCard.isPresent()) {
+            firstCard = Optional.of(card);
+        } else if (!secondCard.isPresent()) {
+            secondCard = Optional.of(card);
+        } else {
+            throw new ExceedHandSizeException("too many cards on hand added");
+        }
     }
 
-    public int getFirstCard() {
-        //TODO: this shouldn't be a C style return..
-        if(hand.size() < 1){
-            return -1;
-        }
-        return hand.get(0);
+    public Optional<Integer> getFirstCard() {
+        return firstCard;
     }
 
-    public int getSecondCard() {
-        if(hand.size() < 2){
-            return -1;
-        }
-        return hand.get(1);
+    public Optional<Integer> getSecondCard() {
+        return secondCard;
     }
 
     public String getName() {

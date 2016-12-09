@@ -1,13 +1,11 @@
 package com.zuehlke.hoc;
 
 import com.zuehlke.hoc.model.Match;
-import com.zuehlke.hoc.model.NokerDeck;
 import com.zuehlke.hoc.model.Player;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -35,7 +33,7 @@ public class MatchTest {
         tobi = players.get(0);
         miki = players.get(1);
         riki = players.get(2);
-        match = new Match(players, new NokerDeck(), notifier);
+        match = new Match(players, notifier);
     }
 
     @Test
@@ -44,7 +42,7 @@ public class MatchTest {
 
         Mockito.verify(notifier).broadcastMatchStart(match);
         Mockito.verify(notifier).broadcastRoundStarts();
-        Mockito.verify(notifier).askPlayerForAction(players.get(0).getName(), 0);
+        Mockito.verify(notifier).askPlayerForAction(players.get(0).getName(), 0, 0);
     }
 
     @Test
@@ -82,7 +80,7 @@ public class MatchTest {
     @Test
     public void playerSetRaise() {
         match.startMatch();
-        match.getMatchPlayers().forEach(player -> player.setChipsStack(NokerGame.INITIAL_CHIPS));
+        match.getMatchPlayers().forEach(player -> player.setChipsStack(NokerSettings.INITIAL_CHIPS));
         Player player = tobi;
         long raiseAmount = 10;
 
@@ -92,7 +90,7 @@ public class MatchTest {
         Mockito.verify(notifier, never()).broadcastPlayerCalled(player);
         Mockito.verify(notifier, never()).broadcastPlayerFolded(player);
 
-        assertEquals(NokerGame.INITIAL_CHIPS-raiseAmount, match.getMatchPlayers().get(0).getChipsStack());
+        assertEquals(NokerSettings.INITIAL_CHIPS-raiseAmount, match.getMatchPlayers().get(0).getChipsStack());
     }
 
     @Test
@@ -110,7 +108,7 @@ public class MatchTest {
     @Test
     public void firstRoundFinishes() {
         match.startMatch();
-        match.getMatchPlayers().forEach(player -> player.setChipsStack(NokerGame.INITIAL_CHIPS));
+        match.getMatchPlayers().forEach(player -> player.setChipsStack(NokerSettings.INITIAL_CHIPS));
 
         match.playerSet(tobi, 10);     // raise 10
         match.playerSet(miki, 10);    // call
@@ -123,7 +121,7 @@ public class MatchTest {
     @Test
     public void firstRoundEndedButNotFinished() {
         match.startMatch();
-        match.getMatchPlayers().forEach(player -> player.setChipsStack(NokerGame.INITIAL_CHIPS));
+        match.getMatchPlayers().forEach(player -> player.setChipsStack(NokerSettings.INITIAL_CHIPS));
 
         match.playerSet(tobi, 10);  // raise 10
         match.playerSet(miki, 10);  // call
@@ -135,7 +133,7 @@ public class MatchTest {
     @Test
     public void matchFinished() {
         match.startMatch();
-        match.getMatchPlayers().forEach(player -> player.setChipsStack(NokerGame.INITIAL_CHIPS));
+        match.getMatchPlayers().forEach(player -> player.setChipsStack(NokerSettings.INITIAL_CHIPS));
 
         match.playerSet(tobi, 10);  // raise 10
         match.playerSet(miki, 10);  // call

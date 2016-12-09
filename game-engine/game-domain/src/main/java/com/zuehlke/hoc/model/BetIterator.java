@@ -11,7 +11,6 @@ import java.util.List;
  */
 public class BetIterator implements Iterator<Player> {
 
-
     private final Bets bets;
     private final List<Player> players;
 

@@ -1,5 +1,6 @@
 package com.zuehlke.hoc.model;
 
+import com.zuehlke.hoc.NokerSettings;
 import com.zuehlke.hoc.PlayerNotifierAdapter;
 
 import java.util.ArrayList;
@@ -22,19 +23,19 @@ public class Match {
     private Round round;
 
 
-    public Match(List<Player> matchPlayers, Deck deck, PlayerNotifierAdapter notifier) {
-        init(matchPlayers, deck, notifier);
+    public Match(List<Player> matchPlayers, PlayerNotifierAdapter notifier) {
+        init(matchPlayers, notifier);
     }
 
-    private Match(List<Player> matchPlayers, int firstPlayerOfRoundIndex, Deck deck, PlayerNotifierAdapter notifier) {
-        init(matchPlayers, deck, notifier);
+    private Match(List<Player> matchPlayers, int firstPlayerOfRoundIndex, PlayerNotifierAdapter notifier) {
+        init(matchPlayers, notifier);
         this.firstPlayerOfRoundIndex = firstPlayerOfRoundIndex;
     }
 
-    private void init(List<Player> matchPlayers, Deck deck, PlayerNotifierAdapter notifier) {
+    private void init(List<Player> matchPlayers, PlayerNotifierAdapter notifier) {
         this.notifier = notifier;
-        this.deck = deck;
-        deck.shuffle();
+        this.deck = new NokerDeck();
+        this.deck.shuffle();
         this.matchPlayers = matchPlayers;
     }
 
@@ -42,8 +43,10 @@ public class Match {
      * Creates and starts a new round.
      */
     public void startMatch() {
-        notifier.broadcastMatchStart(this);
         round = new Round(matchPlayers, firstPlayerOfRoundIndex, deck, notifier);
+        matchPlayers.forEach(player -> round.getBets().withdrawBlindFromPlayer(player));
+        notifier.broadcastMatchStart(this);
+
         round.startRound();
     }
 
@@ -54,7 +57,7 @@ public class Match {
      */
     public Match createNextMatch(){
         removePlayersWithNoChips();
-        return new Match(matchPlayers, BetIterator.nextPlayerIndex(matchPlayers, firstPlayerOfRoundIndex), deck, notifier);
+        return new Match(matchPlayers, BetIterator.nextPlayerIndex(matchPlayers, firstPlayerOfRoundIndex), notifier);
     }
 
     private void removePlayersWithNoChips() {
@@ -90,7 +93,7 @@ public class Match {
 
     private void ifRoundIsFinishedGoAhead() {
         if (round.isFinished()){
-            if (round.getCurrentRound() == Round.RoundNumber.FIRST_ROUND) {
+            if (round.getCurrentRound() == Round.RoundNumber.FIRST_ROUND && !isFinished()) {
                 round = round.createSecondRound();
                 round.startRound();
             } else {
@@ -114,10 +117,11 @@ public class Match {
     }
 
     public boolean isFinished(){
-        return round.isFinished() && round.getCurrentRound() == Round.RoundNumber.SECOND_ROUND;
+        return round.isFinished() && (round.getCurrentRound() == Round.RoundNumber.SECOND_ROUND ||
+                (round.getBets().getActivePlayers().size() == 1) && round.getBets().getFoldedPlayers().size() >= 1);
     }
 
-    public boolean hasMoreThanOnePlayerChips(){
+    public boolean existsMoreThanOnePlayerWithChips(){
         //never do this to shit!
         return matchPlayers.stream().mapToInt( p -> p.getChipsStack() > 0 ? 1 :0).sum() > 1;
     }

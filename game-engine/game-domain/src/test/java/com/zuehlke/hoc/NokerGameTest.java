@@ -2,7 +2,6 @@ package com.zuehlke.hoc;
 
 
 import com.zuehlke.hoc.Exceptions.InitGameException;
-import com.zuehlke.hoc.model.NokerDeck;
 import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.notification.api.PlayerNotifier;
 import org.junit.Test;
@@ -10,13 +9,13 @@ import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 
 public class NokerGameTest {
-
 
     @Test(expected = InitGameException.class)
     public void initGameWithTooLittlePlayers() {
@@ -32,7 +31,7 @@ public class NokerGameTest {
 
     @Test(expected = InitGameException.class)
     public void initGameWithTooManyPlayers() {
-        NokerGame game = new NokerGame(NokerGame.MAX_NUM_OF_PLAYERS + 1, null);
+        NokerGame game = new NokerGame(NokerSettings.MAX_NUM_OF_PLAYERS + 1, null);
     }
 
 
@@ -64,15 +63,64 @@ public class NokerGameTest {
 
         Player tobi = game.createPlayer("tobi");
         Player riki = game.createPlayer("riki");
-        Player trump = game.createPlayer("trump");
+        Player john = game.createPlayer("john");
 
         players.add(tobi);
         players.add(riki);
-        players.add(trump);
+        players.add(john);
 
         players.forEach(player -> {
             assertNotNull(player.getFirstCard());
-            assertEquals(NokerGame.INITIAL_CHIPS, player.getChipsStack());
+            assertEquals(NokerSettings.INITIAL_CHIPS - NokerSettings.BLIND, player.getChipsStack());
         });
+    }
+
+    @Test
+    public void getExistingPlayersByName() {
+        PlayerNotifier playerNotifier = Mockito.mock(PlayerNotifier.class);
+
+        NokerGame game = new NokerGame(3, playerNotifier);
+
+        Player tobi = game.createPlayer("tobi");
+        Player riki = game.createPlayer("riki");
+        Player trump = game.createPlayer("john");
+
+        Optional<Player> gamePlayer = game.getPlayer("tobi");
+
+        assertTrue(gamePlayer.isPresent());
+        assertEquals(tobi, gamePlayer.get());
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void getNonExistringPlayersByName() {
+        PlayerNotifier playerNotifier = Mockito.mock(PlayerNotifier.class);
+
+        NokerGame game = new NokerGame(3, playerNotifier);
+
+        game.createPlayer("tobi");
+        game.createPlayer("riki");
+        game.createPlayer("john");
+
+        Optional<Player> gamePlayer = game.getPlayer("jerry");
+
+        assertFalse(gamePlayer.isPresent());
+        gamePlayer.get();
+    }
+
+    @Test
+    public void gameFinished() {
+        PlayerNotifier playerNotifier = Mockito.mock(PlayerNotifier.class);
+
+        NokerGame game = new NokerGame(2, playerNotifier);
+
+        Player tobi = game.createPlayer("tobi");
+        Player riki = game.createPlayer("riki");
+
+        game.playerSet(tobi, 60);
+        game.playerSet(riki, 70);
+
+        game.playerSet(tobi, 0);
+        game.playerSet(riki, 0);
+        System.out.println();
     }
 }

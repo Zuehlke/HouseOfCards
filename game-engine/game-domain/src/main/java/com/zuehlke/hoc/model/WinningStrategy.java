@@ -13,9 +13,11 @@ public class WinningStrategy {
 
     private static int PAIR_SCORE_FACTOR = 20;
 
-
     public static List<Player> winners(List<Player> matchPlayers, Bets bets) {
         List<Player> remainingPlayersOfRound = filterFoldedPlayers(matchPlayers, bets);
+        if (remainingPlayersOfRound.size() == 1) {
+            return new ArrayList<>(remainingPlayersOfRound);
+        }
         Map<Player, Integer> playerScores = calculatePlayerScores(remainingPlayersOfRound);
         return calculateWinners(playerScores);
     }
@@ -41,8 +43,8 @@ public class WinningStrategy {
         Map<Player, Integer> playerScores = new HashMap<>();
         remainingPlayersOfRound.forEach(player -> {
             int score = 0;
-            int firstCard = player.getFirstCard();
-            int secondCard = player.getSecondCard();
+            int firstCard = player.getFirstCard().get();
+            int secondCard = player.getSecondCard().get();
 
             if (playerHasPair(player)) {
                 score = PAIR_SCORE_FACTOR * NokerDeck.HIGHEST_CARD + firstCard;
@@ -77,6 +79,6 @@ public class WinningStrategy {
 
 
     private static boolean playerHasPair(Player player) {
-        return player.getFirstCard() == player.getSecondCard();
+        return player.getFirstCard().get().equals(player.getSecondCard().get());
     }
 }

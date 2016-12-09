@@ -22,8 +22,8 @@ public class PlayerNotifierAdapter {
         this.notifier = notifier;
     }
 
-    public void askPlayerForAction(String name, long chipsToCall) {
-        log.info("Ask player for action: Player in turn: {}, Chips to call: {}", name, chipsToCall);
+    public void askPlayerForAction(String name, long minimumSet, long maximumSet) {
+        log.info("Ask player for action: Player in turn: {}, Minimum set: {}, Maximum set: {}", name, minimumSet, maximumSet);
     }
 
     public void sendCardInfoToPlayer(String name, int card) {
@@ -71,8 +71,11 @@ public class PlayerNotifierAdapter {
         log.info("Game finished");
     }
 
-    public void broadcastGameStarted() {
-        log.info("Game started");
+    public void broadcastGameStarted(List<Player> gamePlayers) {
+        log.info("Game started: Players: {}", gamePlayers);
     }
 
+    public void broadcastPlayerJoined(String playerName) {
+        log.info("Player joined: Player: {}", playerName);
+    }
 }
