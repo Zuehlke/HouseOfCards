@@ -48,7 +48,7 @@
     <body>
         
         
-    <div class="book" data-level="3.2" data-chapter-title="Game messages" data-filepath="docs/game_messages.md" data-basepath=".." data-revision="Fri Dec 09 2016 10:59:49 GMT+0100 (CET)">
+    <div class="book" data-level="3.2" data-chapter-title="Game messages" data-filepath="docs/game_messages.md" data-basepath=".." data-revision="Fri Dec 09 2016 16:42:14 GMT+0100 (CET)">
     
 
 <div class="book-summary">
@@ -411,100 +411,99 @@
 <h3 id="set">/set</h3>
 <p>Content:</p>
 <pre><code>{
-    uuid: &quot;123e4567-e89b-...&quot;,
-    amount: 25
+    &quot;uuid&quot;: &quot;123e4567-e89b-...&quot;,
+    &quot;amount&quot;: 25
 }
-</code></pre><h3 id="fold">/fold</h3>
+</code></pre><p>Use-cases:</p>
+<ol>
+<li>If a player that is not the active player sends a message, that message is ignored (no response).</li>
+<li>If the active player sends an invalid message (invalid set amount or unknown message) then the player automatically folds (too low amount or too high amount doesn&apos;t matter).</li>
+<li>If the active player does not response after a predefined period of time, the player automatically folds.</li>
+</ol>
+<h3 id="fold">/fold</h3>
 <p>Content:</p>
 <pre><code>{
-    uuid: &quot;123e4567-e89b-...&quot;
+    &quot;uuid&quot;: &quot;123e4567-e89b-...&quot;
 }
 </code></pre><h2 id="bot-endpoints">Bot endpoints</h2>
 <h3 id="matchstarted">/match_started</h3>
 <p>Content:</p>
 <pre><code>{
-    match_players: [{
-        name: &quot;player1&quot;,
-        stack: 200
+    &quot;match_players&quot;: [{
+        &quot;name&quot;: &quot;player1&quot;,
+        &quot;stack&quot;: 200
     }, {
-        name: &quot;player2&quot;,
-        stack: 200
+        &quot;name&quot;: &quot;player2&quot;,
+        &quot;stack&quot;: 200
     }, {
-        name: &quot;player3&quot;,
-        stack: 200
+        &quot;name&quot;: &quot;player3&quot;,
+        &quot;stack&quot;: 200
     }],
-    dealer: &quot;player1&quot;,
-    your_money: 200
+    &quot;dealer&quot;: &quot;player1&quot;,
+    &quot;your_money&quot;: 200
 }
 </code></pre><h3 id="roundstarted">/round_started</h3>
 <p>Content:</p>
 <pre><code>{
-    round_number: 1,
-    round_players: [{
-        name: player1,
-        stack: 200
+    &quot;round_number&quot;: 1,
+    &quot;round_players&quot;: [{
+        &quot;name&quot;: &quot;player1&quot;,
+        &quot;stack&quot;: 200
     }, {
-        name: player2,
-        stack: 200
+        &quot;name&quot;: &quot;player2&quot;,
+        &quot;stack&quot;: 200
     }],
-    round_dealer: &quot;player1&quot;
+    &quot;round_dealer&quot;: &quot;player1&quot;
 }
 </code></pre><p>&quot;round_dealer&quot; is used when the actual dealer has folded in the first round.</p>
 <h3 id="yourturn">/your_turn</h3>
 <p>Content:</p>
 <pre><code>{
-    minimum_set: 42,
-    maximum_set: 200,
-    pot: 320,
-    your_cards: [7],
-    active_players: [{
-        name: player1,
-        stack: 200
+    &quot;minimum_set&quot;: 42,
+    &quot;maximum_set&quot;: 200,
+    &quot;pot&quot;: 320,
+    &quot;your_cards&quot;: [7],
+    &quot;active_players&quot;: [{
+        &quot;name&quot;: &quot;player1&quot;,
+        &quot;stack&quot;: 200
     }, {
-        name: player2,
-        stack: 200
+        &quot;name&quot;: &quot;player2&quot;,
+        &quot;stack&quot;: 200
     }]
 }
 </code></pre><h3 id="playerset">/player_set</h3>
 <p>Content:</p>
 <pre><code>{
-    player: &quot;player1&quot;,
-    amount: 25
+    &quot;player&quot;: &quot;player1&quot;,
+    &quot;amount&quot;: 25
 }
 </code></pre><h3 id="playerfolded">/player_folded</h3>
 <p>Content:</p>
 <pre><code>{
-    player: &quot;player1&quot;
+    &quot;player&quot;: &quot;player1&quot;
 }
 </code></pre><h3 id="showdown">/showdown</h3>
 <p>Content:</p>
 <pre><code>{
-    cards: [{
-        player1: [6, 8]
+    &quot;players&quot;: [{
+        &quot;player1&quot;: [6, 8]
     }, {
-        player2: [11, 13]
+        &quot;player2&quot;: [11, 13]
     }]
 }
 </code></pre><p>Use-cases:</p>
 <ol>
-<li>Showdown is only send when after the second round there is more than one round_player left.</li>
+<li>Showdown is only sent when after the second round there is more than one round_player left.</li>
 </ol>
 <h3 id="matchfinished">/match_finished</h3>
 <p>Content:</p>
 <pre><code>{
-    pot: 840,
-    winners: [player1]
+    &quot;winners&quot;: [&quot;player1&quot;, &quot;player2&quot;, ...]
 }
-</code></pre><p>Use-cases:</p>
-<ol>
-<li>If a player that is not the active player sends a message, that message is ignored. -&gt; no response.</li>
-<li>If the active player sends an invalid message (invalid set amount or unknown message) then the player automatically folds (too low amount or too high amount doesn&apos;t matter).</li>
-<li>If the active player does not response after a predefined period of time, the player automatically folds.</li>
-</ol>
-<h3 id="gamefinished">/game_finished</h3>
+</code></pre><h3 id="gamefinished">/game_finished</h3>
 <p>Content:</p>
 <pre><code>{
-    winner: [player1]
+    &quot;winner&quot;: &quot;player1&quot;
 }
 </code></pre>
                     
