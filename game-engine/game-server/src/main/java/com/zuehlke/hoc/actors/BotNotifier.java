@@ -40,23 +40,12 @@ public interface BotNotifier {
     Optional<String> getPlayerNameByUuid(UUID playerUUID);
 
     /**
-     * Stores URI and port of the bot in order to send messages to the bot given its name.
-     *
-     * @param registerMessage the registration message received from the bot.
-     * @return true if the name was not already taken.
-     */
-    boolean registerBot(RegisterMessage registerMessage);
-
-    /**
      * Informs the bot that it's registration message did not pass the paramater validation
      *
      * @param registerMessage the invalid RegisterMessage
      * @param errorMsg        A human readable error message.
      */
     void sendInvalidRegistrationMessage(RegisterMessage registerMessage, String errorMsg);
-
-
-
 
 
     /**
@@ -104,6 +93,7 @@ public interface BotNotifier {
 
     /**
      * Notify all the bots about the winners of the current match.
+     *
      * @param matchWinners names of the winners of the current match
      */
     void broadcastMatchFinished(List<String> matchWinners);
@@ -111,6 +101,7 @@ public interface BotNotifier {
 
     /**
      * Notify all the bots about the winner of the game.
+     *
      * @param winnerName the winner of the game
      */
     void broadcastGameFinished(String winnerName);
@@ -118,6 +109,7 @@ public interface BotNotifier {
 
     /**
      * Notify all the bots about the showdown of the current match.
+     *
      * @param players remaining players in showdown phase of the current match
      */
     void broadcastShowdown(List<Player> players);
