@@ -2,7 +2,7 @@ package com.zuehlke.hoc;
 
 import com.zuehlke.hoc.model.Match;
 import com.zuehlke.hoc.model.Player;
-import com.zuehlke.hoc.notification.api.PlayerNotifier;
+import com.zuehlke.hoc.notification.api.NokerGameObserver;
 import com.zuehlke.hoc.notification.api.StartInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,13 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class PlayerNotifierAdapter {
+public class NokerGameObserverAdapter {
 
-    private static final Logger log = LoggerFactory.getLogger(PlayerNotifierAdapter.class.getName());
-    private PlayerNotifier notifier;
+    private static final Logger log = LoggerFactory.getLogger(NokerGameObserverAdapter.class.getName());
+    private NokerGameObserver notifier;
 
 
-    public PlayerNotifierAdapter(PlayerNotifier notifier) {
+    public NokerGameObserverAdapter(NokerGameObserver notifier) {
         this.notifier = notifier;
     }
 

@@ -1,6 +1,6 @@
 package com.zuehlke.hoc.model;
 
-import com.zuehlke.hoc.PlayerNotifierAdapter;
+import com.zuehlke.hoc.NokerGameObserverAdapter;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class Round {
         FIRST_ROUND, SECOND_ROUND;
     }
 
-    private PlayerNotifierAdapter notifier;
+    private NokerGameObserverAdapter notifier;
     private BetIterator betIterator;
     private Player turnOfPlayer;
     private Deck deck;
@@ -28,7 +28,7 @@ public class Round {
     private Bets bets;
 
 
-    public Round(List<Player> players, int firstPlayerIndex, Deck deck, PlayerNotifierAdapter notifier) {
+    public Round(List<Player> players, int firstPlayerIndex, Deck deck, NokerGameObserverAdapter notifier) {
         this.notifier = notifier;
         this.deck = deck;
         this.bets = new Bets();

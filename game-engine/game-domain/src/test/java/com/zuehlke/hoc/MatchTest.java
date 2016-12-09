@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -20,7 +19,7 @@ import static org.mockito.Mockito.times;
 public class MatchTest {
 
     private Match match;
-    private PlayerNotifierAdapter notifier;
+    private NokerGameObserverAdapter notifier;
     private List<Player> players;
 
     private Player tobi;
@@ -29,7 +28,7 @@ public class MatchTest {
 
     @Before
     public void setup() {
-        notifier = Mockito.mock(PlayerNotifierAdapter.class);
+        notifier = Mockito.mock(NokerGameObserverAdapter.class);
         players = Utils.loadDummyPlayers();
         players.forEach(player -> player.setChipsStack(10));
         tobi = players.get(0);
