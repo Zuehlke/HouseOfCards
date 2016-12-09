@@ -57,6 +57,15 @@ class RestBotNotifier implements BotNotifier {
         return true;
     }
 
+    public void sendInvalidRegistrationMessage(RegisterMessage registerMessage, String errorMsg) {
+        //TODO: errorMsg is not send
+        String url = String.format("http://%s:%d/start", registerMessage.getHostname(), registerMessage.getPort());
+        log.info("send invalid registration message info to {}", url);
+        GameEvent invalidRegMsg = new GameEvent();
+        invalidRegMsg.setEventKind(GameEvent.EventKind.INVALID_REG_MSG);
+        restTemplate.postForObject(url, invalidRegMsg, String.class);
+    }
+
     @Override
     public void sendRegistrationInfo(RegistrationInfoMessage registrationResponse) {
         Optional<String> urlOptional = this.botRegistrationService.getUriByPlayerName(registrationResponse.getPlayerName());
@@ -71,8 +80,9 @@ class RestBotNotifier implements BotNotifier {
         return uuid2Bot.get(playerUUID) != null ? of(uuid2Bot.get(playerUUID)) : Optional.empty();
     }
 
+
     @Override
-    public void sendMatchStarted(List<Player> players, Player dealer) {
+    public void broadcastMatchStarted(List<Player> players, Player dealer) {
         players.forEach(p -> {
             if (bots.get(p.getName()) == null) {
                 log.info("Player {} cannot be associated with a URI", p.getName());
@@ -92,55 +102,52 @@ class RestBotNotifier implements BotNotifier {
     }
 
     @Override
-    public void sendYourTurn(Player player, long minimalBet, long maximalBet, long amountOfCreditsInPot, List<Player> activePlayers) {
+    public void sendTurnRequest(Player player, long minimalBet, long maximalBet, long amountOfCreditsInPot, List<Player> activePlayers) {
         RegisterMessage uriAndPort = bots.get(player.getName());
         if (uriAndPort == null) {
             log.info("Player {} cannot be associated with a URI", player.getName());
         } else {
             String url = String.format("http://%s:%d/%s", uriAndPort.getHostname(), uriAndPort.getPort(), Endpoints.YOUR_TURN.url);
-            YourTurnMessage yourTurnMessage = buildYourTurnMessage(player, minimalBet, maximalBet, amountOfCreditsInPot, activePlayers);
+            TurnRequestMessage turnRequestMessage = buildYourTurnMessage(player, minimalBet, maximalBet, amountOfCreditsInPot, activePlayers);
             log.info("Request bet or fold from player: {}", player.getName());
-            restTemplate.postForObject(url, yourTurnMessage, String.class);
+            restTemplate.postForObject(url, turnRequestMessage, String.class);
         }
     }
 
     @Override
+    public void broadcastMatchFinished(List<String> matchWinners) {
+        MatchFinishedMessage matchFinishedMessage = new MatchFinishedMessage(matchWinners);
+        broadcastMessage(matchFinishedMessage, Endpoints.MATCH_FINISHED.url);
+        log.info("Broadcast match finished");
+    }
+
+    @Override
+    public void broadcastGameFinished(String winnerName) {
+        GameFinishedMessage gameFinishedMessage = new GameFinishedMessage(winnerName);
+        broadcastMessage(gameFinishedMessage, Endpoints.GAME_FINISHED.url);
+        log.info("Broadcast game finished");
+    }
+
+    @Override
+    public void broadcastShowdown(List<Player> players) {
+        ShowdownMessage showdownMessage = buildShowdownMessage(players);
+        broadcastMessage(showdownMessage, Endpoints.SHOWDOWN.url);
+    }
+
+    @Override
     public void broadcastPlayerFolded(String playerName) {
-        FoldMessage foldMessage = new FoldMessage();
-        foldMessage.setPlayerName(playerName);
+        FoldMessage foldMessage = new FoldMessage(playerName);
         broadcastMessage(foldMessage, Endpoints.PLAYER_FOLDED.url);
-        log.info("Player {} folded - broadcast to all active players", playerName);
+        log.info("Broadcast player {} folded", playerName);
     }
 
     @Override
     public void broadcastPlayerSet(String playerName, long amount) {
-        SetMessage setMessage = new SetMessage();
-        setMessage.setPlayerName(playerName);
-        setMessage.setAmount(amount);
+        SetMessage setMessage = new SetMessage(playerName, amount);
         broadcastMessage(setMessage, Endpoints.PLAYER_SET.url);
-        log.info("Player {} set {} - broadcast to all active players", playerName, amount);
+        log.info("Broadcast layer {} set {}", playerName, amount);
     }
 
-    public void sendInvalidRegistrationMessage(RegisterMessage registerMessage, String errorMsg) {
-        //TODO: errorMsg is not send
-        String url = String.format("http://%s:%d/start", registerMessage.getHostname(), registerMessage.getPort());
-        log.info("send invalid registration message info to {}", url);
-        GameEvent invalidRegMsg = new GameEvent();
-        invalidRegMsg.setEventKind(GameEvent.EventKind.INVALID_REG_MSG);
-        restTemplate.postForObject(url, invalidRegMsg, String.class);
-    }
-
-    /**
-     * Broadcasts a message to all registered bots.
-     *
-     * @param message the message containing the information to be transmitted
-     */
-    private void broadcastMessage(Message message, String endpoint) {
-        bots.values().forEach(bot -> {
-            String url = String.format("http://%s:%d/%s", bot.getHostname(), bot.getPort(), endpoint);
-            restTemplate.postForObject(url, message, String.class);
-        });
-    }
 
     private MatchStartedMessage buildMatchStartedMessage(List<Player> players, Player dealer, Player p) {
         MatchStartedMessage matchStartedMessage = new MatchStartedMessage();
@@ -162,15 +169,15 @@ class RestBotNotifier implements BotNotifier {
         return roundStartedMessage;
     }
 
-    private YourTurnMessage buildYourTurnMessage(Player player, long minimalBet, long maximalBet, long amountOfCreditsInPot, List<Player> activePlayers) {
-        YourTurnMessage yourTurnMessage = new YourTurnMessage();
-        yourTurnMessage.setMinimum_set(minimalBet);
-        yourTurnMessage.setMaximum_set(maximalBet);
-        yourTurnMessage.setPot(amountOfCreditsInPot);
+    private TurnRequestMessage buildYourTurnMessage(Player player, long minimalBet, long maximalBet, long amountOfCreditsInPot, List<Player> activePlayers) {
+        TurnRequestMessage turnRequestMessage = new TurnRequestMessage();
+        turnRequestMessage.setMinimum_set(minimalBet);
+        turnRequestMessage.setMaximum_set(maximalBet);
+        turnRequestMessage.setPot(amountOfCreditsInPot);
 
         //set the list of active players in message
         List<PlayerDTO> playerDTOs = activePlayers.stream().map(x -> new PlayerDTO(x.getName(), x.getChipsStack())).collect(Collectors.toList());
-        yourTurnMessage.setActive_players(playerDTOs);
+        turnRequestMessage.setActive_players(playerDTOs);
 
         //set the cards of the player in message
         List<Integer> cards = new ArrayList<>();
@@ -180,9 +187,36 @@ class RestBotNotifier implements BotNotifier {
         if (player.getSecondCard() >= 0) {
             cards.add(player.getSecondCard());
         }
-        yourTurnMessage.setYour_cards(cards);
-        return yourTurnMessage;
+        turnRequestMessage.setYour_cards(cards);
+        return turnRequestMessage;
     }
+
+    private ShowdownMessage buildShowdownMessage(List<Player> players) {
+        ShowdownMessage showdownMessage = new ShowdownMessage();
+        Map<String, List<Integer>> showDownPlayers = new HashMap<>();
+        players.forEach(player -> {
+            List<Integer> hand = new ArrayList<>();
+            hand.add(player.getFirstCard());
+            hand.add(player.getSecondCard());
+            showDownPlayers.put(player.getName(), hand);
+        });
+        showdownMessage.setPlayers(showDownPlayers);
+        return showdownMessage;
+    }
+
+
+    /**
+     * Broadcasts a message to all registered bots.
+     *
+     * @param message the message containing the information to be transmitted
+     */
+    private void broadcastMessage(Message message, String endpoint) {
+        bots.values().forEach(bot -> {
+            String url = String.format("http://%s:%d/%s", bot.getHostname(), bot.getPort(), endpoint);
+            restTemplate.postForObject(url, message, String.class);
+        });
+    }
+
 
     private enum Endpoints {
         PLAYER_FOLDED("player_folded"),

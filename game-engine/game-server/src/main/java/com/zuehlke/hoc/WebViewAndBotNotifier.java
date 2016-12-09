@@ -22,7 +22,7 @@ public class WebViewAndBotNotifier implements NokerGameObserver {
     private final BotNotifier botNotifier;
     private final ViewNotifier viewNotifier;
 
-    //private NokerGame game;
+
 
     public WebViewAndBotNotifier(BotNotifier botNotifier, ViewNotifier viewNotifier) {
         this.botNotifier = botNotifier;
@@ -30,15 +30,14 @@ public class WebViewAndBotNotifier implements NokerGameObserver {
     }
 
     @Override
-    public void requestBet(Player player, long lowerBound, long upperBound, long amountInPot, List<Player> activePlayers) {
-        //viewNotifier.sendGameInfo("Next turn: Player "+player);
-        log.info("requestBet: player: {}", player.getName());
-        botNotifier.sendYourTurn(player, lowerBound, upperBound, amountInPot, activePlayers);
+    public void requestTurn(Player player, long lowerBound, long upperBound, long amountInPot, List<Player> activePlayers) {
+        log.info("requestTurn: player: {}", player.getName());
+        botNotifier.sendTurnRequest(player, lowerBound, upperBound, amountInPot, activePlayers);
     }
 
     @Override
     public void matchStarted(List<Player> players, Player dealer) {
-        botNotifier.sendMatchStarted(players, dealer);
+        botNotifier.broadcastMatchStarted(players, dealer);
         log.info("A new match started");
     }
 
@@ -49,29 +48,32 @@ public class WebViewAndBotNotifier implements NokerGameObserver {
     }
 
     @Override
-    public void broadcastMatchFinished(List<Player> matchWinners, long pot) {
-
+    public void playerFolded(String playerName) {
+        botNotifier.broadcastPlayerFolded(playerName);
+        log.info("Player folded: {}", playerName);
     }
 
     @Override
-    public void broadcastShowdown(List<Player> players) {
-
-    }
-
-    @Override
-    public void broadcastGameFinished(Player player) {
-
-    }
-
-    @Override
-    public void broadcastPlayerFolded(Player player) {
-        botNotifier.broadcastPlayerFolded(player.getName());
-        log.info("Player folded: {}", player.getName());
-    }
-
-    @Override
-    public void broadcastPlayerSet(String playerName, long amount) {
+    public void playerSet(String playerName, long amount) {
         botNotifier.broadcastPlayerSet(playerName, amount);
         log.info("Player set: {}, {}", playerName, amount);
+    }
+
+    @Override
+    public void matchFinished(List<String> matchWinners) {
+        botNotifier.broadcastMatchFinished(matchWinners);
+        log.info("Match finished");
+    }
+
+    @Override
+    public void showdown(List<Player> players) {
+        botNotifier.broadcastShowdown(players);
+        log.info("Showdown");
+    }
+
+    @Override
+    public void gameFinished(String winnerName) {
+        botNotifier.broadcastGameFinished(winnerName);
+        log.info("Game finished");
     }
 }

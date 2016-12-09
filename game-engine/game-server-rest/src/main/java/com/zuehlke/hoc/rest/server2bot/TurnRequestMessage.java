@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author Lukas Hofmaier0
  */
-public class YourTurnMessage implements Message {
+public class TurnRequestMessage implements Message {
 
     private List<Integer> your_cards;
     private List<PlayerDTO> active_players;

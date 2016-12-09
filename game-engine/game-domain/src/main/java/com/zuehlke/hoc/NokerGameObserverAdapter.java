@@ -11,6 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * The {@link NokerGameObserverAdapter} class is used by the NokerGame to notify it's
+ * environment about changes in the game state. The adapter maps its inputs and calls
+ * delegates the notifications to the {@link NokerGameObserver}.
+ */
 public class NokerGameObserverAdapter {
 
     private static final Logger log = LoggerFactory.getLogger(NokerGameObserverAdapter.class.getName());
@@ -21,6 +26,7 @@ public class NokerGameObserverAdapter {
         this.notifier = notifier;
     }
 
+
     public void askPlayerForAction(String name, long chipsToCall) {
         log.info("Ask player for action: Player in turn: {}, Chips to call: {}", name, chipsToCall);
     }
@@ -30,45 +36,50 @@ public class NokerGameObserverAdapter {
     }
 
     public void broadcastMatchStart(Match match) {
-        StartInfo startInfo = new StartInfo();
-
-        List<String> players = new ArrayList<>();
-        List<Player> matchPlayers = match.getMatchPlayers();
-
-        matchPlayers.forEach(player -> players.add(player.getName()));
-        matchPlayers.forEach(player -> startInfo.addPlayerInfo(new PlayerInfo(player.getName(), player.getChipsStack())));
-
-        log.info("Match started: Players: {}", matchPlayers);
+        log.info("Match started");
     }
 
     public void broadcastPlayerFolded(Player player) {
-        notifier.broadcastPlayerFolded(player);
+        notifier.playerFolded(player.getName());
         log.info("Player folded: Player: {}", player.getName());
     }
 
     public void broadcastPlayerSet(Player player, long amount) {
-        notifier.broadcastPlayerSet(player.getName(), amount);
+        notifier.playerSet(player.getName(), amount);
         log.info("Player set: Player: {}, {}", player.getName(), amount);
     }
 
+    // TODO: adapt the parameters according to the protocol
     public void broadcastRoundStarts(){
         log.info("Round started");
     }
 
-    public void broadcastRoundFinished() {
-        log.info("Round finished");
-    }
 
     public void broadcastMatchFinished(List<Player> winners) {
+        List<String> winnersNames = new ArrayList<>();
+        winners.forEach(winner -> winnersNames.add(winner.getName()));
+        notifier.matchFinished(winnersNames);
         log.info("Match finished: Winner(s): {}", winners);
     }
 
+
+    // TODO: adapt the parameters according to the protocol => add the game winner's name
     public void broadcastGameFinished() {
         log.info("Game finished");
     }
 
+
+    // This notification is not defined in the game protocol and must therefore
+    // not be delegated to the NokerGameObserver. It can be used for logging the
+    // event.
+    public void broadcastRoundFinished() {
+        log.info("Round finished");
+    }
+
+    // This notification is not defined in the game protocol and must therefore
+    // not be delegated to the NokerGameObserver. It can be used for logging the
+    // event.
     public void broadcastGameStarted() {
         log.info("Game started");
     }
-
 }

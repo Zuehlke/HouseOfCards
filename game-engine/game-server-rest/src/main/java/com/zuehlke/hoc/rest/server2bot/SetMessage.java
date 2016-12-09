@@ -6,6 +6,16 @@ public class SetMessage implements Message {
     private String playerName;
     private long amount;
 
+    public SetMessage() {
+        playerName = "";
+        amount = 0;
+    }
+
+    public SetMessage(String playerName, long amount) {
+        this.playerName = playerName;
+        this.amount = amount;
+    }
+
     public String getPlayerName() {
         return playerName;
     }
