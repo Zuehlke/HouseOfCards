@@ -5,6 +5,7 @@ import com.zuehlke.hoc.model.Player;
 
 import java.util.List;
 
+
 public interface NokerGameObserver {
 
     /**

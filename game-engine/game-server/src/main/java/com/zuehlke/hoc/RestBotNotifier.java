@@ -72,10 +72,6 @@ class RestBotNotifier implements BotNotifier {
     }
 
 
-
-
-
-
     @Override
     public void broadcastMatchStarted(List<Player> players, Player dealer) {
         players.forEach(p -> {
@@ -125,7 +121,8 @@ class RestBotNotifier implements BotNotifier {
 
     @Override
     public void broadcastShowdown(List<Player> players) {
-        // TODO: create and send message to bots
+        ShowdownMessage showdownMessage = buildShowdownMessage(players);
+        broadcastMessage(showdownMessage, Endpoints.SHOWDOWN.url);
     }
 
     @Override
@@ -142,17 +139,6 @@ class RestBotNotifier implements BotNotifier {
         log.info("Broadcast layer {} set {}", playerName, amount);
     }
 
-    /**
-     * Broadcasts a message to all registered bots.
-     *
-     * @param message the message containing the information to be transmitted
-     */
-    private void broadcastMessage(Message message, String endpoint) {
-        bots.values().forEach(bot -> {
-            String url = String.format("http://%s:%d/%s", bot.getHostname(), bot.getPort(), endpoint);
-            restTemplate.postForObject(url, message, String.class);
-        });
-    }
 
     private MatchStartedMessage buildMatchStartedMessage(List<Player> players, Player dealer, Player p) {
         MatchStartedMessage matchStartedMessage = new MatchStartedMessage();
@@ -194,6 +180,32 @@ class RestBotNotifier implements BotNotifier {
         }
         yourTurnMessage.setYour_cards(cards);
         return yourTurnMessage;
+    }
+
+    private ShowdownMessage buildShowdownMessage(List<Player> players) {
+        ShowdownMessage showdownMessage = new ShowdownMessage();
+        Map<String, List<Integer>> showDownPlayers = new HashMap<>();
+        players.forEach(player -> {
+            List<Integer> hand = new ArrayList<>();
+            hand.add(player.getFirstCard());
+            hand.add(player.getSecondCard());
+            showDownPlayers.put(player.getName(), hand);
+        });
+        showdownMessage.setPlayers(showDownPlayers);
+        return showdownMessage;
+    }
+
+
+    /**
+     * Broadcasts a message to all registered bots.
+     *
+     * @param message the message containing the information to be transmitted
+     */
+    private void broadcastMessage(Message message, String endpoint) {
+        bots.values().forEach(bot -> {
+            String url = String.format("http://%s:%d/%s", bot.getHostname(), bot.getPort(), endpoint);
+            restTemplate.postForObject(url, message, String.class);
+        });
     }
 
 

@@ -1,8 +1,6 @@
 package com.zuehlke.hoc.rest.server2bot;
 
 
-import com.zuehlke.hoc.rest.PlayerDTO;
-
 import java.util.ArrayList;
 import java.util.List;
 
