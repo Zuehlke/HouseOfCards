@@ -8,7 +8,7 @@ import java.util.List;
 public interface NokerGameObserver {
 
     /**
-     * Is called when a players bet is requested. After this call the <code>NokerGame</code> instance expects
+     * Is called when a players turn is requested. After this call the <code>NokerGame</code> instance expects
      * <code>playerSet</code>.
      *
      * @param player        the player whos bet is requested
@@ -18,7 +18,8 @@ public interface NokerGameObserver {
      * @param activePlayers list of player that are still participating in the game and haven't folded in the current
      *                      match.
      */
-    void requestBet(Player player, long lowerBound, long upperBound, long amountInPot, List<Player> activePlayers);
+    void requestTurn(Player player, long lowerBound, long upperBound, long amountInPot, List<Player> activePlayers);
+
 
     /**
      * Is called when a new match is started. E.g. after all players called <code>createPlayer</code> or after a match
@@ -28,6 +29,7 @@ public interface NokerGameObserver {
      * @param dealer  the player who has the dealer button in the current match
      */
     void matchStarted(List<Player> players, Player dealer);
+
 
     /**
      * Is called when a new round begins.
@@ -39,10 +41,14 @@ public interface NokerGameObserver {
      */
     void roundStarted(List<Player> players, Player dealer, int roundNumber);
 
-    void broadcastMatchFinished(List<Player> matchWinners, long pot);
-    void broadcastShowdown(List<Player> players);
-    void broadcastGameFinished(Player player);
 
-    void broadcastPlayerFolded(Player player);
-    void broadcastPlayerSet(String playerName, long amount);
+    void matchFinished(List<String> matchWinners);
+
+    void showdown(List<Player> players);
+
+    void gameFinished(Player player);
+
+    void playerFolded(Player player);
+
+    void playerSet(String playerName, long amount);
 }

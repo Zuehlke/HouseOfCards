@@ -57,13 +57,27 @@ class RestBotNotifier implements BotNotifier {
         return true;
     }
 
+    public void sendInvalidRegistrationMessage(RegisterMessage registerMessage, String errorMsg) {
+        //TODO: errorMsg is not send
+        String url = String.format("http://%s:%d/start", registerMessage.getHostname(), registerMessage.getPort());
+        log.info("send invalid registration message info to {}", url);
+        GameEvent invalidRegMsg = new GameEvent();
+        invalidRegMsg.setEventKind(GameEvent.EventKind.INVALID_REG_MSG);
+        restTemplate.postForObject(url, invalidRegMsg, String.class);
+    }
+
     @Override
     public Optional<String> getPlayerNameByUuid(UUID playerUUID) {
         return uuid2Bot.get(playerUUID) != null ? of(uuid2Bot.get(playerUUID)) : Optional.empty();
     }
 
+
+
+
+
+
     @Override
-    public void sendMatchStarted(List<Player> players, Player dealer) {
+    public void broadcastMatchStarted(List<Player> players, Player dealer) {
         players.forEach(p -> {
             if (bots.get(p.getName()) == null) {
                 log.info("Player {} cannot be associated with a URI", p.getName());
@@ -83,7 +97,7 @@ class RestBotNotifier implements BotNotifier {
     }
 
     @Override
-    public void sendYourTurn(Player player, long minimalBet, long maximalBet, long amountOfCreditsInPot, List<Player> activePlayers) {
+    public void sendTurnRequest(Player player, long minimalBet, long maximalBet, long amountOfCreditsInPot, List<Player> activePlayers) {
         RegisterMessage uriAndPort = bots.get(player.getName());
         if (uriAndPort == null) {
             log.info("Player {} cannot be associated with a URI", player.getName());
@@ -96,29 +110,34 @@ class RestBotNotifier implements BotNotifier {
     }
 
     @Override
+    public void broadcastMatchFinished(List<String> matchWinners) {
+        MatchFinishedMessage matchFinishedMessage = new MatchFinishedMessage(matchWinners);
+        broadcastMessage(matchFinishedMessage, Endpoints.MATCH_FINISHED.url);
+        log.info("Broadcast match finished");
+    }
+
+    @Override
+    public void broadcastGameFinished(String winnerName) {
+        // TODO: create and send message to bots
+    }
+
+    @Override
+    public void broadcastShowdown(List<Player> players) {
+        // TODO: create and send message to bots
+    }
+
+    @Override
     public void broadcastPlayerFolded(String playerName) {
-        FoldMessage foldMessage = new FoldMessage();
-        foldMessage.setPlayerName(playerName);
+        FoldMessage foldMessage = new FoldMessage(playerName);
         broadcastMessage(foldMessage, Endpoints.PLAYER_FOLDED.url);
-        log.info("Player {} folded - broadcast to all active players", playerName);
+        log.info("Broadcast player {} folded", playerName);
     }
 
     @Override
     public void broadcastPlayerSet(String playerName, long amount) {
-        SetMessage setMessage = new SetMessage();
-        setMessage.setPlayerName(playerName);
-        setMessage.setAmount(amount);
+        SetMessage setMessage = new SetMessage(playerName, amount);
         broadcastMessage(setMessage, Endpoints.PLAYER_SET.url);
-        log.info("Player {} set {} - broadcast to all active players", playerName, amount);
-    }
-
-    public void sendInvalidRegistrationMessage(RegisterMessage registerMessage, String errorMsg) {
-        //TODO: errorMsg is not send
-        String url = String.format("http://%s:%d/start", registerMessage.getHostname(), registerMessage.getPort());
-        log.info("send invalid registration message info to {}", url);
-        GameEvent invalidRegMsg = new GameEvent();
-        invalidRegMsg.setEventKind(GameEvent.EventKind.INVALID_REG_MSG);
-        restTemplate.postForObject(url, invalidRegMsg, String.class);
+        log.info("Broadcast layer {} set {}", playerName, amount);
     }
 
     /**
@@ -174,6 +193,7 @@ class RestBotNotifier implements BotNotifier {
         yourTurnMessage.setYour_cards(cards);
         return yourTurnMessage;
     }
+
 
     private enum Endpoints {
         PLAYER_FOLDED("player_folded"),

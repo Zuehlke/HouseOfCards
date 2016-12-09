@@ -17,14 +17,6 @@ import java.util.UUID;
 public interface BotNotifier {
 
     /**
-     * Stores URI and port of the bot in order to send messages to the bot given its name.
-     *
-     * @param registerMessage the registration message received from the bot.
-     * @return true if the name was not already taken.
-     */
-    boolean registerBot(RegisterMessage registerMessage);
-
-    /**
      * Retrieve the player name given an UUID
      *
      * @param playerUUID UUID set upon registration of the bot.
@@ -33,9 +25,30 @@ public interface BotNotifier {
     Optional<String> getPlayerNameByUuid(UUID playerUUID);
 
     /**
+     * Stores URI and port of the bot in order to send messages to the bot given its name.
+     *
+     * @param registerMessage the registration message received from the bot.
+     * @return true if the name was not already taken.
+     */
+    boolean registerBot(RegisterMessage registerMessage);
+
+    /**
+     * Informs the bot that it's registration message did not pass the paramater validation
+     *
+     * @param registerMessage the invalid RegisterMessage
+     * @param errorMsg        A human readable error message.
+     */
+    void sendInvalidRegistrationMessage(RegisterMessage registerMessage, String errorMsg);
+
+
+
+
+
+    /**
      * Broadcasts the game start to all bots
      */
-    void sendMatchStarted(List<Player> players, Player dealer);
+    void broadcastMatchStarted(List<Player> players, Player dealer);
+
 
     /**
      * Notify all bots still in the game about a new round.
@@ -45,14 +58,6 @@ public interface BotNotifier {
      * @param dealer       player in the role "dealer
      */
     void broadcastRoundStarted(List<Player> roundPlayers, int roundNumber, Player dealer);
-
-    /**
-     * Informs the bot that it's registration message did not pass the paramater validation
-     *
-     * @param registerMessage the invalid RegisterMessage
-     * @param errorMsg        A human readable error message.
-     */
-    void sendInvalidRegistrationMessage(RegisterMessage registerMessage, String errorMsg);
 
 
     /**
@@ -69,6 +74,7 @@ public interface BotNotifier {
      */
     void broadcastPlayerSet(String playerName, long amount);
 
+
     /**
      * Invites a player to send its move and sends him a card.
      *
@@ -78,5 +84,26 @@ public interface BotNotifier {
      * @param amountInPot          amount of money currently in the pot
      * @param activePlayers        a list of player that haven't send a fold in the current match.
      */
-    void sendYourTurn(Player player, long lowerBound, long upperBound, long amountInPot, List<Player> activePlayers);
+    void sendTurnRequest(Player player, long lowerBound, long upperBound, long amountInPot, List<Player> activePlayers);
+
+
+    /**
+     * Notify all the bots about the winners of the current match.
+     * @param matchWinners names of the winners of the current match
+     */
+    void broadcastMatchFinished(List<String> matchWinners);
+
+
+    /**
+     * Notify all the bots about the winner of the game.
+     * @param winnerName the winner of the game
+     */
+    void broadcastGameFinished(String winnerName);
+
+
+    /**
+     * Notify all the bots about the showdown of the current match.
+     * @param players remaining players in showdown phase of the current match
+     */
+    void broadcastShowdown(List<Player> players);
 }

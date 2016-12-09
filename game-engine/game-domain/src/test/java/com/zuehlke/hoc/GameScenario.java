@@ -95,8 +95,8 @@ public class GameScenario {
 //            }
 //
 //            @Override
-//            public void broadcastPlayerFolded(String playerName) {
-//                log.info("called broadcastPlayerFolded");
+//            public void playerFolded(String playerName) {
+//                log.info("called playerFolded");
 //            }
 //
 //            @Override

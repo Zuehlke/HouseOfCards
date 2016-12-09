@@ -6,6 +6,14 @@ public class FoldMessage implements Message {
 
     private String playerName;
 
+    public FoldMessage() {
+        playerName = "";
+    }
+
+    public FoldMessage(String playerName) {
+        this.playerName = playerName;
+    }
+
     public String getPlayerName() {
         return playerName;
     }
