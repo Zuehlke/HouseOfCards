@@ -1,4 +1,4 @@
-# Noker rules
+# Noker (not quite Poker)
 
 Noker is based on the traditional Texas Hold’em Poker game. It’s main objective is to simplify the game mechanics
 therefore facilitating the development of bots.
