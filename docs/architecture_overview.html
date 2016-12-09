@@ -48,7 +48,7 @@
     <body>
         
         
-    <div class="book" data-level="2" data-chapter-title="Architecture overview" data-filepath="docs/architecture_overview.md" data-basepath=".." data-revision="Fri Dec 09 2016 16:42:14 GMT+0100 (CET)">
+    <div class="book" data-level="2" data-chapter-title="Architecture overview" data-filepath="docs/architecture_overview.md" data-basepath=".." data-revision="Fri Dec 09 2016 17:32:20 GMT+0100 (CET)">
     
 
 <div class="book-summary">
@@ -402,8 +402,14 @@
                     
                         <h1 id="architecture-overview">Architecture overview</h1>
 <p><img src="images/architecture_overview_detailed.png" alt=""></p>
-<p>EngineActor is the main communication point. Since the application is real-time, it is important that requests
- are handled synchronized.</p>
+<p><em>NokerController</em> is the entry point for the communication from the bots to the game server and provides all necessary
+REST endpoints. The <em>EngineActor</em> handles the incoming messages from the <em>NokerController</em> and delegates them to the
+<em>NokerGame</em>, which updates the game state. Since the application is in real-time and stateful, it is important that
+messages are handled in a synchronized way.</p>
+<p>Game events caused by updates to the game state are sent back to the bots by the <em>RestBotNotifier</em>.
+At the same time web live views are notified from the <em>WebSocketNotifier</em> about the game events.
+Web live views communicate with the game server using WebSockets. A web view registers at the <em>GameViewerController</em>
+and receives updates from the <em>GameViewerPublishService</em>.</p>
 
                     
                     </section>
