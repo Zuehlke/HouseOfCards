@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 public class MatchFinishedMessage implements Message {
     private List<String> winners;
 

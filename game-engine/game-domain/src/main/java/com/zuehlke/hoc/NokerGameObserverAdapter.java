@@ -3,7 +3,6 @@ package com.zuehlke.hoc;
 import com.zuehlke.hoc.model.Match;
 import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.notification.api.NokerGameObserver;
-import com.zuehlke.hoc.notification.api.StartInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
