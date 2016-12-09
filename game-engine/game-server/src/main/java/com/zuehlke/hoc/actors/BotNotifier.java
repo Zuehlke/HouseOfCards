@@ -1,8 +1,8 @@
 package com.zuehlke.hoc.actors;
 
-import com.zuehlke.hoc.PlayerInfo;
 import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
+import com.zuehlke.hoc.rest.server2bot.RegistrationInfoMessage;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +23,13 @@ public interface BotNotifier {
      * @return true if the name was not already taken.
      */
     boolean registerBot(RegisterMessage registerMessage);
+
+    /**
+     * Sends <code>RegistrationInfoMessage</code> to defined player.
+     *
+     * @param registrationInfoMessage registration confirmation message
+     */
+    void sendRegistrationInfo(RegistrationInfoMessage registrationInfoMessage);
 
     /**
      * Retrieve the player name given an UUID

@@ -4,10 +4,8 @@ import com.zuehlke.hoc.actors.BotNotifier;
 import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.rest.GameEvent;
 import com.zuehlke.hoc.rest.PlayerDTO;
-import com.zuehlke.hoc.rest.bot2server.*;
+import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
 import com.zuehlke.hoc.rest.server2bot.*;
-import com.zuehlke.hoc.rest.server2bot.FoldMessage;
-import com.zuehlke.hoc.rest.server2bot.SetMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +25,12 @@ class RestBotNotifier implements BotNotifier {
     private final Map<String, RegisterMessage> bots = new HashMap<>();
     private final Map<UUID, String> uuid2Bot = new HashMap<>();
     private final RestTemplate restTemplate;
+    private final RegistrationService botRegistrationService;
 
     @Autowired
-    public RestBotNotifier(RestTemplateBuilder restBuilder) {
-        restTemplate = restBuilder.build();
+    public RestBotNotifier(RestTemplateBuilder restBuilder, RegistrationService botRegistrationService) {
+        this.restTemplate = restBuilder.build();
+        this.botRegistrationService = botRegistrationService;
     }
 
     @Override
@@ -55,6 +55,15 @@ class RestBotNotifier implements BotNotifier {
         log.info("Send RESERVATION_CONFIRMATION message for team {} to {}", registerMessage.getPlayerName(), url);
         restTemplate.postForObject(url, registrationResponse, String.class);
         return true;
+    }
+
+    @Override
+    public void sendRegistrationInfo(RegistrationInfoMessage registrationResponse) {
+        Optional<String> urlOptional = this.botRegistrationService.getUriByPlayerName(registrationResponse.getPlayerName());
+        urlOptional.ifPresent(url -> {
+            log.info("Send ReservationInfo message for player {} to {}", registrationResponse.getPlayerName(), url);
+            this.restTemplate.postForObject(url, registrationResponse, String.class);
+        });
     }
 
     @Override
