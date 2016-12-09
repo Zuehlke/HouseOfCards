@@ -44,7 +44,7 @@ public interface BotNotifier {
      * @param roundNumber  number of the round
      * @param dealer       player in the role "dealer
      */
-    void sendRoundStarted(List<PlayerInfo> roundPlayers, int roundNumber, PlayerInfo dealer);
+    void broadcastRoundStarted(List<PlayerInfo> roundPlayers, int roundNumber, PlayerInfo dealer);
 
     /**
      * Informs the bot that it's registration message did not pass the paramater validation

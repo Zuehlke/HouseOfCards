@@ -97,7 +97,7 @@ public class RestBotNotifier implements BotNotifier {
     }
 
     @Override
-    public void sendRoundStarted(List<PlayerInfo> roundPlayers, int roundNumber, PlayerInfo dealer) {
+    public void broadcastRoundStarted(List<PlayerInfo> roundPlayers, int roundNumber, PlayerInfo dealer) {
         RoundStartedMessage roundStartedMessage = buildRoundStartedMessage(roundPlayers, roundNumber, dealer);
         broadcastMessage(roundStartedMessage, Endpoints.ROUND_STARTED.url);
     }
