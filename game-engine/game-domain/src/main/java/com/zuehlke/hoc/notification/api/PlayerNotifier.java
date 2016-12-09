@@ -44,5 +44,5 @@ public interface PlayerNotifier {
     void broadcastGameFinished(Player player);
 
     void broadcastPlayerFolded(Player player);
-    void broadcastPlayerSet(Player player, long amount);
+    void broadcastPlayerSet(String playerName, long amount);
 }

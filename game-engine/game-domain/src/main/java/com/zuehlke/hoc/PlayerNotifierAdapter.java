@@ -46,12 +46,9 @@ public class PlayerNotifierAdapter {
         log.info("Player folded: Player: {}", player.getName());
     }
 
-    public void broadcastPlayerCalled(Player player) {
-        log.info("Player called: Player: {}", player.getName());
-    }
-
-    public void broadcastPlayerRaised(Player player, long raise) {
-        log.info("Player raised: Player: {}, Raise: {}", player.getName(), raise);
+    public void broadcastPlayerSet(Player player, long amount) {
+        notifier.broadcastPlayerSet(player.getName(), amount);
+        log.info("Player set: Player: {}, {}", player.getName(), amount);
     }
 
     public void broadcastRoundStarts(){

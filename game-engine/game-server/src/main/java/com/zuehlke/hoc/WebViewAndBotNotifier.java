@@ -38,13 +38,14 @@ public class WebViewAndBotNotifier implements PlayerNotifier {
 
     @Override
     public void matchStarted(List<Player> players, Player dealer) {
+        botNotifier.sendMatchStarted(players, dealer);
         log.info("A new match started");
     }
 
     @Override
     public void roundStarted(List<Player> players, Player dealer, int roundNumber) {
-        viewNotifier.sendGameInfo("New match started");
-
+        botNotifier.broadcastRoundStarted(players, roundNumber, dealer);
+        log.info("A new round started");
     }
 
     @Override
@@ -64,13 +65,13 @@ public class WebViewAndBotNotifier implements PlayerNotifier {
 
     @Override
     public void broadcastPlayerFolded(Player player) {
-        botNotifier.sendPlayerFolded(player.getName());
-        // TODO: inform viewNotifier
+        botNotifier.broadcastPlayerFolded(player.getName());
         log.info("Player folded: {}", player.getName());
     }
 
     @Override
-    public void broadcastPlayerSet(Player player, long amount) {
-
+    public void broadcastPlayerSet(String playerName, long amount) {
+        botNotifier.broadcastPlayerSet(playerName, amount);
+        log.info("Player set: {}, {}", playerName, amount);
     }
 }
