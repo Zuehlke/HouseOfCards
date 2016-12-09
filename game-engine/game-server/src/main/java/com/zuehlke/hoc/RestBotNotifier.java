@@ -99,9 +99,9 @@ class RestBotNotifier implements BotNotifier {
             log.info("Player {} cannot be associated with a URI", player.getName());
         } else {
             String url = String.format("http://%s:%d/%s", uriAndPort.getHostname(), uriAndPort.getPort(), Endpoints.YOUR_TURN.url);
-            YourTurnMessage yourTurnMessage = buildYourTurnMessage(player, minimalBet, maximalBet, amountOfCreditsInPot, activePlayers);
+            TurnRequestMessage turnRequestMessage = buildYourTurnMessage(player, minimalBet, maximalBet, amountOfCreditsInPot, activePlayers);
             log.info("Request bet or fold from player: {}", player.getName());
-            restTemplate.postForObject(url, yourTurnMessage, String.class);
+            restTemplate.postForObject(url, turnRequestMessage, String.class);
         }
     }
 
@@ -160,15 +160,15 @@ class RestBotNotifier implements BotNotifier {
         return roundStartedMessage;
     }
 
-    private YourTurnMessage buildYourTurnMessage(Player player, long minimalBet, long maximalBet, long amountOfCreditsInPot, List<Player> activePlayers) {
-        YourTurnMessage yourTurnMessage = new YourTurnMessage();
-        yourTurnMessage.setMinimum_set(minimalBet);
-        yourTurnMessage.setMaximum_set(maximalBet);
-        yourTurnMessage.setPot(amountOfCreditsInPot);
+    private TurnRequestMessage buildYourTurnMessage(Player player, long minimalBet, long maximalBet, long amountOfCreditsInPot, List<Player> activePlayers) {
+        TurnRequestMessage turnRequestMessage = new TurnRequestMessage();
+        turnRequestMessage.setMinimum_set(minimalBet);
+        turnRequestMessage.setMaximum_set(maximalBet);
+        turnRequestMessage.setPot(amountOfCreditsInPot);
 
         //set the list of active players in message
         List<PlayerDTO> playerDTOs = activePlayers.stream().map(x -> new PlayerDTO(x.getName(), x.getChipsStack())).collect(Collectors.toList());
-        yourTurnMessage.setActive_players(playerDTOs);
+        turnRequestMessage.setActive_players(playerDTOs);
 
         //set the cards of the player in message
         List<Integer> cards = new ArrayList<>();
@@ -178,8 +178,8 @@ class RestBotNotifier implements BotNotifier {
         if (player.getSecondCard() >= 0) {
             cards.add(player.getSecondCard());
         }
-        yourTurnMessage.setYour_cards(cards);
-        return yourTurnMessage;
+        turnRequestMessage.setYour_cards(cards);
+        return turnRequestMessage;
     }
 
     private ShowdownMessage buildShowdownMessage(List<Player> players) {

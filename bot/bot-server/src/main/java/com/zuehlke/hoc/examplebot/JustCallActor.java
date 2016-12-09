@@ -64,11 +64,11 @@ class JustCallActor extends UntypedActor {
             RoundStartedMessage roundStartedMessage = (RoundStartedMessage) message;
             log.info("received round_started response. Nr of players {}", roundStartedMessage.getRound_players().size());
         }
-        if(message instanceof YourTurnMessage){
-            YourTurnMessage yourTurnMessage = (YourTurnMessage) message;
-            log.info("received card: {}, minimal bet is {}", yourTurnMessage.getYour_cards().get(0), yourTurnMessage.getMinimum_set());
+        if(message instanceof TurnRequestMessage){
+            TurnRequestMessage turnRequestMessage = (TurnRequestMessage) message;
+            log.info("received card: {}, minimal bet is {}", turnRequestMessage.getYour_cards().get(0), turnRequestMessage.getMinimum_set());
             com.zuehlke.hoc.rest.bot2server.SetMessage setMessage = new com.zuehlke.hoc.rest.bot2server.SetMessage();
-            setMessage.setAmount(yourTurnMessage.getMinimum_set());
+            setMessage.setAmount(turnRequestMessage.getMinimum_set());
             setMessage.setUuid(this.uuid);
             this.httpSender.tell(setMessage, getSelf());
         }

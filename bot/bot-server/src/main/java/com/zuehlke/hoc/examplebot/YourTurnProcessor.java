@@ -1,7 +1,7 @@
 package com.zuehlke.hoc.examplebot;
 
 import akka.actor.ActorRef;
-import com.zuehlke.hoc.rest.server2bot.YourTurnMessage;
+import com.zuehlke.hoc.rest.server2bot.TurnRequestMessage;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.converter.stream.InputStreamCache;
@@ -25,7 +25,7 @@ public class YourTurnProcessor implements Processor{
         InputStreamCache inputStreamCache = (InputStreamCache) exchange.getIn().getBody();
         ObjectMapper objectMapper = new ObjectMapper();
 
-        YourTurnMessage roundStartedMessage = objectMapper.readValue(inputStreamCache, YourTurnMessage.class);
+        TurnRequestMessage roundStartedMessage = objectMapper.readValue(inputStreamCache, TurnRequestMessage.class);
         ask(this.httpReceiverActor, roundStartedMessage, 1000);
     }
 }
