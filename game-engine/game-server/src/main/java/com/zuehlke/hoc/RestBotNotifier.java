@@ -18,10 +18,8 @@ import java.util.stream.Collectors;
 
 import static java.util.Optional.of;
 
-
-
 @Component
-public class RestBotNotifier implements BotNotifier {
+class RestBotNotifier implements BotNotifier {
 
     private static final Logger log = LoggerFactory.getLogger(RestBotNotifier.class.getName());
     private final Map<String, RegisterMessage> bots = new HashMap<>();
@@ -70,12 +68,12 @@ public class RestBotNotifier implements BotNotifier {
 
     @Override
     public void sendMatchStarted(List<Player> players, Player dealer) {
-        players.stream().forEach(p -> {
+        players.forEach(p -> {
             if (bots.get(p.getName()) == null) {
                 log.info("Player {} cannot be associated with a URI", p.getName());
             } else {
                 MatchStartedMessage matchStartedMessage = buildMatchStartedMessage(players, dealer, p);
-                String url = String.format("http://%s:%d/match_started", bots.get(p.getName()).getHostname(), bots.get(p.getName()).getPort());
+                String url = String.format("http://%s:%d/%s", bots.get(p.getName()).getHostname(), bots.get(p.getName()).getPort(), Endpoints.MATCH_STARTED.url);
                 log.info("Send match_started to {}. Money: {}, Dealer: {}", url, matchStartedMessage.getYour_money(), matchStartedMessage.getDealer());
                 restTemplate.postForObject(url, matchStartedMessage, String.class);
             }
@@ -120,6 +118,7 @@ public class RestBotNotifier implements BotNotifier {
 
     /**
      * Broadcasts a message to all registered bots.
+     *
      * @param message the message containing the information to be transmitted
      */
     private void broadcastMessage(Message message, String endpoint) {
