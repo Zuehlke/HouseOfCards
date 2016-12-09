@@ -1,10 +1,12 @@
 package com.zuehlke.hoc.rest;
 
+import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
 import org.junit.Test;
 
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class RegisterMessageTest {
 

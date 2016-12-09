@@ -18,7 +18,7 @@ public class RoundTest {
 
     private List<Player> players;
     private Deck deck;
-    private PlayerNotifierAdapter notifier;
+    private NokerGameObserverAdapter notifier;
     private Player tobi;
     private Player miki;
     private Player riki;
@@ -28,7 +28,7 @@ public class RoundTest {
     public void beforeTest(){
         players = players();
         deck = deck();
-        notifier = Mockito.mock(PlayerNotifierAdapter.class);
+        notifier = Mockito.mock(NokerGameObserverAdapter.class);
         tobi = players.get(0);
         miki = players.get(1);
         riki = players.get(2);

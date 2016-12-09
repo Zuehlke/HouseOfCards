@@ -19,11 +19,11 @@ These are the different task types:
 * **documentation**
   * maintaining this Wiki (currently the central place for documentation) and code documentation
 * **enhancement**
-  * generally speaking, enhancement are optimizations representing NFRs
+  * generally speaking, enhancement stands for optimizations representing NFRs
 * **feature**
-  * generally speaking, enhancement are implementations of FRs
+  * generally speaking, features are implementations of FRs
 * **refactoring**
-  * refactorings don't change the behavior of the system, they simply make the code cleaner
+  * refactorings don't change the behavior of the system, they simply make the code or project cleaner
 * **requirement**
   * requirement analysis
 * **testing**

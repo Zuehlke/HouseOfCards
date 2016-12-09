@@ -2,13 +2,11 @@ package com.zuehlke.hoc;
 
 
 import com.zuehlke.hoc.model.Player;
-import com.zuehlke.hoc.notification.api.PlayerNotifier;
+import com.zuehlke.hoc.notification.api.NokerGameObserver;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 
 /**
@@ -22,9 +20,9 @@ public class GameScenario {
     @Test
     public void demo(){
 
-        PlayerNotifier playerNotifier = Mockito.mock(PlayerNotifier.class);
+        NokerGameObserver nokerGameObserver = Mockito.mock(NokerGameObserver.class);
 
-        NokerGame game = new NokerGame(3, playerNotifier);
+        NokerGame game = new NokerGame(3, nokerGameObserver);
 
         Player tobi = game.createPlayer("tobi");
         Player riki = game.createPlayer("riki");
@@ -69,7 +67,7 @@ public class GameScenario {
 
 //    @Test
 //    public void testMatchStarted() {
-//        PlayerNotifier playerNotifier = new PlayerNotifier() {
+//        NokerGameObserver playerNotifier = new NokerGameObserver() {
 //            @Override
 //            public void sendCardInfo(String player, int card) {
 //                log.info("called sendCardInfo");
@@ -97,8 +95,8 @@ public class GameScenario {
 //            }
 //
 //            @Override
-//            public void broadcastPlayerFolded(String playerName) {
-//                log.info("called broadcastPlayerFolded");
+//            public void playerFolded(String playerName) {
+//                log.info("called playerFolded");
 //            }
 //
 //            @Override
@@ -107,8 +105,8 @@ public class GameScenario {
 //            }
 //
 //            @Override
-//            public void broadcastNextMatch() {
-//                log.info("called broadcastNextMatch");
+//            public void roundStarted() {
+//                log.info("called roundStarted");
 //            }
 //        };
 //

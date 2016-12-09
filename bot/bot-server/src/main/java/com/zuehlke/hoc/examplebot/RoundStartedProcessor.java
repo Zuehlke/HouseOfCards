@@ -1,8 +1,7 @@
 package com.zuehlke.hoc.examplebot;
 
 import akka.actor.ActorRef;
-import com.zuehlke.hoc.rest.MatchStartedMessage;
-import com.zuehlke.hoc.rest.RoundStartedMessage;
+import com.zuehlke.hoc.rest.server2bot.RoundStartedMessage;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.converter.stream.InputStreamCache;

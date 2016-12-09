@@ -4,27 +4,25 @@ import com.zuehlke.hoc.actors.BotNotifier;
 import com.zuehlke.hoc.actors.EngineActor;
 import com.zuehlke.hoc.actors.ViewNotifier;
 import com.zuehlke.hoc.model.Player;
-import com.zuehlke.hoc.notification.api.PlayerNotifier;
+import com.zuehlke.hoc.notification.api.NokerGameObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
- * Handles callbacks from <code>NonkerGame</code> instance and forwards notifications to the web view and the registered
+ * Handles callbacks from <code>NokerGame</code> instance and forwards notifications to the web view and the registered
  * bots.
  *
  * @author Lukas Hofmaier
  */
-public class WebViewAndBotNotifier implements PlayerNotifier {
+public class WebViewAndBotNotifier implements NokerGameObserver {
 
     private final static Logger log = LoggerFactory.getLogger(EngineActor.class);
     private final BotNotifier botNotifier;
     private final ViewNotifier viewNotifier;
 
-    //private NokerGame game;
+
 
     public WebViewAndBotNotifier(BotNotifier botNotifier, ViewNotifier viewNotifier) {
         this.botNotifier = botNotifier;
@@ -32,72 +30,50 @@ public class WebViewAndBotNotifier implements PlayerNotifier {
     }
 
     @Override
-    public void sendCardInfo(String player, int card) {
-        log.info("Send card info");
-        viewNotifier.sendGameInfo("Player " + player + " got card " + card);
-    }
-
-    @Override
-    public void playersTurn(String playerName, long minimumChipsForCall, NokerGame game) {
-        //viewNotifier.sendGameInfo("Next turn: Player "+player);
-        log.info("playersTurn: player: {}", playerName);
-        Optional<Player> player = game.getPlayer(playerName);
-        List<Integer> cards = new ArrayList<>();
-        player.map(x -> {
-            if (x.getFirstCard() >= 0) {
-                        cards.add(x.getFirstCard());
-                    }
-            if (x.getSecondCard() >= 0) {
-                        cards.add(x.getSecondCard());
-                    }
-                    //TODO: the arguments maximalBet, amountOfCreditsInPot and activePlayers are dummies argument and need to
-            // be replaced with meaningful value as soon the NokerGame API provides the correspondings methods.
-                    botNotifier.sendYourTurn(x.getName(), minimumChipsForCall, Integer.MAX_VALUE, 100, cards, new ArrayList<PlayerInfo>());
-                    return x;
-                }
-        );
+    public void requestTurn(Player player, long lowerBound, long upperBound, long amountInPot, List<Player> activePlayers) {
+        log.info("requestTurn: player: {}", player.getName());
+        botNotifier.sendTurnRequest(player, lowerBound, upperBound, amountInPot, activePlayers);
     }
 
     @Override
     public void matchStarted(List<Player> players, Player dealer) {
+        botNotifier.broadcastMatchStarted(players, dealer);
         log.info("A new match started");
     }
 
     @Override
-    public void broadcastNextRound() {
-        viewNotifier.sendGameInfo("New round started");
-
+    public void roundStarted(List<Player> players, Player dealer, int roundNumber) {
+        botNotifier.broadcastRoundStarted(players, roundNumber, dealer);
+        log.info("A new round started");
     }
 
     @Override
-    public void broadcastNextMatch() {
-        viewNotifier.sendGameInfo("New match started");
-
+    public void playerFolded(String playerName) {
+        botNotifier.broadcastPlayerFolded(playerName);
+        log.info("Player folded: {}", playerName);
     }
 
     @Override
-    public void broadcastMatchFinished(List<Player> matchWinners, long pot) {
-
+    public void playerSet(String playerName, long amount) {
+        botNotifier.broadcastPlayerSet(playerName, amount);
+        log.info("Player set: {}, {}", playerName, amount);
     }
 
     @Override
-    public void broadcastShowdown(List<Player> players) {
-
+    public void matchFinished(List<String> matchWinners) {
+        botNotifier.broadcastMatchFinished(matchWinners);
+        log.info("Match finished");
     }
 
     @Override
-    public void broadcastGameFinished(Player player) {
-
+    public void showdown(List<Player> players) {
+        botNotifier.broadcastShowdown(players);
+        log.info("Showdown");
     }
 
     @Override
-    public void broadcastPlayerFolded(Player player) {
-        botNotifier.playerFolded(player.getName());
-        log.info("Player folded: {}", player.getName());
-    }
-
-    @Override
-    public void broadcastPlayerSet(Player player, long amount) {
-
+    public void gameFinished(String winnerName) {
+        botNotifier.broadcastGameFinished(winnerName);
+        log.info("Game finished");
     }
 }

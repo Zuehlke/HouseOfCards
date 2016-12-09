@@ -1,11 +1,13 @@
-package com.zuehlke.hoc.rest;
+package com.zuehlke.hoc.rest.server2bot;
+
+import com.zuehlke.hoc.rest.PlayerDTO;
 
 import java.util.List;
 
 /**
  * @author Lukas Hofmaier
  */
-public class RoundStartedMessage {
+public class RoundStartedMessage implements Message {
 
     private int round_number;
     private List<PlayerDTO> round_players;

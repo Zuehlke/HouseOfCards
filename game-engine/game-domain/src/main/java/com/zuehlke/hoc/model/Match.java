@@ -1,7 +1,7 @@
 package com.zuehlke.hoc.model;
 
 import com.zuehlke.hoc.NokerSettings;
-import com.zuehlke.hoc.PlayerNotifierAdapter;
+import com.zuehlke.hoc.NokerGameObserverAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +17,13 @@ public class Match {
 
     private List<Player> matchPlayers;
     private Deck deck;
-    private PlayerNotifierAdapter notifier;
+    private NokerGameObserverAdapter notifier;
 
     private int firstPlayerOfRoundIndex = 0;
     private Round round;
 
 
-    public Match(List<Player> matchPlayers, PlayerNotifierAdapter notifier) {
+    public Match(List<Player> matchPlayers, NokerGameObserverAdapter notifier) {
         init(matchPlayers, notifier);
     }
 
@@ -32,7 +32,7 @@ public class Match {
         this.firstPlayerOfRoundIndex = firstPlayerOfRoundIndex;
     }
 
-    private void init(List<Player> matchPlayers, PlayerNotifierAdapter notifier) {
+    private void init(List<Player> matchPlayers, Deck deck, NokerGameObserverAdapter notifier) {
         this.notifier = notifier;
         this.deck = new NokerDeck();
         this.deck.shuffle();

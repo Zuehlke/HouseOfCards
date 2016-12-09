@@ -1,10 +1,9 @@
 package com.zuehlke.hoc.actors;
 
-import com.zuehlke.hoc.PlayerInfo;
 import com.zuehlke.hoc.model.Player;
-import com.zuehlke.hoc.rest.RegisterMessage;
+import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
+import com.zuehlke.hoc.rest.server2bot.RegistrationInfoMessage;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,6 +25,13 @@ public interface BotNotifier {
     boolean registerBot(RegisterMessage registerMessage);
 
     /**
+     * Sends <code>RegistrationInfoMessage</code> to defined player.
+     *
+     * @param registrationInfoMessage registration confirmation message
+     */
+    void sendRegistrationInfo(RegistrationInfoMessage registrationInfoMessage);
+
+    /**
      * Retrieve the player name given an UUID
      *
      * @param playerUUID UUID set upon registration of the bot.
@@ -34,20 +40,12 @@ public interface BotNotifier {
     Optional<String> getPlayerNameByUuid(UUID playerUUID);
 
     /**
-     * Broadcasts the game start to all bots
-     */
-    void sendMatchStartedMessage(List<PlayerInfo> players, PlayerInfo dealer);
-
-    /**
-     * Notify all bots still in the game about a new round.
+     * Stores URI and port of the bot in order to send messages to the bot given its name.
      *
-     * @param roundPlayers player that haven't send a fold in the last round.
-     * @param roundNumber  number of the round
-     * @param dealer       player in the role "dealer
+     * @param registerMessage the registration message received from the bot.
+     * @return true if the name was not already taken.
      */
-    void sendRoundStarted(List<PlayerInfo> roundPlayers, int roundNumber, PlayerInfo dealer);
-
-    void sendPlayerInfo(Player player);
+    boolean registerBot(RegisterMessage registerMessage);
 
     /**
      * Informs the bot that it's registration message did not pass the paramater validation
@@ -57,17 +55,70 @@ public interface BotNotifier {
      */
     void sendInvalidRegistrationMessage(RegisterMessage registerMessage, String errorMsg);
 
+
+
+
+
+    /**
+     * Broadcasts the game start to all bots
+     */
+    void broadcastMatchStarted(List<Player> players, Player dealer);
+
+
+    /**
+     * Notify all bots still in the game about a new round.
+     *
+     * @param roundPlayers player that haven't send a fold in the last round.
+     * @param roundNumber  number of the round
+     * @param dealer       player in the role "dealer
+     */
+    void broadcastRoundStarted(List<Player> roundPlayers, int roundNumber, Player dealer);
+
+
+    /**
+     * Notify all bots about the player who folded.
+     * @param playerName the player who placed a fold move
+     */
+    void broadcastPlayerFolded(String playerName);
+
+
+    /**
+     * Notify all bots about the player who set.
+     * @param playerName the player who placed the set move
+     * @param amount the amount of chips set
+     */
+    void broadcastPlayerSet(String playerName, long amount);
+
+
     /**
      * Invites a player to send its move and sends him a card.
      *
-     * @param receiver             represented as string
-     * @param minimalBet           minimal bet allowed at the current game state
-     * @param maximalBet           maximal bet allowed at the current game state
-     * @param amountOfCreditsInPot amount of money currently in the pot
-     * @param card                 the card that is send to the player
+     * @param player               receiver of the request
+     * @param lowerBound           minimal bet allowed at the current game state
+     * @param upperBound           maximal bet allowed at the current game state
+     * @param amountInPot          amount of money currently in the pot
      * @param activePlayers        a list of player that haven't send a fold in the current match.
      */
-    void sendYourTurn(String receiver, long minimalBet, int maximalBet, int amountOfCreditsInPot, List<Integer> cards, ArrayList<PlayerInfo> activePlayers);
+    void sendTurnRequest(Player player, long lowerBound, long upperBound, long amountInPot, List<Player> activePlayers);
 
-    void playerFolded(String playerName);
+
+    /**
+     * Notify all the bots about the winners of the current match.
+     * @param matchWinners names of the winners of the current match
+     */
+    void broadcastMatchFinished(List<String> matchWinners);
+
+
+    /**
+     * Notify all the bots about the winner of the game.
+     * @param winnerName the winner of the game
+     */
+    void broadcastGameFinished(String winnerName);
+
+
+    /**
+     * Notify all the bots about the showdown of the current match.
+     * @param players remaining players in showdown phase of the current match
+     */
+    void broadcastShowdown(List<Player> players);
 }

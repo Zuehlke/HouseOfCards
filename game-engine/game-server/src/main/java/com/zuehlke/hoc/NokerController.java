@@ -1,10 +1,9 @@
 package com.zuehlke.hoc;
 
-import com.zuehlke.hoc.actors.DefaultActorSystem;
 import com.zuehlke.hoc.actors.IEngineActor;
-import com.zuehlke.hoc.rest.FoldMessage;
-import com.zuehlke.hoc.rest.RegisterMessage;
-import com.zuehlke.hoc.rest.SetMessage;
+import com.zuehlke.hoc.rest.bot2server.FoldMessage;
+import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
+import com.zuehlke.hoc.rest.bot2server.SetMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +18,10 @@ public class NokerController {
 
     private static final Logger log = LoggerFactory.getLogger(NokerController.class.getName());
 
-    private DefaultActorSystem actorSystem;
+    private ActorService actorSystem;
 
     @Autowired
-    public NokerController(DefaultActorSystem actorSystem) {
+    public NokerController(ActorService actorSystem) {
         this.actorSystem = actorSystem;
     }
 

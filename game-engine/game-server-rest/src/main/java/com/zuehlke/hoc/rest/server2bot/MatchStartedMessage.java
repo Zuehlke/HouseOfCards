@@ -1,4 +1,6 @@
-package com.zuehlke.hoc.rest;
+package com.zuehlke.hoc.rest.server2bot;
+
+import com.zuehlke.hoc.rest.PlayerDTO;
 
 import java.util.List;
 
@@ -7,7 +9,7 @@ import java.util.List;
  *
  * @author Lukas Hofmaier
  */
-public class MatchStartedMessage {
+public class MatchStartedMessage implements Message {
 
     private List<PlayerDTO> match_players;
     private PlayerDTO dealer;

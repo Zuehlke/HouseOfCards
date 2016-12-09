@@ -5,7 +5,8 @@ import akka.actor.Props;
 import akka.actor.UntypedActor;
 import akka.camel.Camel;
 import akka.camel.CamelExtension;
-import com.zuehlke.hoc.rest.*;
+import com.zuehlke.hoc.rest.server2bot.*;
+import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,8 +50,8 @@ class JustCallActor extends UntypedActor {
     @Override
     public void onReceive(Object message) throws Throwable {
 
-        if(message instanceof RegistrationResponse){
-            RegistrationResponse registrationResponse = (RegistrationResponse) message;
+        if(message instanceof RegistrationInfoMessage){
+            RegistrationInfoMessage registrationResponse = (RegistrationInfoMessage) message;
             log.info("received registration response. UUID: {}", registrationResponse.getUUID());
             this.uuid = registrationResponse.getUUID();
 
@@ -63,13 +64,21 @@ class JustCallActor extends UntypedActor {
             RoundStartedMessage roundStartedMessage = (RoundStartedMessage) message;
             log.info("received round_started response. Nr of players {}", roundStartedMessage.getRound_players().size());
         }
-        if(message instanceof YourTurnMessage){
-            YourTurnMessage yourTurnMessage = (YourTurnMessage) message;
-            log.info("received card: {}, minimal bet is {}", yourTurnMessage.getYour_cards().get(0), yourTurnMessage.getMinimum_set());
-            SetMessage setMessage = new SetMessage();
-            setMessage.setAmount(yourTurnMessage.getMinimum_set());
+        if(message instanceof TurnRequestMessage){
+            TurnRequestMessage turnRequestMessage = (TurnRequestMessage) message;
+            log.info("received card: {}, minimal bet is {}", turnRequestMessage.getYour_cards().get(0), turnRequestMessage.getMinimum_set());
+            com.zuehlke.hoc.rest.bot2server.SetMessage setMessage = new com.zuehlke.hoc.rest.bot2server.SetMessage();
+            setMessage.setAmount(turnRequestMessage.getMinimum_set());
             setMessage.setUuid(this.uuid);
             this.httpSender.tell(setMessage, getSelf());
+        }
+        if (message instanceof FoldMessage) {
+            FoldMessage foldMessage = (FoldMessage) message;
+            log.info("received fold_message message. Player {} folded", foldMessage.getPlayerName());
+        }
+        if (message instanceof com.zuehlke.hoc.rest.server2bot.SetMessage) {
+            com.zuehlke.hoc.rest.server2bot.SetMessage setMessage = (com.zuehlke.hoc.rest.server2bot.SetMessage) message;
+            log.info("received set_message message. Player {} set {}", setMessage.getPlayerName(), setMessage.getAmount());
         }
     }
 

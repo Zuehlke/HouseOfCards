@@ -18,7 +18,7 @@ import static org.mockito.Mockito.times;
 public class MatchTest {
 
     private Match match;
-    private PlayerNotifierAdapter notifier;
+    private NokerGameObserverAdapter notifier;
     private List<Player> players;
 
     private Player tobi;
@@ -27,7 +27,7 @@ public class MatchTest {
 
     @Before
     public void setup() {
-        notifier = Mockito.mock(PlayerNotifierAdapter.class);
+        notifier = Mockito.mock(NokerGameObserverAdapter.class);
         players = Utils.loadDummyPlayers();
         players.forEach(player -> player.setChipsStack(10));
         tobi = players.get(0);
@@ -72,8 +72,7 @@ public class MatchTest {
 
         match.playerSet(player, 0);
 
-        Mockito.verify(notifier).broadcastPlayerCalled(player);
-        Mockito.verify(notifier, never()).broadcastPlayerRaised(any(), anyLong());
+        Mockito.verify(notifier).broadcastPlayerSet(tobi, 0);
         Mockito.verify(notifier, never()).broadcastPlayerFolded(player);
     }
 
@@ -86,8 +85,7 @@ public class MatchTest {
 
         match.playerSet(player, raiseAmount);
 
-        Mockito.verify(notifier).broadcastPlayerRaised(player, raiseAmount);
-        Mockito.verify(notifier, never()).broadcastPlayerCalled(player);
+        Mockito.verify(notifier).broadcastPlayerSet(player, raiseAmount);
         Mockito.verify(notifier, never()).broadcastPlayerFolded(player);
 
         assertEquals(NokerSettings.INITIAL_CHIPS-raiseAmount, match.getMatchPlayers().get(0).getChipsStack());
@@ -101,8 +99,7 @@ public class MatchTest {
         match.playerFold(player);
 
         Mockito.verify(notifier).broadcastPlayerFolded(player);
-        Mockito.verify(notifier, never()).broadcastPlayerCalled(player);
-        Mockito.verify(notifier, never()).broadcastPlayerRaised(any(), anyLong());
+        Mockito.verify(notifier, never()).broadcastPlayerSet(any(), anyLong());
     }
 
     @Test
