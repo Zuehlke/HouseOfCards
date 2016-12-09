@@ -46,9 +46,9 @@ public interface NokerGameObserver {
 
     void showdown(List<Player> players);
 
-    void gameFinished(Player player);
+    void gameFinished(String winnerName);
 
-    void playerFolded(Player player);
+    void playerFolded(String player);
 
     void playerSet(String playerName, long amount);
 }

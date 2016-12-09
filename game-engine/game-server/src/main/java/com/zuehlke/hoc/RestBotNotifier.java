@@ -118,7 +118,9 @@ class RestBotNotifier implements BotNotifier {
 
     @Override
     public void broadcastGameFinished(String winnerName) {
-        // TODO: create and send message to bots
+        GameFinishedMessage gameFinishedMessage = new GameFinishedMessage(winnerName);
+        broadcastMessage(gameFinishedMessage, Endpoints.GAME_FINISHED.url);
+        log.info("Broadcast game finished");
     }
 
     @Override

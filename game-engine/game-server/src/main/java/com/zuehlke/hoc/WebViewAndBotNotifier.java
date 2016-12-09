@@ -48,6 +48,18 @@ public class WebViewAndBotNotifier implements NokerGameObserver {
     }
 
     @Override
+    public void playerFolded(String playerName) {
+        botNotifier.broadcastPlayerFolded(playerName);
+        log.info("Player folded: {}", playerName);
+    }
+
+    @Override
+    public void playerSet(String playerName, long amount) {
+        botNotifier.broadcastPlayerSet(playerName, amount);
+        log.info("Player set: {}, {}", playerName, amount);
+    }
+
+    @Override
     public void matchFinished(List<String> matchWinners) {
         botNotifier.broadcastMatchFinished(matchWinners);
         log.info("Match finished");
@@ -60,20 +72,8 @@ public class WebViewAndBotNotifier implements NokerGameObserver {
     }
 
     @Override
-    public void gameFinished(Player winner) {
-        botNotifier.broadcastGameFinished(winner.getName());
+    public void gameFinished(String winnerName) {
+        botNotifier.broadcastGameFinished(winnerName);
         log.info("Game finished");
-    }
-
-    @Override
-    public void playerFolded(Player player) {
-        botNotifier.broadcastPlayerFolded(player.getName());
-        log.info("Player folded: {}", player.getName());
-    }
-
-    @Override
-    public void playerSet(String playerName, long amount) {
-        botNotifier.broadcastPlayerSet(playerName, amount);
-        log.info("Player set: {}, {}", playerName, amount);
     }
 }

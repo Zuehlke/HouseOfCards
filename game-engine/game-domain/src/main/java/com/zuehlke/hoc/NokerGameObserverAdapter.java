@@ -42,7 +42,7 @@ public class NokerGameObserverAdapter {
     }
 
     public void broadcastPlayerFolded(Player player) {
-        notifier.playerFolded(player);
+        notifier.playerFolded(player.getName());
         log.info("Player folded: Player: {}", player.getName());
     }
 
