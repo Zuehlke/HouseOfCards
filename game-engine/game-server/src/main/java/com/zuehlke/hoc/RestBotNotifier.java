@@ -99,10 +99,6 @@ public class RestBotNotifier implements BotNotifier {
     @Override
     public void sendRoundStarted(List<PlayerInfo> roundPlayers, int roundNumber, PlayerInfo dealer) {
 
-        List<PlayerDTO> playerDTOs = roundPlayers.stream().map(x -> new PlayerDTO(x.getName(), x.getChipstack())).collect(Collectors.toList());
-
-        PlayerDTO dealerDto = new PlayerDTO(dealer.getName(), dealer.getChipstack());
-
         roundPlayers.forEach(x -> {
             RegisterMessage registerMessage = bots.get(x.getName());
             if (registerMessage == null) {
@@ -110,13 +106,20 @@ public class RestBotNotifier implements BotNotifier {
             } else {
                 String url = String.format("http://%s:%d/%s", registerMessage.getHostname(), registerMessage.getPort(), Endpoints.ROUND_STARTED.url);
                 log.info("send game start to {}", url);
-                RoundStartedMessage roundStartedMessage = new RoundStartedMessage();
-                roundStartedMessage.setRound_players(playerDTOs);
-                roundStartedMessage.setRound_dealier(dealerDto);
-                roundStartedMessage.setRound_number(roundNumber);
+                RoundStartedMessage roundStartedMessage = buildRoundStartedMessage(roundPlayers, roundNumber, dealer);
                 restTemplate.postForObject(url, roundStartedMessage, String.class);
             }
         });
+    }
+
+    private RoundStartedMessage buildRoundStartedMessage(List<PlayerInfo> roundPlayers, int roundNumber, PlayerInfo dealer) {
+        RoundStartedMessage roundStartedMessage = new RoundStartedMessage();
+        List<PlayerDTO> playerDTOs = roundPlayers.stream().map(x -> new PlayerDTO(x.getName(), x.getChipstack())).collect(Collectors.toList());
+        roundStartedMessage.setRound_players(playerDTOs);
+        PlayerDTO dealerDto = new PlayerDTO(dealer.getName(), dealer.getChipstack());
+        roundStartedMessage.setRound_dealier(dealerDto);
+        roundStartedMessage.setRound_number(roundNumber);
+        return roundStartedMessage;
     }
 
     @Override
