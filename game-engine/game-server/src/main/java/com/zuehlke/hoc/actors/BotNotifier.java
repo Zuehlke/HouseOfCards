@@ -35,7 +35,7 @@ public interface BotNotifier {
     /**
      * Broadcasts the game start to all bots
      */
-    void sendMatchStartedMessage(List<Player> players, Player dealer);
+    void sendMatchStarted(List<Player> players, Player dealer);
 
     /**
      * Notify all bots still in the game about a new round.

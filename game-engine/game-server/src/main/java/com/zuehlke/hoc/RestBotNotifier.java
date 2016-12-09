@@ -69,7 +69,7 @@ public class RestBotNotifier implements BotNotifier {
     }
 
     @Override
-    public void sendMatchStartedMessage(List<Player> players, Player dealer) {
+    public void sendMatchStarted(List<Player> players, Player dealer) {
         log.debug("Send match started event to all bots.");
 
         players.stream().forEach(p -> {
