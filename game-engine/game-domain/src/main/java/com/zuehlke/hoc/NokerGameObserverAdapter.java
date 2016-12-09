@@ -27,8 +27,8 @@ public class NokerGameObserverAdapter {
     }
 
 
-    public void askPlayerForAction(String name, long chipsToCall) {
-        log.info("Ask player for action: Player in turn: {}, Chips to call: {}", name, chipsToCall);
+    public void askPlayerForAction(String name, long minimumToSet, long maximumToSet) {
+        log.info("Ask player for action: Player in turn: {}, Chips to call: {}", name, minimumToSet);
     }
 
     public void sendCardInfoToPlayer(String name, int card) {
@@ -79,7 +79,11 @@ public class NokerGameObserverAdapter {
     // This notification is not defined in the game protocol and must therefore
     // not be delegated to the NokerGameObserver. It can be used for logging the
     // event.
-    public void broadcastGameStarted() {
+    public void broadcastGameStarted(List<Player> gamePlayers) {
         log.info("Game started");
+    }
+
+    public void broadcastPlayerJoined(String playerName) {
+        log.info("Player joined: Player: {}", playerName);
     }
 }

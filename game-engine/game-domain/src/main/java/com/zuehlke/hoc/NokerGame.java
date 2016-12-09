@@ -31,7 +31,7 @@ public class NokerGame {
     private Match currentMatch;
 
 
-    public NokerGame(int expectedNumOfPlayers, NokerGameObserverAdapter notifier) {
+    public NokerGame(int expectedNumOfPlayers, NokerGameObserver notifier) {
         this.notifier = new NokerGameObserverAdapter(notifier);
         if (expectedNumOfPlayers < NokerSettings.MIN_NUM_OF_PLAYERS) {
             throw new InitGameException(

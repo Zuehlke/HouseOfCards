@@ -13,12 +13,12 @@ import java.util.List;
 
 public class PlayerNotifierAdapter {
 
-    private PlayerNotifier notifier;
+    private NokerGameObserver notifier;
 
     private static final Logger log = LoggerFactory.getLogger(PlayerNotifierAdapter.class.getName());
 
 
-    public PlayerNotifierAdapter(PlayerNotifier notifier) {
+    public PlayerNotifierAdapter(NokerGameObserver notifier) {
         this.notifier = notifier;
     }
 
@@ -43,7 +43,6 @@ public class PlayerNotifierAdapter {
     }
 
     public void broadcastPlayerFolded(Player player) {
-        notifier.broadcastPlayerFolded(player);
         log.info("Player folded: Player: {}", player.getName());
     }
 

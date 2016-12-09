@@ -77,7 +77,7 @@ public class NokerGameTest {
 
     @Test
     public void getExistingPlayersByName() {
-        PlayerNotifier playerNotifier = Mockito.mock(PlayerNotifier.class);
+        NokerGameObserver playerNotifier = Mockito.mock(NokerGameObserver.class);
 
         NokerGame game = new NokerGame(3, playerNotifier);
 
@@ -93,7 +93,7 @@ public class NokerGameTest {
 
     @Test(expected = NoSuchElementException.class)
     public void getNonExistringPlayersByName() {
-        PlayerNotifier playerNotifier = Mockito.mock(PlayerNotifier.class);
+        NokerGameObserver playerNotifier = Mockito.mock(NokerGameObserver.class);
 
         NokerGame game = new NokerGame(3, playerNotifier);
 
@@ -109,7 +109,7 @@ public class NokerGameTest {
 
     @Test
     public void gameFinished() {
-        PlayerNotifier playerNotifier = Mockito.mock(PlayerNotifier.class);
+        NokerGameObserver playerNotifier = Mockito.mock(NokerGameObserver.class);
 
         NokerGame game = new NokerGame(2, playerNotifier);
 
