@@ -16,7 +16,8 @@ public class Bets {
     private final Set<Player> calledPlayers = new HashSet<>();
     private final Set<Player> activePlayers = new HashSet<>();
     private long highestBet = 0;
-    private long maxRaiseAmount = NokerSettings.INITIAL_CHIPS - NokerSettings.BLIND;
+
+    private long maximumToSet = NokerSettings.INITIAL_CHIPS - NokerSettings.BLIND;
 
     public long getTotalPot(){
         return bets.values().stream().mapToLong(l -> l).sum();
@@ -29,15 +30,19 @@ public class Bets {
     public void playerFolds(Player player) {
         foldedPlayers.add(player);
         calledPlayers.remove(player);
+        activePlayers.remove(player);
     }
 
-    public void playerCalls(Player player){
+    public long playerCalls(Player player){
         if (!playerHasFolded(player)) {
             requiemsPlayerHasEnoughChipsToCall(player);
-            player.setChipsStack(player.getChipsStack() - neededChipsToCall(player));
-            bets.put(player, highestBet);
+            long neededChipsToCall = neededChipsToCall(player);
+            player.setChipsStack(player.getChipsStack() - neededChipsToCall);
+            bets.put(player, bets.get(player) + neededChipsToCall);
             calledPlayers.add(player);
+            return neededChipsToCall;
         }
+        return 0;
     }
 
     private void requiemsPlayerHasEnoughChipsToCall(Player player) {
@@ -53,15 +58,16 @@ public class Bets {
     public void withdrawBlindFromPlayer(Player player) {
         player.decreaseChipsStack(NokerSettings.BLIND);
         bets.put(player, NokerSettings.BLIND);
+        activePlayers.add(player);
     }
 
     public void playerRaise(Player player, long raiseAmount){
         if (!playerHasFolded(player)) {
             if (isValidRaiseAmount(player, raiseAmount)) {
-                player.setChipsStack(player.getChipsStack() - neededChipsToRaise(player, raiseAmount));
+                long raisedChips = neededChipsToRaise(player, raiseAmount);
+                player.setChipsStack(player.getChipsStack() - raisedChips);
                 bets.put(player, bets.get(player) + raiseAmount);
-                highestBet += raiseAmount;
-                maxRaiseAmount = minChipStackOfActivePlayers();
+                highestBet = raisedChips;
                 calledPlayers.clear();
                 calledPlayers.add(player);
             } else {
@@ -91,7 +97,7 @@ public class Bets {
     }
 
     private boolean isValidRaiseAmount(Player player, long raise) {
-        return raise <= maxRaiseAmount && playerHasEnoughChipsToRaise(player, raise);
+        return raise <= maximumToSet && playerHasEnoughChipsToRaise(player, raise);
     }
 
     private boolean playerHasEnoughChipsToRaise(Player player, long raise) {
@@ -123,8 +129,8 @@ public class Bets {
         return foldedPlayers;
     }
 
-    public long getMaxRaiseAmount() {
-        return maxRaiseAmount;
+    public long getMaximumToSet() {
+        return minChipStackOfActivePlayers();
     }
 
     public long getHighestBet() {

@@ -27,7 +27,7 @@ public class NokerGameObserverAdapter {
 
 
     public void askPlayerForAction(String name, long minimumToSet, long maximumToSet) {
-        log.info("Ask player for action: Player in turn: {}, Chips to call: {}", name, minimumToSet);
+        log.info("Ask player for action: Player in turn: {}, Minimum to set: {}, Maximum to set: {}", name, minimumToSet, maximumToSet);
     }
 
     public void sendCardInfoToPlayer(String name, int card) {
@@ -35,7 +35,7 @@ public class NokerGameObserverAdapter {
     }
 
     public void broadcastMatchStart(Match match) {
-        log.info("Match started");
+        log.info("Match started, Players: {}", match.getMatchPlayers());
     }
 
     public void broadcastPlayerFolded(Player player) {

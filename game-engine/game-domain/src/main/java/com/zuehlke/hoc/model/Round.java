@@ -1,6 +1,7 @@
 package com.zuehlke.hoc.model;
 
 import com.zuehlke.hoc.NokerGameObserverAdapter;
+import com.zuehlke.hoc.NokerSettings;
 
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class Round {
         notifier.broadcastRoundStarts();
         dealCard();
         turnOfPlayer = betIterator.next();
-        notifier.askPlayerForAction(turnOfPlayer.getName(), 0, bets.getMaxRaiseAmount());
+        notifier.askPlayerForAction(turnOfPlayer.getName(), bets.getHighestBet(), bets.getMaximumToSet());
     }
 
     public void dealCard() {
@@ -88,8 +89,8 @@ public class Round {
 
     public void playerCall(Player player){
         if (isPlayersTurn(player)) {
-            bets.playerCalls(player);
-            notifier.broadcastPlayerSet(player, bets.neededChipsToCall(player));
+            long l = bets.playerCalls(player);
+            notifier.broadcastPlayerSet(player, l);
             notifyNextPlayerOrBroadcastFinishEvent();
         }
     }
@@ -110,7 +111,7 @@ public class Round {
     private void notifyNextPlayerOrBroadcastFinishEvent() {
         if(betIterator.hasNext()){
             turnOfPlayer = betIterator.next();
-            notifier.askPlayerForAction(turnOfPlayer.getName(), bets.neededChipsToCall(turnOfPlayer), bets.getMaxRaiseAmount());
+            notifier.askPlayerForAction(turnOfPlayer.getName(), bets.neededChipsToCall(turnOfPlayer), bets.getMaximumToSet());
         } else{
             notifier.broadcastRoundFinished();
         }
