@@ -8,12 +8,16 @@ import com.zuehlke.hoc.rest.bot2server.FoldMessage;
 import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
 import com.zuehlke.hoc.rest.bot2server.SetMessage;
 import com.zuehlke.hoc.rest.server2bot.RegistrationInfoMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
 public class EngineActor implements IEngineActor {
 
     private static final int NUM_OF_GAME_PLAYERS = 2;
+
+    private static final Logger log = LoggerFactory.getLogger(EngineActor.class.getName());
 
     private final NokerGame game;
     private final BotNotifier botNotifier;
@@ -27,11 +31,13 @@ public class EngineActor implements IEngineActor {
     }
 
     public void registerPlayer(RegisterMessage registerMessage) {
+        log.info("registerPlayer");
         //validate register message
         registerMessage.validate().ifPresent(errorMsg ->
                 botNotifier.sendInvalidRegistrationMessage(registerMessage, errorMsg));
 
-        if (this.botRegistrationService.isRegistered(registerMessage.getPlayerName())) {
+        if (!this.botRegistrationService.isRegistered(registerMessage.getPlayerName())) {
+            log.info("add player to game");
             Player newPlayer = game.createPlayer(registerMessage.getPlayerName());
             RegistrationInfoMessage registrationInfoMessage = this.botRegistrationService.register(registerMessage, newPlayer);
             this.botNotifier.sendRegistrationInfo(registrationInfoMessage);

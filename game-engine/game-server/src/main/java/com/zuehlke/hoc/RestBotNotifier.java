@@ -71,7 +71,7 @@ class RestBotNotifier implements BotNotifier {
         Optional<String> urlOptional = this.botRegistrationService.getUriByPlayerName(registrationResponse.getPlayerName());
         urlOptional.ifPresent(url -> {
             log.info("Send ReservationInfo message for player {} to {}", registrationResponse.getPlayerName(), url);
-            this.restTemplate.postForObject(url, registrationResponse, String.class);
+            this.restTemplate.postForObject(url + "/register_info", registrationResponse, String.class);
         });
     }
 
@@ -226,6 +226,7 @@ class RestBotNotifier implements BotNotifier {
         YOUR_TURN("your_turn"),
         SHOWDOWN("showdown"),
         MATCH_FINISHED("match_finished"),
+        REGISTER_INFO("register_info"),
         GAME_FINISHED("game_finished");
 
         private final String url;
