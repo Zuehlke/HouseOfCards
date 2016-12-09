@@ -2,6 +2,7 @@ package com.zuehlke.hoc.actors;
 
 import com.zuehlke.hoc.rest.bot2server.FoldMessage;
 import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
+import com.zuehlke.hoc.rest.bot2server.SetMessage;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -44,7 +45,23 @@ public class EngineActorTest {
         registerPlayer("player2", "localhost", 8081);
 
         engineActor.fold(foldMessage);
-        verify(botNotifierMock).sendPlayerFolded("player1");
+        verify(botNotifierMock).broadcastPlayerFolded("player1");
+    }
+
+    @Test
+    public void set() {
+        SetMessage setMessage = new SetMessage();
+        setMessage.setUuid(UUID.randomUUID());
+        setMessage.setAmount(50);
+
+        when(botNotifierMock.registerBot(any())).thenReturn(true);
+        when(botNotifierMock.getPlayerNameByUuid(any())).thenReturn(Optional.of("player1"));
+
+        registerPlayer("player1", "localhost", 8080);
+        registerPlayer("player2", "localhost", 8081);
+
+        engineActor.setBet(setMessage);
+        verify(botNotifierMock).broadcastPlayerSet("player1", 50);
     }
 
 

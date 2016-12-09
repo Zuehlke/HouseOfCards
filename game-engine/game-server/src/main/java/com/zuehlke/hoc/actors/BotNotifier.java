@@ -44,7 +44,7 @@ public interface BotNotifier {
      * @param roundNumber  number of the round
      * @param dealer       player in the role "dealer
      */
-    void broadcastRoundStarted(List<PlayerInfo> roundPlayers, int roundNumber, PlayerInfo dealer);
+    void broadcastRoundStarted(List<Player> roundPlayers, int roundNumber, Player dealer);
 
     /**
      * Informs the bot that it's registration message did not pass the paramater validation
@@ -56,10 +56,18 @@ public interface BotNotifier {
 
 
     /**
-     * Broadcasts a message to all bots about the player who folded.
+     * Notify all bots about the player who folded.
      * @param playerName the player who placed a fold move
      */
-    void sendPlayerFolded(String playerName);
+    void broadcastPlayerFolded(String playerName);
+
+
+    /**
+     * Notify all bots about the player who set.
+     * @param playerName the player who placed the set move
+     * @param amount the amount of chips set
+     */
+    void broadcastPlayerSet(String playerName, long amount);
 
     /**
      * Invites a player to send its move and sends him a card.

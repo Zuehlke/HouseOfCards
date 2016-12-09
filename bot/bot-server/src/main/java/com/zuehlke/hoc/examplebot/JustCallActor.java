@@ -5,12 +5,8 @@ import akka.actor.Props;
 import akka.actor.UntypedActor;
 import akka.camel.Camel;
 import akka.camel.CamelExtension;
-import com.zuehlke.hoc.rest.bot2server.SetMessage;
-import com.zuehlke.hoc.rest.server2bot.MatchStartedMessage;
+import com.zuehlke.hoc.rest.server2bot.*;
 import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
-import com.zuehlke.hoc.rest.server2bot.RegistrationInfoMessage;
-import com.zuehlke.hoc.rest.server2bot.RoundStartedMessage;
-import com.zuehlke.hoc.rest.server2bot.YourTurnMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,10 +67,18 @@ class JustCallActor extends UntypedActor {
         if(message instanceof YourTurnMessage){
             YourTurnMessage yourTurnMessage = (YourTurnMessage) message;
             log.info("received card: {}, minimal bet is {}", yourTurnMessage.getYour_cards().get(0), yourTurnMessage.getMinimum_set());
-            SetMessage setMessage = new SetMessage();
+            com.zuehlke.hoc.rest.bot2server.SetMessage setMessage = new com.zuehlke.hoc.rest.bot2server.SetMessage();
             setMessage.setAmount(yourTurnMessage.getMinimum_set());
             setMessage.setUuid(this.uuid);
             this.httpSender.tell(setMessage, getSelf());
+        }
+        if (message instanceof FoldMessage) {
+            FoldMessage foldMessage = (FoldMessage) message;
+            log.info("received fold_message message. Player {} folded", foldMessage.getPlayerName());
+        }
+        if (message instanceof com.zuehlke.hoc.rest.server2bot.SetMessage) {
+            com.zuehlke.hoc.rest.server2bot.SetMessage setMessage = (com.zuehlke.hoc.rest.server2bot.SetMessage) message;
+            log.info("received set_message message. Player {} set {}", setMessage.getPlayerName(), setMessage.getAmount());
         }
     }
 

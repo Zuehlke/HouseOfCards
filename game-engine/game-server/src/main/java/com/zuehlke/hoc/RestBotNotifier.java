@@ -4,8 +4,10 @@ import com.zuehlke.hoc.actors.BotNotifier;
 import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.rest.GameEvent;
 import com.zuehlke.hoc.rest.PlayerDTO;
-import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
+import com.zuehlke.hoc.rest.bot2server.*;
 import com.zuehlke.hoc.rest.server2bot.*;
+import com.zuehlke.hoc.rest.server2bot.FoldMessage;
+import com.zuehlke.hoc.rest.server2bot.SetMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +33,6 @@ class RestBotNotifier implements BotNotifier {
         restTemplate = restBuilder.build();
     }
 
-    /**
-     * Stores the URI and the port for a given player to send him game event messages.
-     *
-     * @param registerMessage RegistrationMessage containing name, uri and port of the sender.
-     * @return Returns true if the registrations was successful, otherwise false.
-     */
     @Override
     public boolean registerBot(RegisterMessage registerMessage) {
         String url = String.format("http://%s:%d/register_info", registerMessage.getHostname(), registerMessage.getPort());
@@ -81,7 +77,7 @@ class RestBotNotifier implements BotNotifier {
     }
 
     @Override
-    public void broadcastRoundStarted(List<PlayerInfo> roundPlayers, int roundNumber, PlayerInfo dealer) {
+    public void broadcastRoundStarted(List<Player> roundPlayers, int roundNumber, Player dealer) {
         RoundStartedMessage roundStartedMessage = buildRoundStartedMessage(roundPlayers, roundNumber, dealer);
         broadcastMessage(roundStartedMessage, Endpoints.ROUND_STARTED.url);
     }
@@ -100,11 +96,20 @@ class RestBotNotifier implements BotNotifier {
     }
 
     @Override
-    public void sendPlayerFolded(String playerName) {
+    public void broadcastPlayerFolded(String playerName) {
         FoldMessage foldMessage = new FoldMessage();
         foldMessage.setPlayerName(playerName);
         broadcastMessage(foldMessage, Endpoints.PLAYER_FOLDED.url);
         log.info("Player {} folded - broadcast to all active players", playerName);
+    }
+
+    @Override
+    public void broadcastPlayerSet(String playerName, long amount) {
+        SetMessage setMessage = new SetMessage();
+        setMessage.setPlayerName(playerName);
+        setMessage.setAmount(amount);
+        broadcastMessage(setMessage, Endpoints.PLAYER_SET.url);
+        log.info("Player {} set {} - broadcast to all active players", playerName, amount);
     }
 
     public void sendInvalidRegistrationMessage(RegisterMessage registerMessage, String errorMsg) {
@@ -138,11 +143,11 @@ class RestBotNotifier implements BotNotifier {
         return matchStartedMessage;
     }
 
-    private RoundStartedMessage buildRoundStartedMessage(List<PlayerInfo> roundPlayers, int roundNumber, PlayerInfo dealer) {
+    private RoundStartedMessage buildRoundStartedMessage(List<Player> roundPlayers, int roundNumber, Player dealer) {
         RoundStartedMessage roundStartedMessage = new RoundStartedMessage();
-        List<PlayerDTO> playerDTOs = roundPlayers.stream().map(x -> new PlayerDTO(x.getName(), x.getChipstack())).collect(Collectors.toList());
+        List<PlayerDTO> playerDTOs = roundPlayers.stream().map(x -> new PlayerDTO(x.getName(), x.getChipsStack())).collect(Collectors.toList());
         roundStartedMessage.setRound_players(playerDTOs);
-        PlayerDTO dealerDto = new PlayerDTO(dealer.getName(), dealer.getChipstack());
+        PlayerDTO dealerDto = new PlayerDTO(dealer.getName(), dealer.getChipsStack());
         roundStartedMessage.setRound_dealier(dealerDto);
         roundStartedMessage.setRound_number(roundNumber);
         return roundStartedMessage;

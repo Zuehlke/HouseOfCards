@@ -90,7 +90,7 @@ public class Round {
     public void playerCall(Player player){
         if (isPlayersTurn(player)) {
             bets.playerCalls(player);
-            notifier.broadcastPlayerCalled(player);
+            notifier.broadcastPlayerSet(player, bets.neededChipsToCall(player));
             notifyNextPlayerOrBroadcastFinishEvent();
         }
     }
@@ -98,7 +98,7 @@ public class Round {
     public void playerRaise(Player player, long raiseAmount){
         if (isPlayersTurn(player)) {
             bets.playerRaise(player, raiseAmount);
-            notifier.broadcastPlayerRaised(player, raiseAmount);
+            notifier.broadcastPlayerSet(player, raiseAmount);
             notifyNextPlayerOrBroadcastFinishEvent();
         }
     }
