@@ -1,6 +1,5 @@
 package com.zuehlke.hoc;
 
-import com.zuehlke.hoc.actors.DefaultActorSystem;
 import com.zuehlke.hoc.actors.IEngineActor;
 import com.zuehlke.hoc.rest.bot2server.FoldMessage;
 import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
@@ -19,10 +18,10 @@ public class NokerController {
 
     private static final Logger log = LoggerFactory.getLogger(NokerController.class.getName());
 
-    private DefaultActorSystem actorSystem;
+    private ActorService actorSystem;
 
     @Autowired
-    public NokerController(DefaultActorSystem actorSystem) {
+    public NokerController(ActorService actorSystem) {
         this.actorSystem = actorSystem;
     }
 
