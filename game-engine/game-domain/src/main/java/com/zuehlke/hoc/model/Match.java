@@ -1,6 +1,6 @@
 package com.zuehlke.hoc.model;
 
-import com.zuehlke.hoc.PlayerNotifierAdapter;
+import com.zuehlke.hoc.NokerGameObserverAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,22 +16,22 @@ public class Match {
 
     private List<Player> matchPlayers;
     private Deck deck;
-    private PlayerNotifierAdapter notifier;
+    private NokerGameObserverAdapter notifier;
 
     private int firstPlayerOfRoundIndex = 0;
     private Round round;
 
 
-    public Match(List<Player> matchPlayers, Deck deck, PlayerNotifierAdapter notifier) {
+    public Match(List<Player> matchPlayers, Deck deck, NokerGameObserverAdapter notifier) {
         init(matchPlayers, deck, notifier);
     }
 
-    private Match(List<Player> matchPlayers, int firstPlayerOfRoundIndex, Deck deck, PlayerNotifierAdapter notifier) {
+    private Match(List<Player> matchPlayers, int firstPlayerOfRoundIndex, Deck deck, NokerGameObserverAdapter notifier) {
         init(matchPlayers, deck, notifier);
         this.firstPlayerOfRoundIndex = firstPlayerOfRoundIndex;
     }
 
-    private void init(List<Player> matchPlayers, Deck deck, PlayerNotifierAdapter notifier) {
+    private void init(List<Player> matchPlayers, Deck deck, NokerGameObserverAdapter notifier) {
         this.notifier = notifier;
         this.deck = deck;
         deck.shuffle();

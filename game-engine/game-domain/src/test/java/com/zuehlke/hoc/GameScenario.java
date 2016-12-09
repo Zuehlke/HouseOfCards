@@ -2,7 +2,7 @@ package com.zuehlke.hoc;
 
 
 import com.zuehlke.hoc.model.Player;
-import com.zuehlke.hoc.notification.api.PlayerNotifier;
+import com.zuehlke.hoc.notification.api.NokerGameObserver;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
@@ -20,9 +20,9 @@ public class GameScenario {
     @Test
     public void demo(){
 
-        PlayerNotifier playerNotifier = Mockito.mock(PlayerNotifier.class);
+        NokerGameObserver nokerGameObserver = Mockito.mock(NokerGameObserver.class);
 
-        NokerGame game = new NokerGame(3, playerNotifier);
+        NokerGame game = new NokerGame(3, nokerGameObserver);
 
         Player tobi = game.createPlayer("tobi");
         Player riki = game.createPlayer("riki");
@@ -67,7 +67,7 @@ public class GameScenario {
 
 //    @Test
 //    public void testMatchStarted() {
-//        PlayerNotifier playerNotifier = new PlayerNotifier() {
+//        NokerGameObserver playerNotifier = new NokerGameObserver() {
 //            @Override
 //            public void sendCardInfo(String player, int card) {
 //                log.info("called sendCardInfo");

@@ -4,7 +4,7 @@ import com.zuehlke.hoc.actors.BotNotifier;
 import com.zuehlke.hoc.actors.EngineActor;
 import com.zuehlke.hoc.actors.ViewNotifier;
 import com.zuehlke.hoc.model.Player;
-import com.zuehlke.hoc.notification.api.PlayerNotifier;
+import com.zuehlke.hoc.notification.api.NokerGameObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author Lukas Hofmaier
  */
-public class WebViewAndBotNotifier implements PlayerNotifier {
+public class WebViewAndBotNotifier implements NokerGameObserver {
 
     private final static Logger log = LoggerFactory.getLogger(EngineActor.class);
     private final BotNotifier botNotifier;

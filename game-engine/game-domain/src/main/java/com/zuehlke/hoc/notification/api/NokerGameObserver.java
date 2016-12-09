@@ -5,7 +5,7 @@ import com.zuehlke.hoc.model.Player;
 
 import java.util.List;
 
-public interface PlayerNotifier {
+public interface NokerGameObserver {
 
     /**
      * Is called when a players bet is requested. After this call the <code>NokerGame</code> instance expects

@@ -2,9 +2,8 @@ package com.zuehlke.hoc;
 
 
 import com.zuehlke.hoc.Exceptions.InitGameException;
-import com.zuehlke.hoc.model.NokerDeck;
 import com.zuehlke.hoc.model.Player;
-import com.zuehlke.hoc.notification.api.PlayerNotifier;
+import com.zuehlke.hoc.notification.api.NokerGameObserver;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -39,9 +38,9 @@ public class NokerGameTest {
     @Test
     public void notEnoughPlayersToStartGame() {
         List<Player> players = new ArrayList<>();
-        PlayerNotifier playerNotifier = Mockito.mock(PlayerNotifier.class);
+        NokerGameObserver nokerGameObserver = Mockito.mock(NokerGameObserver.class);
 
-        NokerGame game = new NokerGame(3, playerNotifier);
+        NokerGame game = new NokerGame(3, nokerGameObserver);
 
         Player tobi = game.createPlayer("tobi");
         Player riki = game.createPlayer("riki");
@@ -58,9 +57,9 @@ public class NokerGameTest {
     @Test
     public void addPlayersStartsGame() {
         List<Player> players = new ArrayList<>();
-        PlayerNotifier playerNotifier = Mockito.mock(PlayerNotifier.class);
+        NokerGameObserver nokerGameObserver = Mockito.mock(NokerGameObserver.class);
 
-        NokerGame game = new NokerGame(3, playerNotifier);
+        NokerGame game = new NokerGame(3, nokerGameObserver);
 
         Player tobi = game.createPlayer("tobi");
         Player riki = game.createPlayer("riki");
