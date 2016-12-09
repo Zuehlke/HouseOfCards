@@ -130,28 +130,33 @@ public class RestBotNotifier implements BotNotifier {
         } else {
             String url = String.format("http://%s:%d/%s", uriAndPort.getHostname(), uriAndPort.getPort(), Endpoints.YOUR_TURN.url);
             //create YourTurn message
-            YourTurnMessage yourTurnMessage = new YourTurnMessage();
-            yourTurnMessage.setMinimum_set(minimalBet);
-            yourTurnMessage.setMaximum_set(maximalBet);
-            yourTurnMessage.setPot(amountOfCreditsInPot);
-
-            //set the list of active players in message
-            List<PlayerDTO> playerDTOs = activePlayers.stream().map(x -> new PlayerDTO(x.getName(), x.getChipsStack())).collect(Collectors.toList());
-            yourTurnMessage.setActive_players(playerDTOs);
-
-            //set the cards of the player in message
-            List<Integer> cards = new ArrayList<>();
-            if (player.getFirstCard() >= 0) {
-                cards.add(player.getFirstCard());
-            }
-            if (player.getSecondCard() >= 0) {
-                cards.add(player.getSecondCard());
-            }
-            yourTurnMessage.setYour_cards(cards);
+            YourTurnMessage yourTurnMessage = buildYourTurnMessage(player, minimalBet, maximalBet, amountOfCreditsInPot, activePlayers);
 
             log.info("Request bet or fold from player: {}", player.getName());
             restTemplate.postForObject(url, yourTurnMessage, String.class);
         }
+    }
+
+    private YourTurnMessage buildYourTurnMessage(Player player, long minimalBet, long maximalBet, long amountOfCreditsInPot, List<Player> activePlayers) {
+        YourTurnMessage yourTurnMessage = new YourTurnMessage();
+        yourTurnMessage.setMinimum_set(minimalBet);
+        yourTurnMessage.setMaximum_set(maximalBet);
+        yourTurnMessage.setPot(amountOfCreditsInPot);
+
+        //set the list of active players in message
+        List<PlayerDTO> playerDTOs = activePlayers.stream().map(x -> new PlayerDTO(x.getName(), x.getChipsStack())).collect(Collectors.toList());
+        yourTurnMessage.setActive_players(playerDTOs);
+
+        //set the cards of the player in message
+        List<Integer> cards = new ArrayList<>();
+        if (player.getFirstCard() >= 0) {
+            cards.add(player.getFirstCard());
+        }
+        if (player.getSecondCard() >= 0) {
+            cards.add(player.getSecondCard());
+        }
+        yourTurnMessage.setYour_cards(cards);
+        return yourTurnMessage;
     }
 
     @Override
