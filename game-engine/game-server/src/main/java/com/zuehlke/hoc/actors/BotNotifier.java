@@ -15,14 +15,6 @@ import java.util.List;
 public interface BotNotifier {
 
     /**
-     * Stores URI and port of the bot in order to send messages to the bot given its name.
-     *
-     * @param registerMessage the registration message received from the bot.
-     * @return true if the name was not already taken.
-     */
-    boolean registerBot(RegisterMessage registerMessage);
-
-    /**
      * Sends <code>RegistrationInfoMessage</code> to defined player.
      *
      * @param registrationInfoMessage registration confirmation message

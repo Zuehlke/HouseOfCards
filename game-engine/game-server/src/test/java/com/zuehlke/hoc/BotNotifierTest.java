@@ -2,7 +2,7 @@ package com.zuehlke.hoc;
 
 
 import com.zuehlke.hoc.actors.BotNotifier;
-import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
+import com.zuehlke.hoc.rest.server2bot.RegistrationInfoMessage;
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -27,16 +27,16 @@ public class BotNotifierTest {
 
     }
 
-
     //@Test
     public void registerBot() {
         this.server
                 .expect(requestTo("http://localhost:2222/register_info"))
                 .andRespond(withSuccess("{}", MediaType.APPLICATION_JSON));
-        botNotifier.registerBot(new RegisterMessage()
-                .setPlayerName("Winner Bot")
-                .setHostname("localhost")
-                .setPort(2222));
+
+        RegistrationInfoMessage registrationInfoMessage = new RegistrationInfoMessage();
+        registrationInfoMessage.setPlayerName("Winner Bot");
+        botNotifier.sendRegistrationInfo(registrationInfoMessage);
+
         server.verify();
     }
 }

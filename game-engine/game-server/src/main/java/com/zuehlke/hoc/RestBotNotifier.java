@@ -31,31 +31,6 @@ class RestBotNotifier implements BotNotifier {
         this.botRegistrationService = botRegistrationService;
     }
 
-    @Override
-    public boolean registerBot(RegisterMessage registerMessage) {
-        /*
-        String url = String.format("http://%s:%d/register_info", registerMessage.getHostname(), registerMessage.getPort());
-        RegistrationInfoMessage registrationResponse = new RegistrationInfoMessage();
-        registrationResponse.setPlayerName(registerMessage.getPlayerName());
-        UUID uuid = UUID.randomUUID();
-        uuid2Bot.put(uuid, registerMessage.getPlayerName());
-        registrationResponse.setUUID(uuid);
-        if (bots.containsKey(registerMessage.getPlayerName())) {
-            log.info("Name {} is already taken.", registerMessage.getPlayerName());
-            registrationResponse.setInfoMessage(RegistrationInfoMessage.Result.NAME_ALREADY_TAKEN);
-            log.info("Send NAME_ALREADY_TAKEN message to {}.", url);
-            restTemplate.postForObject(url, registrationResponse, String.class);
-            return false;
-        }
-        log.info("Register bot: " + registerMessage.getPlayerName() + " -> " + registerMessage.getHostname() + ":" + registerMessage.getPort());
-        bots.put(registerMessage.getPlayerName(), registerMessage);
-        log.info("Current bots: " + bots.keySet().stream().reduce("", (a, b) -> a += (b + ", ")));
-        registrationResponse.setInfoMessage(RegistrationInfoMessage.Result.CONFIRMATION);
-        log.info("Send RESERVATION_CONFIRMATION message for team {} to {}", registerMessage.getPlayerName(), url);
-        restTemplate.postForObject(url, registrationResponse, String.class);*/
-        return true;
-    }
-
     public void sendInvalidRegistrationMessage(RegisterMessage registerMessage, String errorMsg) {
         //TODO: errorMsg is not send
         String url = String.format("http://%s:%d/start", registerMessage.getHostname(), registerMessage.getPort());

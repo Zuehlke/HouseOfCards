@@ -11,7 +11,6 @@ import org.junit.Test;
 import java.util.UUID;
 
 import static java.util.Optional.of;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 
@@ -42,11 +41,14 @@ public class EngineActorTest {
         FoldMessage foldMessage = new FoldMessage();
         foldMessage.setUuid(UUID.randomUUID());
 
-        when(botNotifierMock.registerBot(any())).thenReturn(true);
+        //when(botNotifierMock.registerBot(any())).thenReturn(true);
         // when(botNotifierMock.getPlayerNameByUuid(any())).thenReturn(Optional.of("player1"));
 
-        buildRegisterMessage("player1", "localhost", 8080);
-        buildRegisterMessage("player2", "localhost", 8081);
+        RegisterMessage registerMessage1 = buildRegisterMessage("player1", "localhost", 8080);
+        RegisterMessage registerMessage2 = buildRegisterMessage("player2", "localhost", 8081);
+
+        engineActor.registerPlayer(registerMessage1);
+        engineActor.registerPlayer(registerMessage2);
 
         engineActor.fold(foldMessage);
         verify(botNotifierMock).broadcastPlayerFolded("player1");
