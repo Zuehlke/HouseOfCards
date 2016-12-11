@@ -66,7 +66,8 @@ class JustCallActor extends UntypedActor {
         }
         if(message instanceof TurnRequestMessage){
             TurnRequestMessage turnRequestMessage = (TurnRequestMessage) message;
-            log.info("received card: {}, minimal bet is {}", turnRequestMessage.getYour_cards().get(0), turnRequestMessage.getMinimum_set());
+            //log.info("received card: {}, minimal bet is {}", turnRequestMessage.getYour_cards().get(0), turnRequestMessage.getMinimum_set());
+            log.info("received turn request message");
             com.zuehlke.hoc.rest.bot2server.SetMessage setMessage = new com.zuehlke.hoc.rest.bot2server.SetMessage();
             setMessage.setAmount(turnRequestMessage.getMinimum_set());
             setMessage.setUuid(this.uuid);

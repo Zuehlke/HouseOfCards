@@ -52,8 +52,8 @@ public class EngineActor implements IEngineActor {
 
     @Override
     public void setBet(SetMessage setMessage) {
-        Optional<String> playerNameOptional = this.botNotifier.getPlayerNameByUuid(setMessage.getUuid());
-        playerNameOptional.flatMap(this.game::getPlayer).ifPresent(player -> {
+        Optional<Player> playerNameOptional = this.botRegistrationService.getPlayerByUuid(setMessage.getUuid());
+        playerNameOptional.ifPresent(player -> {
             game.playerSet(player, setMessage.getAmount());
         });
     }
