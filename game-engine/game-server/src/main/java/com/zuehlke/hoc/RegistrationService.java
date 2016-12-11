@@ -18,5 +18,11 @@ public interface RegistrationService {
 
     Optional<String> getUriByPlayerName(String playerName);
 
+    /**
+     * Retrieve the player given an UUID
+     *
+     * @param uuid UUID set upon registration of the bot.
+     * @return optional player
+     */
     Optional<Player> getPlayerByUuid(UUID uuid);
 }

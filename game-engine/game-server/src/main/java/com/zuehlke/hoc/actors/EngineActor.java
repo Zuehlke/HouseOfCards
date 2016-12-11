@@ -46,14 +46,14 @@ public class EngineActor implements IEngineActor {
 
     @Override
     public void fold(FoldMessage foldMessage) {
-        Optional<String> playerName = botNotifier.getPlayerNameByUuid(foldMessage.getUuid());
-        playerName.flatMap(game::getPlayer).ifPresent(game::playerFold);
+        Optional<Player> playerOptional = this.botRegistrationService.getPlayerByUuid(foldMessage.getUuid());
+        playerOptional.ifPresent(game::playerFold);
     }
 
     @Override
     public void setBet(SetMessage setMessage) {
-        Optional<Player> playerNameOptional = this.botRegistrationService.getPlayerByUuid(setMessage.getUuid());
-        playerNameOptional.ifPresent(player -> {
+        Optional<Player> playerOptional = this.botRegistrationService.getPlayerByUuid(setMessage.getUuid());
+        playerOptional.ifPresent(player -> {
             game.playerSet(player, setMessage.getAmount());
         });
     }
