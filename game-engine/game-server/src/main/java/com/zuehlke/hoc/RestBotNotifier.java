@@ -16,8 +16,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.Optional.of;
-
 @Component
 class RestBotNotifier implements BotNotifier {
 
@@ -76,12 +74,6 @@ class RestBotNotifier implements BotNotifier {
             this.restTemplate.postForObject("http://" + url + "/register_info", registrationResponse, String.class);
         });
     }
-
-    @Override
-    public Optional<String> getPlayerNameByUuid(UUID playerUUID) {
-        return uuid2Bot.get(playerUUID) != null ? of(uuid2Bot.get(playerUUID)) : Optional.empty();
-    }
-
 
     @Override
     public void broadcastMatchStarted(List<Player> players, Player dealer) {

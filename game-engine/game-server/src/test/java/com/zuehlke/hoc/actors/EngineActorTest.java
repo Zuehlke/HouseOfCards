@@ -1,15 +1,16 @@
 package com.zuehlke.hoc.actors;
 
 import com.zuehlke.hoc.RegistrationService;
+import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.rest.bot2server.FoldMessage;
 import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
 import com.zuehlke.hoc.rest.bot2server.SetMessage;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Optional;
 import java.util.UUID;
 
+import static java.util.Optional.of;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -30,9 +31,9 @@ public class EngineActorTest {
     }
 
     @Test
-    public void registerPlayer() throws Exception {
-        RegisterMessage registerMessage = registerPlayer("hansdampf", "localhost", 8080);
-
+    public void buildRegisterMessage() throws Exception {
+        RegisterMessage registerMessage = buildRegisterMessage("hansdampf", "localhost", 8080);
+        engineActor.registerPlayer(registerMessage);
         verify(botRegistrationService).isRegistered(registerMessage.getPlayerName());
     }
 
@@ -42,10 +43,10 @@ public class EngineActorTest {
         foldMessage.setUuid(UUID.randomUUID());
 
         when(botNotifierMock.registerBot(any())).thenReturn(true);
-        when(botNotifierMock.getPlayerNameByUuid(any())).thenReturn(Optional.of("player1"));
+        // when(botNotifierMock.getPlayerNameByUuid(any())).thenReturn(Optional.of("player1"));
 
-        registerPlayer("player1", "localhost", 8080);
-        registerPlayer("player2", "localhost", 8081);
+        buildRegisterMessage("player1", "localhost", 8080);
+        buildRegisterMessage("player2", "localhost", 8081);
 
         engineActor.fold(foldMessage);
         verify(botNotifierMock).broadcastPlayerFolded("player1");
@@ -54,27 +55,32 @@ public class EngineActorTest {
     @Test
     public void set() {
         SetMessage setMessage = new SetMessage();
-        setMessage.setUuid(UUID.randomUUID());
+        UUID uuid = UUID.randomUUID();
+        setMessage.setUuid(uuid);
         setMessage.setAmount(50);
 
-        when(botNotifierMock.registerBot(any())).thenReturn(true);
-        when(botNotifierMock.getPlayerNameByUuid(any())).thenReturn(Optional.of("player1"));
+        //when(botNotifierMock.registerBot(any())).thenReturn(true);
+        //when(botNotifierMock.getPlayerNameByUuid(any())).thenReturn(Optional.of("player1"));
 
-        registerPlayer("player1", "localhost", 8080);
-        registerPlayer("player2", "localhost", 8081);
+        RegisterMessage registerMessage = buildRegisterMessage("player1", "localhost", 8080);
+        RegisterMessage registerMessage1 = buildRegisterMessage("player2", "localhost", 8081);
 
+        Player player = new Player("player1");
+
+        when(botRegistrationService.getPlayerByUuid(setMessage.getUuid())).thenReturn(of(player));
+
+        engineActor.registerPlayer(registerMessage);
+        engineActor.registerPlayer(registerMessage1);
         engineActor.setBet(setMessage);
-        verify(botNotifierMock).getPlayerNameByUuid(setMessage.getUuid());
+        verify(botRegistrationService).getPlayerByUuid(setMessage.getUuid());
         //verify(botNotifierMock).broadcastPlayerSet("player1", 50);
     }
 
-
-    private RegisterMessage registerPlayer(String playername, String hostname, int port) {
+    private RegisterMessage buildRegisterMessage(String playername, String hostname, int port) {
         RegisterMessage registerMessage = new RegisterMessage();
         registerMessage.setPlayerName(playername);
         registerMessage.setHostname(hostname);
         registerMessage.setPort(port);
-        engineActor.registerPlayer(registerMessage);
         return registerMessage;
     }
 }

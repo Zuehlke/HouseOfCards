@@ -11,7 +11,7 @@
     <logger name="org.apache.camel" level="error"/>
 
     <logger name="org.eclipse.jetty" level="error"/>
-
+    <logger name="org.springframework" level="error"/>
     <root level="debug">
         <appender-ref ref="STDOUT"/>
     </root>

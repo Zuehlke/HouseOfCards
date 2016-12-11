@@ -5,8 +5,6 @@ import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
 import com.zuehlke.hoc.rest.server2bot.RegistrationInfoMessage;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 /**
  * Defines the interface to the bots. Is used by <code>EngineActor</code> to send messages to the bots. Maps names to
@@ -32,14 +30,6 @@ public interface BotNotifier {
     void sendRegistrationInfo(RegistrationInfoMessage registrationInfoMessage);
 
     /**
-     * Retrieve the player name given an UUID
-     *
-     * @param playerUUID UUID set upon registration of the bot.
-     * @return name of the player
-     */
-    Optional<String> getPlayerNameByUuid(UUID playerUUID);
-
-    /**
      * Informs the bot that it's registration message did not pass the paramater validation
      *
      * @param registerMessage the invalid RegisterMessage
@@ -47,12 +37,10 @@ public interface BotNotifier {
      */
     void sendInvalidRegistrationMessage(RegisterMessage registerMessage, String errorMsg);
 
-
     /**
      * Broadcasts the game start to all bots
      */
     void broadcastMatchStarted(List<Player> players, Player dealer);
-
 
     /**
      * Notify all bots still in the game about a new round.
@@ -63,13 +51,11 @@ public interface BotNotifier {
      */
     void broadcastRoundStarted(List<Player> roundPlayers, int roundNumber, Player dealer);
 
-
     /**
      * Notify all bots about the player who folded.
      * @param playerName the player who placed a fold move
      */
     void broadcastPlayerFolded(String playerName);
-
 
     /**
      * Notify all bots about the player who set.
@@ -77,7 +63,6 @@ public interface BotNotifier {
      * @param amount the amount of chips set
      */
     void broadcastPlayerSet(String playerName, long amount);
-
 
     /**
      * Invites a player to send its move and sends him a card.
@@ -90,7 +75,6 @@ public interface BotNotifier {
      */
     void sendTurnRequest(Player player, long lowerBound, long upperBound, long amountInPot, List<Player> activePlayers);
 
-
     /**
      * Notify all the bots about the winners of the current match.
      *
@@ -98,14 +82,12 @@ public interface BotNotifier {
      */
     void broadcastMatchFinished(List<String> matchWinners);
 
-
     /**
      * Notify all the bots about the winner of the game.
      *
      * @param winnerName the winner of the game
      */
     void broadcastGameFinished(String winnerName);
-
 
     /**
      * Notify all the bots about the showdown of the current match.
