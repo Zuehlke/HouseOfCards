@@ -1,7 +1,11 @@
 package com.zuehlke.hoc.examplebot;
 
+import akka.actor.Props;
+import akka.camel.Camel;
+import akka.camel.CamelExtension;
 import com.zuehlke.hoc.rest.bot2server.Bot2ServerMessage;
 import com.zuehlke.hoc.rest.bot2server.FoldMessage;
+import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
 import com.zuehlke.hoc.rest.bot2server.SetMessage;
 import com.zuehlke.hoc.rest.server2bot.TurnRequestMessage;
 import org.slf4j.Logger;
@@ -34,6 +38,23 @@ public class TobiActor extends JustCallActor {
         SetMessage raise85 = new SetMessage();
         raise85.setAmount(85);
         this.moveScript.push(raise85);
+        log.info("initialise");
+    }
+
+    public void preStart(){
+        Camel camel = CamelExtension.get(getContext().system());
+
+        try {
+            camel.context().addRoutes(new CustomRouteBuilder(getSelf(), credentials));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        this.httpSender = getContext().system().actorOf(Props.create(HttpSenderActor.class));
+
+        RegisterMessage registerMessage = createRegisterMessage(credentials);
+        this.httpSender.tell(registerMessage, getSelf());
+        log.info("prestart of tobi");
     }
 
     protected void processTurnRequestMessage(TurnRequestMessage turnRequestMessage) {

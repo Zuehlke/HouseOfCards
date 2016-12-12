@@ -95,7 +95,7 @@ class JustCallActor extends UntypedActor {
         this.httpSender.tell(setMessage, getSelf());
     }
 
-    private static RegisterMessage createRegisterMessage(Credentials credentials) {
+    protected static RegisterMessage createRegisterMessage(Credentials credentials) {
         RegisterMessage registerMessage = new RegisterMessage();
         registerMessage.setPlayerName(credentials.getName());
         registerMessage.setHostname(credentials.getHostname());
