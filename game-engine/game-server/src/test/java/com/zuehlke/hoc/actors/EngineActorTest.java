@@ -30,7 +30,7 @@ public class EngineActorTest {
     }
 
     @Test
-    public void buildRegisterMessage() throws Exception {
+    public void register() throws Exception {
         RegisterMessage registerMessage = buildRegisterMessage("hansdampf", "localhost", 8080);
         engineActor.registerPlayer(registerMessage);
         verify(botRegistrationService).isRegistered(registerMessage.getPlayerName());
