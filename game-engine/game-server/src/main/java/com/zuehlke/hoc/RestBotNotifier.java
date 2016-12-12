@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 class RestBotNotifier implements BotNotifier {
 
     private static final Logger log = LoggerFactory.getLogger(RestBotNotifier.class.getName());
-    private final Map<String, RegisterMessage> bots = new HashMap<>();
-    private final Map<UUID, String> uuid2Bot = new HashMap<>();
     private final RestTemplate restTemplate;
     private final RegistrationService botRegistrationService;
 
@@ -174,19 +172,18 @@ class RestBotNotifier implements BotNotifier {
         return showdownMessage;
     }
 
-
     /**
      * Broadcasts a message to all registered bots.
      *
      * @param message the message containing the information to be transmitted
      */
     private void broadcastMessage(Message message, String endpoint) {
-        bots.values().forEach(bot -> {
-            String url = String.format("http://%s/%s", botRegistrationService.getUriByPlayerName(bot.getPlayerName()), endpoint);
+        botRegistrationService.getAllRegisteredUris().forEach(uri -> {
+            String url = String.format("http://%s/%s", uri, endpoint);
+            log.info("Send broadcast message to {}", url);
             restTemplate.postForObject(url, message, String.class);
         });
     }
-
 
     private enum Endpoints {
         PLAYER_FOLDED("player_folded"),

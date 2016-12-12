@@ -5,10 +5,7 @@ import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
 import com.zuehlke.hoc.rest.server2bot.RegistrationInfoMessage;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static java.util.Optional.of;
 
@@ -50,5 +47,10 @@ public class BotRegistrationService implements RegistrationService {
 
     public Optional<Player> getPlayerByUuid(UUID uuid) {
         return uuid2playerName.get(uuid) != null ? of(uuid2playerName.get(uuid)) : Optional.empty();
+    }
+
+    @Override
+    public Collection<String> getAllRegisteredUris() {
+        return playerName2Uri.values();
     }
 }

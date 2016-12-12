@@ -4,6 +4,7 @@ import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
 import com.zuehlke.hoc.rest.server2bot.RegistrationInfoMessage;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -43,4 +44,11 @@ public interface RegistrationService {
      * @return optional player
      */
     Optional<Player> getPlayerByUuid(UUID uuid);
+
+    /**
+     * Get uris of all registered bots.
+     *
+     * @return collection of all registered uris
+     */
+    Collection<String> getAllRegisteredUris();
 }
