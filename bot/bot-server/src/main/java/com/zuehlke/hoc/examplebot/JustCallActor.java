@@ -81,6 +81,10 @@ class JustCallActor extends UntypedActor {
             com.zuehlke.hoc.rest.server2bot.SetMessage setMessage = (com.zuehlke.hoc.rest.server2bot.SetMessage) message;
             log.info("received set_message message. Player {} set {}", setMessage.getPlayerName(), setMessage.getAmount());
         }
+        if (message instanceof MatchFinishedMessage) {
+            MatchFinishedMessage matchFinishedMessage = (MatchFinishedMessage) message;
+            log.info("received match_finished message. Match winners: {}", matchFinishedMessage.getWinners());
+        }
     }
 
     private static RegisterMessage createRegisterMessage(Credentials credentials) {
