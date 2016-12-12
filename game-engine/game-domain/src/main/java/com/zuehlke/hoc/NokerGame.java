@@ -62,10 +62,8 @@ public class NokerGame {
     public Player createPlayer(String playerName) {
         Player player = new Player(playerName);
         gamePlayers.add(player);
-        log.info("create Player");
 
         if (allPlayersJoined()) {
-            log.info("start game");
             startGame();
         }
         return player;
@@ -76,7 +74,6 @@ public class NokerGame {
     }
 
     private void startGame() {
-        System.out.println("start game");
         notifier.broadcastGameStarted();
         gamePlayers.forEach(player -> player.setChipsStack(INITIAL_CHIPS));
         currentMatch = new Match(gamePlayers, new NokerDeck(), notifier);
