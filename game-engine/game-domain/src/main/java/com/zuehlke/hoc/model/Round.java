@@ -15,25 +15,19 @@ import static com.zuehlke.hoc.model.Round.RoundNumber.SECOND_ROUND;
  */
 public class Round {
 
-    public enum RoundNumber {
-        FIRST_ROUND, SECOND_ROUND;
-    }
-
     private NokerGameObserverAdapter notifier;
     private BetIterator betIterator;
     private Player turnOfPlayer;
     private Deck deck;
-
     private RoundNumber currentRound = FIRST_ROUND;
     private Bets bets;
-
-
     public Round(List<Player> players, int firstPlayerIndex, Deck deck, NokerGameObserverAdapter notifier) {
         this.notifier = notifier;
         this.deck = deck;
         this.bets = new Bets();
         this.betIterator = new BetIterator(players, firstPlayerIndex, bets);
     }
+
 
     private Round() {
     }
@@ -54,7 +48,8 @@ public class Round {
         notifier.broadcastRoundStarts();
         dealCard();
         turnOfPlayer = betIterator.next();
-        notifier.askPlayerForAction(turnOfPlayer.getName(), bets.getHighestBet(), bets.getMaximumToSet());
+
+        notifier.askPlayerForAction(turnOfPlayer, bets.getHighestBet(), bets.getMaximumToSet(), bets.getTotalPot(), bets.getActivePlayers());
     }
 
     public void dealCard() {
@@ -103,7 +98,6 @@ public class Round {
         }
     }
 
-
     private boolean isPlayersTurn(Player player) {
         return player.getName().equals(turnOfPlayer.getName());
     }
@@ -111,9 +105,15 @@ public class Round {
     private void notifyNextPlayerOrBroadcastFinishEvent() {
         if (betIterator.hasNext()) {
             turnOfPlayer = betIterator.next();
-            notifier.askPlayerForAction(turnOfPlayer.getName(), bets.neededChipsToCall(turnOfPlayer), bets.getMaximumToSet());
+            long pot = bets.getTotalPot();
+            bets.getActivePlayers();
+            notifier.askPlayerForAction(turnOfPlayer, bets.neededChipsToCall(turnOfPlayer), bets.getMaximumToSet(), bets.getTotalPot(), bets.getActivePlayers());
         } else {
             notifier.broadcastRoundFinished();
         }
+    }
+
+    public enum RoundNumber {
+        FIRST_ROUND, SECOND_ROUND
     }
 }

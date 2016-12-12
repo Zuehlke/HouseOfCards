@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Handles callbacks from <code>NokerGame</code> instance and forwards notifications to the web view and the registered
@@ -29,7 +30,7 @@ public class WebViewAndBotNotifier implements NokerGameObserver {
     }
 
     @Override
-    public void requestTurn(Player player, long lowerBound, long upperBound, long amountInPot, List<Player> activePlayers) {
+    public void requestTurn(Player player, long lowerBound, long upperBound, long amountInPot, Set<Player> activePlayers) {
         log.info("requestTurn: player: {}", player.getName());
         botNotifier.sendTurnRequest(player, lowerBound, upperBound, amountInPot, activePlayers);
     }

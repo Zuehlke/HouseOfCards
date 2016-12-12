@@ -4,6 +4,7 @@ package com.zuehlke.hoc.notification.api;
 import com.zuehlke.hoc.model.Player;
 
 import java.util.List;
+import java.util.Set;
 
 
 public interface NokerGameObserver {
@@ -19,7 +20,7 @@ public interface NokerGameObserver {
      * @param activePlayers list of player that are still participating in the game and haven't folded in the current
      *                      match.
      */
-    void requestTurn(Player player, long lowerBound, long upperBound, long amountInPot, List<Player> activePlayers);
+    void requestTurn(Player player, long lowerBound, long upperBound, long amountInPot, Set<Player> activePlayers);
 
 
     /**

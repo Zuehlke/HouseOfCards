@@ -1,6 +1,8 @@
 package com.zuehlke.hoc;
 
-import com.zuehlke.hoc.model.*;
+import com.zuehlke.hoc.model.Deck;
+import com.zuehlke.hoc.model.Player;
+import com.zuehlke.hoc.model.Round;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -9,9 +11,8 @@ import org.mockito.Mockito;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
 
 
 public class RoundTest {
@@ -78,7 +79,7 @@ public class RoundTest {
         inOrder.verify(notifier).sendCardInfoToPlayer(tobi.getName(), 1);
         inOrder.verify(notifier).sendCardInfoToPlayer(miki.getName(), 2);
         inOrder.verify(notifier).sendCardInfoToPlayer(riki.getName(), 3);
-        inOrder.verify(notifier).askPlayerForAction(tobi.getName(), 0, 0);
+        inOrder.verify(notifier).askPlayerForAction(tobi, 0, 0, any(), any());
 
         round = round.createSecondRound();
         round.startRound();
@@ -87,7 +88,7 @@ public class RoundTest {
         inOrder.verify(notifier).sendCardInfoToPlayer(tobi.getName(), 4);
         inOrder.verify(notifier).sendCardInfoToPlayer(miki.getName(), 5);
         inOrder.verify(notifier).sendCardInfoToPlayer(riki.getName(), 6);
-        inOrder.verify(notifier).askPlayerForAction(players().get(0).getName(), 0, 0);
+        inOrder.verify(notifier).askPlayerForAction(players().get(0), 0, 0, any(), any());
     }
 
     @Test
@@ -101,16 +102,16 @@ public class RoundTest {
         inOrder.verify(notifier).sendCardInfoToPlayer(tobi.getName(), 1);
         inOrder.verify(notifier).sendCardInfoToPlayer(miki.getName(), 2);
         inOrder.verify(notifier).sendCardInfoToPlayer(riki.getName(), 3);
-        inOrder.verify(notifier).askPlayerForAction(tobi.getName(), 0, 0);
+        inOrder.verify(notifier).askPlayerForAction(tobi, 0, 0, any(), any());
 
         round.playerCall(tobi);
-        inOrder.verify(notifier).askPlayerForAction(miki.getName(), 0, 0);
+        inOrder.verify(notifier).askPlayerForAction(miki, 0, 0, any(), any());
         round.playerCall(miki);
-        inOrder.verify(notifier).askPlayerForAction(riki.getName(), 0, 0);
+        inOrder.verify(notifier).askPlayerForAction(riki, 0, 0, any(), any());
         round.playerRaise(riki, 2);
-        inOrder.verify(notifier).askPlayerForAction(tobi.getName(), 2, 0);
+        inOrder.verify(notifier).askPlayerForAction(tobi, 2, 0, any(), any());
         round.playerCall(tobi);
-        inOrder.verify(notifier).askPlayerForAction(miki.getName(), 2, 0);
+        inOrder.verify(notifier).askPlayerForAction(miki, 2, 0, any(), any());
         round.playerFold(miki);
         inOrder.verify(notifier).broadcastRoundFinished();
 
@@ -130,16 +131,16 @@ public class RoundTest {
         inOrder.verify(notifier).sendCardInfoToPlayer(tobi.getName(), 1);
         inOrder.verify(notifier).sendCardInfoToPlayer(miki.getName(), 2);
         inOrder.verify(notifier).sendCardInfoToPlayer(riki.getName(), 3);
-        inOrder.verify(notifier).askPlayerForAction(tobi.getName(), 0, 0);
+        inOrder.verify(notifier).askPlayerForAction(tobi, 0, 0, any(), any());
 
         round.playerCall(tobi);
-        inOrder.verify(notifier).askPlayerForAction(miki.getName(), 0, 0);
+        inOrder.verify(notifier).askPlayerForAction(miki, 0, 0, any(), any());
         round.playerRaise(miki, 1);
-        inOrder.verify(notifier).askPlayerForAction(riki.getName(), 1, 0);
+        inOrder.verify(notifier).askPlayerForAction(riki, 1, 0, any(), any());
         round.playerRaise(riki, 2);
-        inOrder.verify(notifier).askPlayerForAction(tobi.getName(), 3, 0);
+        inOrder.verify(notifier).askPlayerForAction(tobi, 3, 0, any(), any());
         round.playerFold(tobi);
-        inOrder.verify(notifier).askPlayerForAction(miki.getName(), 2, 0);
+        inOrder.verify(notifier).askPlayerForAction(miki, 2, 0, any(), any());
         round.playerCall(miki);
         inOrder.verify(notifier).broadcastRoundFinished();
 

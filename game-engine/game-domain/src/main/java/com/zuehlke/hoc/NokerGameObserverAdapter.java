@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -24,13 +25,15 @@ public class NokerGameObserverAdapter {
         this.notifier = notifier;
     }
 
+    /*
     public void askPlayerForAction(String name, long chipsToCall) {
         log.info("Ask player for action: Player in turn: {}, Chips to call: {}", name, chipsToCall);
         notifier.requestTurn(new Player(name), chipsToCall, Integer.MAX_VALUE, 20, new ArrayList<>());
     }
-
-    public void askPlayerForAction(String name, long minimumToSet, long maximumToSet) {
-        log.info("Ask player for action: Player in turn: {}, Minimum to set: {}, Maximum to set: {}", name, minimumToSet, maximumToSet);
+*/
+    public void askPlayerForAction(Player player, long minimumToSet, long maximumToSet, long amountInPot, Set<Player> activePlayers) {
+        log.info("Ask player for action: Player in turn: {}, Minimum to set: {}, Maximum to set: {}", player.getName(), minimumToSet, maximumToSet);
+        notifier.requestTurn(player, minimumToSet, maximumToSet, amountInPot, activePlayers);
     }
 
     public void sendCardInfoToPlayer(String name, int card) {

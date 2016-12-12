@@ -42,7 +42,7 @@ public class MatchTest {
 
         Mockito.verify(notifier).broadcastMatchStart(match);
         Mockito.verify(notifier).broadcastRoundStarts();
-        Mockito.verify(notifier).askPlayerForAction(players.get(0).getName(), 0, 0);
+        Mockito.verify(notifier).askPlayerForAction(players.get(0), 0, 0, any(), any());
     }
 
     @Test

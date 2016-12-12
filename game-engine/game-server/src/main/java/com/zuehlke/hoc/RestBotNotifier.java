@@ -69,7 +69,7 @@ class RestBotNotifier implements BotNotifier {
     }
 
     @Override
-    public void sendTurnRequest(Player player, long minimalBet, long maximalBet, long amountOfCreditsInPot, List<Player> activePlayers) {
+    public void sendTurnRequest(Player player, long minimalBet, long maximalBet, long amountOfCreditsInPot, Set<Player> activePlayers) {
         botRegistrationService.getUriByPlayerName(player.getName()).ifPresent(uri -> {
                     String url = String.format("http://%s/%s", uri, Endpoints.YOUR_TURN.url);
                     TurnRequestMessage turnRequestMessage = buildYourTurnMessage(player, minimalBet, maximalBet, amountOfCreditsInPot, activePlayers);
@@ -134,7 +134,7 @@ class RestBotNotifier implements BotNotifier {
         return roundStartedMessage;
     }
 
-    private TurnRequestMessage buildYourTurnMessage(Player player, long minimalBet, long maximalBet, long amountOfCreditsInPot, List<Player> activePlayers) {
+    private TurnRequestMessage buildYourTurnMessage(Player player, long minimalBet, long maximalBet, long amountOfCreditsInPot, Set<Player> activePlayers) {
         TurnRequestMessage turnRequestMessage = new TurnRequestMessage();
         turnRequestMessage.setMinimum_set(minimalBet);
         turnRequestMessage.setMaximum_set(maximalBet);
@@ -143,15 +143,9 @@ class RestBotNotifier implements BotNotifier {
         //set the list of active players in message
         List<PlayerDTO> playerDTOs = activePlayers.stream().map(x -> new PlayerDTO(x.getName(), x.getChipsStack())).collect(Collectors.toList());
         turnRequestMessage.setActive_players(playerDTOs);
-
-        //set the cards of the player in message
         List<Integer> cards = new ArrayList<>();
-        if (player.getFirstCard() >= 0) {
-            cards.add(player.getFirstCard());
-        }
-        if (player.getSecondCard() >= 0) {
-            cards.add(player.getSecondCard());
-        }
+        player.getFirstCard().ifPresent(card -> cards.add(card));
+        player.getSecondCard().ifPresent(card -> cards.add(card));
         turnRequestMessage.setYour_cards(cards);
         return turnRequestMessage;
     }
@@ -161,8 +155,8 @@ class RestBotNotifier implements BotNotifier {
         Map<String, List<Integer>> showDownPlayers = new HashMap<>();
         players.forEach(player -> {
             List<Integer> hand = new ArrayList<>();
-            hand.add(player.getFirstCard());
-            hand.add(player.getSecondCard());
+            player.getFirstCard().ifPresent(card -> hand.add(card));
+            player.getSecondCard().ifPresent(card -> hand.add(card));
             showDownPlayers.put(player.getName(), hand);
         });
         showdownMessage.setPlayers(showDownPlayers);

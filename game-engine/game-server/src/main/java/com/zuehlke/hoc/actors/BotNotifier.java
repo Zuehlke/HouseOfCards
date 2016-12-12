@@ -5,6 +5,7 @@ import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
 import com.zuehlke.hoc.rest.server2bot.RegistrationInfoMessage;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Defines the interface to the bots. Is used by <code>EngineActor</code> to send messages to the bots. Maps names to
@@ -65,7 +66,7 @@ public interface BotNotifier {
      * @param amountInPot          amount of money currently in the pot
      * @param activePlayers        a list of player that haven't send a fold in the current match.
      */
-    void sendTurnRequest(Player player, long lowerBound, long upperBound, long amountInPot, List<Player> activePlayers);
+    void sendTurnRequest(Player player, long lowerBound, long upperBound, long amountInPot, Set<Player> activePlayers);
 
     /**
      * Notify all the bots about the winners of the current match.
