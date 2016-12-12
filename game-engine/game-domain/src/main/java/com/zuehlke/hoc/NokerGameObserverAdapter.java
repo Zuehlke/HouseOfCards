@@ -72,6 +72,7 @@ public class NokerGameObserverAdapter {
     // TODO: adapt the parameters according to the protocol => add the game winner's name
     public void broadcastGameFinished() {
         log.info("Game finished");
+        notifier.gameFinished("");
     }
 
 
