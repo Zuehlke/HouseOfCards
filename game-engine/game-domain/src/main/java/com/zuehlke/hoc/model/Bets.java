@@ -35,12 +35,11 @@ public class Bets {
 
     public long playerCalls(Player player){
         if (!playerHasFolded(player)) {
-            requiemsPlayerHasEnoughChipsToCall(player);
-            long neededChipsToCall = neededChipsToCall(player);
-            player.setChipsStack(player.getChipsStack() - neededChipsToCall);
-            bets.put(player, bets.get(player) + neededChipsToCall);
+            long currentHighestBet = this.highestBet - bets.get(player);
+            player.setChipsStack(player.getChipsStack() - currentHighestBet);
+            bets.put(player, bets.get(player) + currentHighestBet);
             calledPlayers.add(player);
-            return neededChipsToCall;
+            return currentHighestBet;
         }
         return 0;
     }
@@ -64,10 +63,9 @@ public class Bets {
     public void playerRaise(Player player, long raiseAmount){
         if (!playerHasFolded(player)) {
             if (isValidRaiseAmount(player, raiseAmount)) {
-                long raisedChips = neededChipsToRaise(player, raiseAmount);
-                player.setChipsStack(player.getChipsStack() - raisedChips);
+                player.setChipsStack(player.getChipsStack() - raiseAmount);
                 bets.put(player, bets.get(player) + raiseAmount);
-                highestBet = raisedChips;
+                highestBet = bets.get(player);
                 calledPlayers.clear();
                 calledPlayers.add(player);
             } else {

@@ -116,11 +116,15 @@ public class NokerGameTest {
         Player tobi = game.createPlayer("tobi");
         Player riki = game.createPlayer("riki");
 
-        game.playerSet(tobi, 95);
-        game.playerSet(riki, 95);
+        game.playerSet(tobi, 85);
+        game.playerSet(riki, 85);
 
         game.playerFold(tobi);
 
-        System.out.println();
+        game.playerSet(riki, 5);
+        game.playerSet(tobi, 5);
+
+        game.playerSet(riki, 0);
+        game.playerFold(tobi);
     }
 }

@@ -27,6 +27,7 @@ public class NokerGameObserverAdapter {
     public void askPlayerForAction(String name, long chipsToCall) {
         log.info("Ask player for action: Player in turn: {}, Chips to call: {}", name, chipsToCall);
         notifier.requestTurn(new Player(name), chipsToCall, Integer.MAX_VALUE, 20, new ArrayList<>());
+    }
 
     public void askPlayerForAction(String name, long minimumToSet, long maximumToSet) {
         log.info("Ask player for action: Player in turn: {}, Minimum to set: {}, Maximum to set: {}", name, minimumToSet, maximumToSet);

@@ -87,7 +87,7 @@ public class Match {
     }
 
     private boolean isRaiseMove(Player player, long chips) {
-        return chips > round.getBets().neededChipsToCall(player);
+        return chips >= round.getBets().neededChipsToCall(player);
     }
 
     private void ifRoundIsFinishedGoAhead() {
