@@ -36,13 +36,14 @@ public class EngineActorTest {
         verify(botRegistrationService).isRegistered(registerMessage.getPlayerName());
     }
 
-    //@Test
+    @Test
     public void fold() {
         FoldMessage foldMessage = new FoldMessage();
-        foldMessage.setUuid(UUID.randomUUID());
+        UUID uuid = UUID.randomUUID();
+        foldMessage.setUuid(uuid);
 
-        //when(botNotifierMock.registerBot(any())).thenReturn(true);
-        // when(botNotifierMock.getPlayerNameByUuid(any())).thenReturn(Optional.of("player1"));
+        Player player = new Player("player 1");
+        when(botRegistrationService.getPlayerByUuid(uuid)).thenReturn(of(player));
 
         RegisterMessage registerMessage1 = buildRegisterMessage("player1", "localhost", 8080);
         RegisterMessage registerMessage2 = buildRegisterMessage("player2", "localhost", 8081);
@@ -51,7 +52,7 @@ public class EngineActorTest {
         engineActor.registerPlayer(registerMessage2);
 
         engineActor.fold(foldMessage);
-        verify(botNotifierMock).broadcastPlayerFolded("player1");
+        verify(botRegistrationService).getPlayerByUuid(uuid);
     }
 
     @Test
