@@ -23,7 +23,7 @@ public interface RegistrationService {
     RegistrationInfoMessage register(RegisterMessage registerMessage, Player player);
 
     /**
-     * Checks a playerName is already in use
+     * Checks if a player with playerName is already registered.
      *
      * @param playerName player name
      * @return true if the player name is already registered.
@@ -31,7 +31,8 @@ public interface RegistrationService {
     boolean isRegistered(String playerName);
 
     /**
-     * Return URI given a player name
+     * Return URI given a player name.
+     *
      * @param playerName player name of the target.
      * @return URI of of the player.
      */

@@ -10,7 +10,6 @@ run {
 }
 
 dependencies {
-    compile(project(':bot:bot-domain'))
     compile(project(':game-engine:game-server-rest'))
     compile('com.typesafe.akka:akka-actor_2.11:2.4.12')
     compile('org.scala-lang:scala-library:2.11.8')

@@ -18,14 +18,14 @@ import static java.util.Optional.of;
 public class BotRegistrationService implements RegistrationService {
 
     private Map<String, String> playerName2Uri = new HashMap<>();
-    private Map<UUID, Player> uuid2playerName = new HashMap<>();
+    private Map<UUID, Player> uuid2player = new HashMap<>();
+
 
     public RegistrationInfoMessage register(RegisterMessage registerMessage, Player player) {
         String uri = String.format("%s:%d", registerMessage.getHostname(), registerMessage.getPort());
         playerName2Uri.put(registerMessage.getPlayerName(), uri);
         UUID uuid = UUID.randomUUID();
-        uuid2playerName.put(uuid, player);
-
+        uuid2player.put(uuid, player);
         return buildRegistrationInfoMessage(registerMessage, uuid);
     }
 
@@ -46,7 +46,7 @@ public class BotRegistrationService implements RegistrationService {
     }
 
     public Optional<Player> getPlayerByUuid(UUID uuid) {
-        return uuid2playerName.get(uuid) != null ? of(uuid2playerName.get(uuid)) : Optional.empty();
+        return uuid2player.get(uuid) != null ? of(uuid2player.get(uuid)) : Optional.empty();
     }
 
     @Override
