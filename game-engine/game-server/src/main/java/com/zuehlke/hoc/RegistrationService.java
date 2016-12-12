@@ -31,9 +31,9 @@ public interface RegistrationService {
     boolean isRegistered(String playerName);
 
     /**
-     * Return UUID given a player name
+     * Return URI given a player name
      * @param playerName player name of the target.
-     * @return string that represents an uuid.
+     * @return URI of of the player.
      */
     Optional<String> getUriByPlayerName(String playerName);
 
