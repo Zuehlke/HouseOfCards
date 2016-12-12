@@ -43,7 +43,7 @@ public class BetIterator implements Iterator<Player> {
 
     @Override
     public boolean hasNext() {
-        if ((bets.getActivePlayers().size() == 1 && bets.getFoldedPlayers().size() >= 1)/* || players.get(nextPlayerIndex(players, startIndex)).getChipsStack() == 0*/) {
+        if (bets.getActivePlayers().size() == 1 && bets.getFoldedPlayers().size() >= 1) {
             return false;
         }
         for(Player player : players) {
