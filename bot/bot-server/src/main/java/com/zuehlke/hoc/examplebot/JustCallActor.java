@@ -23,10 +23,10 @@ class JustCallActor extends UntypedActor {
 
     private final static Logger log = LoggerFactory.getLogger(JustCallActor.class);
 
-    private ActorRef httpSender;
+    protected ActorRef httpSender;
 
-    private final Credentials credentials;
-    private UUID uuid;
+    protected final Credentials credentials;
+    protected UUID uuid;
 
     public JustCallActor(Credentials credentials){
         this.credentials = credentials;
@@ -66,12 +66,8 @@ class JustCallActor extends UntypedActor {
         }
         if(message instanceof TurnRequestMessage){
             TurnRequestMessage turnRequestMessage = (TurnRequestMessage) message;
-            //log.info("received card: {}, minimal bet is {}", turnRequestMessage.getYour_cards().get(0), turnRequestMessage.getMinimum_set());
             log.info("received turn request message");
-            com.zuehlke.hoc.rest.bot2server.SetMessage setMessage = new com.zuehlke.hoc.rest.bot2server.SetMessage();
-            setMessage.setAmount(turnRequestMessage.getMinimum_set());
-            setMessage.setUuid(this.uuid);
-            this.httpSender.tell(setMessage, getSelf());
+            processTurnRequestMessage(turnRequestMessage);
         }
         if (message instanceof FoldMessage) {
             FoldMessage foldMessage = (FoldMessage) message;
@@ -88,10 +84,18 @@ class JustCallActor extends UntypedActor {
         if (message instanceof GameFinishedMessage) {
             GameFinishedMessage gameFinishedMessage = (GameFinishedMessage) message;
             log.info("received game_finished message. Game winner: {}", gameFinishedMessage.getWinner());
+            getContext().system().terminate();
         }
     }
 
-    private static RegisterMessage createRegisterMessage(Credentials credentials) {
+    protected void processTurnRequestMessage(TurnRequestMessage turnRequestMessage) {
+        com.zuehlke.hoc.rest.bot2server.SetMessage setMessage = new com.zuehlke.hoc.rest.bot2server.SetMessage();
+        setMessage.setAmount(turnRequestMessage.getMinimum_set());
+        setMessage.setUuid(this.uuid);
+        this.httpSender.tell(setMessage, getSelf());
+    }
+
+    protected static RegisterMessage createRegisterMessage(Credentials credentials) {
         RegisterMessage registerMessage = new RegisterMessage();
         registerMessage.setPlayerName(credentials.getName());
         registerMessage.setHostname(credentials.getHostname());

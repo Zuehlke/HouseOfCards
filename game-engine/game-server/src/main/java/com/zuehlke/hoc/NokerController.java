@@ -27,17 +27,14 @@ public class NokerController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public void register(@RequestBody RegisterMessage registerMessage) {
-        log.info("Received register call");
-        log.info("Register message: {}", registerMessage);
-
+        log.info("Received register call. Register message: {}", registerMessage);
         IEngineActor gameEng = actorSystem.getGameEngine();
         gameEng.registerPlayer(registerMessage);
     }
 
     @RequestMapping(value = "/fold", method = RequestMethod.POST)
     public void fold(@RequestBody FoldMessage foldMessage) {
-        log.info("Received fold move");
-        log.info("Fold message: {}", foldMessage);
+        log.info("Received fold message from player with UUID {}", foldMessage.getUuid());
 
         IEngineActor gameEng = actorSystem.getGameEngine();
         gameEng.fold(foldMessage);
@@ -45,7 +42,7 @@ public class NokerController {
 
     @RequestMapping(value = "/set", method = RequestMethod.POST)
     public void set(@RequestBody SetMessage setMessage) {
-        log.info("player with uuid {} called set with an amount of {}", setMessage.getUuid(), setMessage.getAmount());
+        log.info("Received set message from player with {}. Amount was {}.", setMessage.getUuid(), setMessage.getAmount());
         IEngineActor gameEng = actorSystem.getGameEngine();
         gameEng.setBet(setMessage);
     }

@@ -19,14 +19,27 @@ public class BotApplication {
             String uri = args[1];
             String teamname = args[0];
             int port = Integer.parseInt(args[2]);
+            String strategy = args[3];
 
             ActorSystem system = ActorSystem.create();
 
-            Props playerProps = Props.create(JustCallActor.class, new Credentials(teamname, uri, port));
-            system.actorOf(playerProps);
+            Props playerProps;
+            switch (strategy) {
+                case "tobi":
+                    playerProps = Props.create(TobiActor.class, new Credentials(teamname, uri, port));
+                    system.actorOf(playerProps);
+                    break;
+                case "riki":
+                    playerProps = Props.create(RikiBotActor.class, new Credentials(teamname, uri, port));
+                    system.actorOf(playerProps);
+                    break;
+                default:
+                    playerProps = Props.create(JustCallActor.class, new Credentials(teamname, uri, port));
+                    system.actorOf(playerProps);
+            }
 
         } else {
-            System.out.println("Usage: nokerbot <competitionrunner URI> <teamname> <listening port>");
+            System.out.println("Usage: nokerbot <competitionrunner URI> <teamname> <listening port> riki|tobi");
         }
     }
 

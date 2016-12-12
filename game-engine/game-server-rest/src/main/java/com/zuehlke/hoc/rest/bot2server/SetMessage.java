@@ -8,7 +8,7 @@ import java.util.UUID;
  *
  * @author Lukas Hofmaier
  */
-public class SetMessage {
+public class SetMessage implements Bot2ServerMessage {
 
     private UUID uuid;
     private long amount;
