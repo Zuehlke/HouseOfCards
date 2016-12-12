@@ -12,6 +12,8 @@
 
     <logger name="org.eclipse.jetty" level="error"/>
     <logger name="org.springframework" level="error"/>
+    <logger name="com.zuehlke.hoc.actors.EngineActor" level="error"/>
+
     <root level="debug">
         <appender-ref ref="STDOUT"/>
     </root>
