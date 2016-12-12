@@ -44,14 +44,8 @@ public class Bets {
         return 0;
     }
 
-    private void requiemsPlayerHasEnoughChipsToCall(Player player) {
-        if(player.getChipsStack() < neededChipsToCall(player)){
-            throw new RuntimeException("Player has to less chips!");
-        }
-    }
-
     public long neededChipsToCall(Player player) {
-        return highestBet - (getPlayersBet(player) - NokerSettings.BLIND);
+        return (highestBet - NokerSettings.BLIND) - (getPlayersBet(player) - NokerSettings.BLIND);
     }
 
     public void withdrawBlindFromPlayer(Player player) {
@@ -83,17 +77,6 @@ public class Bets {
         }
     }
 
-    private long minChipStackOfActivePlayers() {
-        long minChipStack = NokerSettings.INITIAL_CHIPS - NokerSettings.BLIND;
-        for (Player p : activePlayers) {
-            long playerChipsStack = p.getChipsStack();
-            if (playerChipsStack < minChipStack) {
-                minChipStack = playerChipsStack;
-            }
-        }
-        return minChipStack;
-    }
-
     private boolean isValidRaiseAmount(Player player, long raise) {
         return raise <= maximumToSet && playerHasEnoughChipsToRaise(player, raise);
     }
@@ -101,11 +84,6 @@ public class Bets {
     private boolean playerHasEnoughChipsToRaise(Player player, long raise) {
         return raise <= player.getChipsStack();
     }
-
-    private long neededChipsToRaise(Player player, long raise) {
-        return (getPlayersBet(player) - NokerSettings.BLIND) + raise;
-    }
-
 
     private long getPlayersBet(Player player){
         return bets.containsKey(player) ? bets.get(player) : 0;
@@ -128,7 +106,20 @@ public class Bets {
     }
 
     public long getMaximumToSet() {
-        return minChipStackOfActivePlayers();
+        long minChipStack = NokerSettings.INITIAL_CHIPS - NokerSettings.BLIND;
+        Optional<Player> looserPlayer = Optional.empty();
+        for (Player player : activePlayers) {
+            long playerChipsStack = player.getChipsStack();
+
+            if (playerChipsStack < minChipStack) {
+                looserPlayer = Optional.of(player);
+                minChipStack = playerChipsStack;
+            }
+        }
+        if (looserPlayer.isPresent()) {
+            System.out.println();
+        }
+        return minChipStack;
     }
 
     public long getHighestBet() {

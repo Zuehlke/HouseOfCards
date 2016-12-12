@@ -1,7 +1,6 @@
 package com.zuehlke.hoc.model;
 
 import com.zuehlke.hoc.NokerGameObserverAdapter;
-import com.zuehlke.hoc.NokerSettings;
 
 import java.util.List;
 
@@ -36,9 +35,10 @@ public class Round {
         this.betIterator = new BetIterator(players, firstPlayerIndex, bets);
     }
 
-    private Round(){}
+    private Round() {
+    }
 
-    public Round createSecondRound(){
+    public Round createSecondRound() {
         Round round = new Round();
         round.notifier = notifier;
         round.betIterator = betIterator;
@@ -58,11 +58,11 @@ public class Round {
     }
 
     public void dealCard() {
-        betIterator.getPlayers().forEach(p -> {
-            if(!bets.playerHasFolded(p)) {
+        betIterator.getPlayers().forEach(player -> {
+            if (!bets.playerHasFolded(player)) {
                 int card = deck.drawCard();
-                p.addCard(card);
-                notifier.sendCardInfoToPlayer(p.getName(), card);
+                player.addCard(card);
+                notifier.sendCardInfoToPlayer(player.getName(), card);
             }
         });
     }
@@ -71,7 +71,7 @@ public class Round {
         return currentRound;
     }
 
-    public boolean isFinished(){
+    public boolean isFinished() {
         return !betIterator.hasNext();
     }
 
@@ -79,7 +79,7 @@ public class Round {
         return bets;
     }
 
-    public void playerFold(Player player){
+    public void playerFold(Player player) {
         if (isPlayersTurn(player)) {
             bets.playerFolds(player);
             notifier.broadcastPlayerFolded(player);
@@ -87,7 +87,7 @@ public class Round {
         }
     }
 
-    public void playerCall(Player player){
+    public void playerCall(Player player) {
         if (isPlayersTurn(player)) {
             long l = bets.playerCalls(player);
             notifier.broadcastPlayerSet(player, l);
@@ -95,7 +95,7 @@ public class Round {
         }
     }
 
-    public void playerRaise(Player player, long raiseAmount){
+    public void playerRaise(Player player, long raiseAmount) {
         if (isPlayersTurn(player)) {
             bets.playerRaise(player, raiseAmount);
             notifier.broadcastPlayerSet(player, raiseAmount);
@@ -109,10 +109,10 @@ public class Round {
     }
 
     private void notifyNextPlayerOrBroadcastFinishEvent() {
-        if(betIterator.hasNext()){
+        if (betIterator.hasNext()) {
             turnOfPlayer = betIterator.next();
             notifier.askPlayerForAction(turnOfPlayer.getName(), bets.neededChipsToCall(turnOfPlayer), bets.getMaximumToSet());
-        } else{
+        } else {
             notifier.broadcastRoundFinished();
         }
     }
