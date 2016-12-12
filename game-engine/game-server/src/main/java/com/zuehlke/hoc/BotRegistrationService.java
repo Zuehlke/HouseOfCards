@@ -24,7 +24,7 @@ public class BotRegistrationService implements RegistrationService {
     private Map<UUID, Player> uuid2playerName = new HashMap<>();
 
     public RegistrationInfoMessage register(RegisterMessage registerMessage, Player player) {
-        String uri = String.format("http://%s:%d", registerMessage.getHostname(), registerMessage.getPort());
+        String uri = String.format("%s:%d", registerMessage.getHostname(), registerMessage.getPort());
         playerName2Uri.put(registerMessage.getPlayerName(), uri);
         UUID uuid = UUID.randomUUID();
         uuid2playerName.put(uuid, player);

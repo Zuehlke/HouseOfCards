@@ -43,6 +43,7 @@ public class NokerController {
         gameEng.fold(foldMessage);
     }
 
+    @RequestMapping(value = "/set", method = RequestMethod.POST)
     public void set(@RequestBody SetMessage setMessage) {
         log.info("player with uuid {} called set with an amount of {}", setMessage.getUuid(), setMessage.getAmount());
         IEngineActor gameEng = actorSystem.getGameEngine();

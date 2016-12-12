@@ -5,6 +5,8 @@ import com.zuehlke.hoc.Exceptions.InitGameException;
 import com.zuehlke.hoc.model.Match;
 import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.notification.api.NokerGameObserver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +26,12 @@ import static java.util.Optional.of;
  */
 public class NokerGame {
 
+    private static final Logger log = LoggerFactory.getLogger(NokerGame.class.getName());
     private final NokerGameObserverAdapter notifier;
     private final List<Player> gamePlayers;
 
     private int expectedNumOfPlayers;
     private Match currentMatch;
-
 
     public NokerGame(int expectedNumOfPlayers, NokerGameObserver notifier) {
         this.notifier = new NokerGameObserverAdapter(notifier);

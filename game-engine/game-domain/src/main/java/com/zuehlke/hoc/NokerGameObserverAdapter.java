@@ -20,11 +20,13 @@ public class NokerGameObserverAdapter {
     private static final Logger log = LoggerFactory.getLogger(NokerGameObserverAdapter.class.getName());
     private NokerGameObserver notifier;
 
-
     public NokerGameObserverAdapter(NokerGameObserver notifier) {
         this.notifier = notifier;
     }
 
+    public void askPlayerForAction(String name, long chipsToCall) {
+        log.info("Ask player for action: Player in turn: {}, Chips to call: {}", name, chipsToCall);
+        notifier.requestTurn(new Player(name), chipsToCall, Integer.MAX_VALUE, 20, new ArrayList<>());
 
     public void askPlayerForAction(String name, long minimumToSet, long maximumToSet) {
         log.info("Ask player for action: Player in turn: {}, Minimum to set: {}, Maximum to set: {}", name, minimumToSet, maximumToSet);
@@ -35,7 +37,8 @@ public class NokerGameObserverAdapter {
     }
 
     public void broadcastMatchStart(Match match) {
-        log.info("Match started, Players: {}", match.getMatchPlayers());
+        log.info("Match started");
+        notifier.matchStarted(match.getMatchPlayers(), match.getFirstPlayerInTurn());
     }
 
     public void broadcastPlayerFolded(Player player) {
@@ -51,8 +54,9 @@ public class NokerGameObserverAdapter {
     // TODO: adapt the parameters according to the protocol
     public void broadcastRoundStarts(){
         log.info("Round started");
+        Player player = new Player("hans");
+        notifier.roundStarted(new ArrayList<>(), player, 0);
     }
-
 
     public void broadcastMatchFinished(List<Player> winners) {
         List<String> winnersNames = new ArrayList<>();
@@ -60,7 +64,6 @@ public class NokerGameObserverAdapter {
         notifier.matchFinished(winnersNames);
         log.info("Match finished: Winner(s): {}", winners);
     }
-
 
     // TODO: adapt the parameters according to the protocol => add the game winner's name
     public void broadcastGameFinished() {
