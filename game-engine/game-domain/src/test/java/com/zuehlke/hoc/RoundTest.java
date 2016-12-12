@@ -13,6 +13,8 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.eq;
 
 
 public class RoundTest {
@@ -79,7 +81,7 @@ public class RoundTest {
         inOrder.verify(notifier).sendCardInfoToPlayer(tobi.getName(), 1);
         inOrder.verify(notifier).sendCardInfoToPlayer(miki.getName(), 2);
         inOrder.verify(notifier).sendCardInfoToPlayer(riki.getName(), 3);
-        inOrder.verify(notifier).askPlayerForAction(tobi, 0, 0, any(), any());
+        inOrder.verify(notifier).askPlayerForAction(eq(tobi), anyLong(), anyLong(), anyLong(), any());
 
         round = round.createSecondRound();
         round.startRound();
@@ -88,7 +90,7 @@ public class RoundTest {
         inOrder.verify(notifier).sendCardInfoToPlayer(tobi.getName(), 4);
         inOrder.verify(notifier).sendCardInfoToPlayer(miki.getName(), 5);
         inOrder.verify(notifier).sendCardInfoToPlayer(riki.getName(), 6);
-        inOrder.verify(notifier).askPlayerForAction(players().get(0), 0, 0, any(), any());
+        inOrder.verify(notifier).askPlayerForAction(eq(tobi), anyLong(), anyLong(), anyLong(), any());
     }
 
     @Test
@@ -98,26 +100,27 @@ public class RoundTest {
         round.startRound();
 
         InOrder inOrder = Mockito.inOrder(notifier);
+        players.forEach(player -> round.getBets().withdrawBlindFromPlayer(player));
         inOrder.verify(notifier).broadcastRoundStarts();
         inOrder.verify(notifier).sendCardInfoToPlayer(tobi.getName(), 1);
         inOrder.verify(notifier).sendCardInfoToPlayer(miki.getName(), 2);
         inOrder.verify(notifier).sendCardInfoToPlayer(riki.getName(), 3);
-        inOrder.verify(notifier).askPlayerForAction(tobi, 0, 0, any(), any());
+        inOrder.verify(notifier).askPlayerForAction(eq(tobi), anyLong(), anyLong(), anyLong(), any());
 
         round.playerCall(tobi);
-        inOrder.verify(notifier).askPlayerForAction(miki, 0, 0, any(), any());
+        inOrder.verify(notifier).askPlayerForAction(eq(miki), anyLong(), anyLong(), anyLong(), any());
         round.playerCall(miki);
-        inOrder.verify(notifier).askPlayerForAction(riki, 0, 0, any(), any());
+        inOrder.verify(notifier).askPlayerForAction(eq(riki), anyLong(), anyLong(), anyLong(), any());
         round.playerRaise(riki, 2);
-        inOrder.verify(notifier).askPlayerForAction(tobi, 2, 0, any(), any());
+        inOrder.verify(notifier).askPlayerForAction(eq(tobi), anyLong(), anyLong(), anyLong(), any());
         round.playerCall(tobi);
-        inOrder.verify(notifier).askPlayerForAction(miki, 2, 0, any(), any());
+        inOrder.verify(notifier).askPlayerForAction(eq(miki), anyLong(), anyLong(), anyLong(), any());
         round.playerFold(miki);
         inOrder.verify(notifier).broadcastRoundFinished();
 
-        assertEquals(3, tobi.getChipsStack());
-        assertEquals(10, miki.getChipsStack());
-        assertEquals(13, riki.getChipsStack());
+        assertEquals(43, tobi.getChipsStack());
+        assertEquals(100, miki.getChipsStack());
+        assertEquals(143, riki.getChipsStack());
     }
 
     @Test
@@ -127,33 +130,34 @@ public class RoundTest {
         round.startRound();
 
         InOrder inOrder = Mockito.inOrder(notifier);
+        players.forEach(player -> round.getBets().withdrawBlindFromPlayer(player));
         inOrder.verify(notifier).broadcastRoundStarts();
         inOrder.verify(notifier).sendCardInfoToPlayer(tobi.getName(), 1);
         inOrder.verify(notifier).sendCardInfoToPlayer(miki.getName(), 2);
         inOrder.verify(notifier).sendCardInfoToPlayer(riki.getName(), 3);
-        inOrder.verify(notifier).askPlayerForAction(tobi, 0, 0, any(), any());
+        inOrder.verify(notifier).askPlayerForAction(eq(tobi), anyLong(), anyLong(), anyLong(), any());
 
         round.playerCall(tobi);
-        inOrder.verify(notifier).askPlayerForAction(miki, 0, 0, any(), any());
+        inOrder.verify(notifier).askPlayerForAction(eq(miki), anyLong(), anyLong(), anyLong(), any());
         round.playerRaise(miki, 1);
-        inOrder.verify(notifier).askPlayerForAction(riki, 1, 0, any(), any());
+        inOrder.verify(notifier).askPlayerForAction(eq(riki), anyLong(), anyLong(), anyLong(), any());
         round.playerRaise(riki, 2);
-        inOrder.verify(notifier).askPlayerForAction(tobi, 3, 0, any(), any());
+        inOrder.verify(notifier).askPlayerForAction(eq(tobi), anyLong(), anyLong(), anyLong(), any());
         round.playerFold(tobi);
-        inOrder.verify(notifier).askPlayerForAction(miki, 2, 0, any(), any());
+        inOrder.verify(notifier).askPlayerForAction(eq(miki), anyLong(), anyLong(), anyLong(), any());
         round.playerCall(miki);
         inOrder.verify(notifier).broadcastRoundFinished();
 
-        assertEquals(5, tobi.getChipsStack());
-        assertEquals(7, miki.getChipsStack());
-        assertEquals(12, riki.getChipsStack());
+        assertEquals(50, tobi.getChipsStack());
+        assertEquals(93, miki.getChipsStack());
+        assertEquals(143, riki.getChipsStack());
     }
 
     private List<Player> players() {
         List<Player> players = Arrays.asList(new Player("Tobi"), new Player("Miki"), new Player("Riki"));
-        players.get(0).setChipsStack(5);
-        players.get(1).setChipsStack(10);
-        players.get(2).setChipsStack(15);
+        players.get(0).setChipsStack(50);
+        players.get(1).setChipsStack(100);
+        players.get(2).setChipsStack(150);
         return players;
     }
 
