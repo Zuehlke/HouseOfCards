@@ -34,17 +34,18 @@ public class BetsTest {
         miki = players.get(1);
         riki = players.get(2);
 
-        tobi.setChipsStack(5);
-        miki.setChipsStack(10);
-        riki.setChipsStack(15);
+        tobi.setChipsStack(50);
+        miki.setChipsStack(100);
+        riki.setChipsStack(150);
     }
 
 
     @Test
     public void playerFolds(){
+        bets.withdrawBlindFromPlayer(tobi);
         bets.playerFolds(tobi);
-        assertEquals(5, tobi.getChipsStack());
-        assertEquals(0, bets.getTotalPot());
+        assertEquals(45, tobi.getChipsStack());
+        assertEquals(5, bets.getTotalPot());
     }
 
 
@@ -52,24 +53,28 @@ public class BetsTest {
     // player has raised before, therefore the amount of chips to call is 0.
     @Test
     public void playerChecks(){
+        bets.withdrawBlindFromPlayer(tobi);
         bets.playerCalls(tobi);
-        assertEquals(5, tobi.getChipsStack());
+        assertEquals(50, tobi.getChipsStack());
         assertEquals(0, bets.getTotalPot());
     }
 
     @Test
     public void firstRaise(){
+        bets.withdrawBlindFromPlayer(tobi);
         bets.playerRaise(tobi, 2);
-        assertEquals(3, tobi.getChipsStack());
-        assertEquals(2, bets.getTotalPot());
+        assertEquals(43, tobi.getChipsStack());
+        assertEquals(7, bets.getTotalPot());
     }
 
     @Test
     public void callAfterRaise(){
+        bets.withdrawBlindFromPlayer(tobi);
+        bets.withdrawBlindFromPlayer(miki);
         bets.playerRaise(tobi, 2);
         bets.playerCalls(miki);
-        assertEquals(8, miki.getChipsStack());
-        assertEquals(4, bets.getTotalPot());
+        assertEquals(93, miki.getChipsStack());
+        assertEquals(14, bets.getTotalPot());
     }
 
     // TODO: rewrite test
@@ -82,15 +87,21 @@ public class BetsTest {
 
     @Test
     public void reRaise(){
+        bets.withdrawBlindFromPlayer(tobi);
+        bets.withdrawBlindFromPlayer(miki);
         bets.playerRaise(tobi, 2);
         bets.playerRaise(miki, 2);
-        assertEquals(3, tobi.getChipsStack());
-        assertEquals(6, miki.getChipsStack());
-        assertEquals(6, bets.getTotalPot());
+        assertEquals(43, tobi.getChipsStack());
+        assertEquals(93, miki.getChipsStack());
+        assertEquals(14, bets.getTotalPot());
     }
 
     @Test
     public void playerHasCalled(){
+        bets.withdrawBlindFromPlayer(miki);
+        bets.withdrawBlindFromPlayer(tobi);
+        bets.withdrawBlindFromPlayer(riki);
+
         bets.playerCalls(tobi);
         assertTrue(bets.playerHasCalled(tobi));
 
@@ -102,6 +113,9 @@ public class BetsTest {
 
     @Test
     public void playerHasFolded(){
+        bets.withdrawBlindFromPlayer(miki);
+        bets.withdrawBlindFromPlayer(tobi);
+        bets.withdrawBlindFromPlayer(riki);
 
         bets.playerFolds(miki);
         assertTrue(bets.playerHasFolded(miki));
@@ -115,6 +129,9 @@ public class BetsTest {
 
     @Test
     public void startNextBetRound(){
+        bets.withdrawBlindFromPlayer(miki);
+        bets.withdrawBlindFromPlayer(tobi);
+        bets.withdrawBlindFromPlayer(riki);
 
         bets.playerFolds(miki);
         bets.playerCalls(tobi);
