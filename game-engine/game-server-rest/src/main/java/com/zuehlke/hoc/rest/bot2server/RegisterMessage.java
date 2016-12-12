@@ -62,6 +62,10 @@ public class RegisterMessage {
                 this.getClass().getSimpleName(), getPlayerName(), getHostname(), getPort());
     }
 
+    /**
+     * Check if the message is valid.
+     * @return empty Optional if message valid, else error message
+     */
     public Optional<String> validate() {
         Optional<String> returnMessage = Optional.empty();
         if (playerName == null || playerName.isEmpty()) {

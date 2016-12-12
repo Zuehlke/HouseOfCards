@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 class RestBotNotifier implements BotNotifier {
 
     private static final Logger log = LoggerFactory.getLogger(RestBotNotifier.class.getName());
-    private final Map<String, RegisterMessage> bots = new HashMap<>();
-    private final Map<UUID, String> uuid2Bot = new HashMap<>();
     private final RestTemplate restTemplate;
     private final RegistrationService botRegistrationService;
 
@@ -73,12 +71,9 @@ class RestBotNotifier implements BotNotifier {
     @Override
     public void sendTurnRequest(Player player, long minimalBet, long maximalBet, long amountOfCreditsInPot, List<Player> activePlayers) {
         botRegistrationService.getUriByPlayerName(player.getName()).ifPresent(uri -> {
-                    log.info("target uri: {}", uri);
-                    log.info("endpoint is: {}", Endpoints.YOUR_TURN);
                     String url = String.format("http://%s/%s", uri, Endpoints.YOUR_TURN.url);
-                    log.info("url is {}", url);
                     TurnRequestMessage turnRequestMessage = buildYourTurnMessage(player, minimalBet, maximalBet, amountOfCreditsInPot, activePlayers);
-                    log.info("Request bet or fold from player: {}", player.getName());
+            log.info("Request bet or fold from player: {} with URL {}", player.getName(), url);
                     restTemplate.postForObject(url, turnRequestMessage, String.class);
                 }
         );
@@ -115,7 +110,7 @@ class RestBotNotifier implements BotNotifier {
     public void broadcastPlayerSet(String playerName, long amount) {
         SetMessage setMessage = new SetMessage(playerName, amount);
         broadcastMessage(setMessage, Endpoints.PLAYER_SET.url);
-        log.info("Broadcast layer {} set {}", playerName, amount);
+        log.info("Broadcast player {} set {}", playerName, amount);
     }
 
 
@@ -174,19 +169,17 @@ class RestBotNotifier implements BotNotifier {
         return showdownMessage;
     }
 
-
     /**
      * Broadcasts a message to all registered bots.
      *
      * @param message the message containing the information to be transmitted
      */
     private void broadcastMessage(Message message, String endpoint) {
-        bots.values().forEach(bot -> {
-            String url = String.format("http://%s/%s", botRegistrationService.getUriByPlayerName(bot.getPlayerName()), endpoint);
+        botRegistrationService.getAllRegisteredUris().forEach(uri -> {
+            String url = String.format("http://%s/%s", uri, endpoint);
             restTemplate.postForObject(url, message, String.class);
         });
     }
-
 
     private enum Endpoints {
         PLAYER_FOLDED("player_folded"),

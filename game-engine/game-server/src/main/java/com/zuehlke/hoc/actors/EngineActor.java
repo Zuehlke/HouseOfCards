@@ -31,16 +31,14 @@ public class EngineActor implements IEngineActor {
     }
 
     public void registerPlayer(RegisterMessage registerMessage) {
-        log.info("registerPlayer");
-        //validate register message
-        registerMessage.validate().ifPresent(errorMsg ->
-                botNotifier.sendInvalidRegistrationMessage(registerMessage, errorMsg));
-
-        if (!this.botRegistrationService.isRegistered(registerMessage.getPlayerName())) {
-            log.info("add player to game");
+        Optional<String> validationResult = validateRegistrationMessage(registerMessage);
+        if (validationResult.isPresent()) {
+            botNotifier.sendInvalidRegistrationMessage(registerMessage, validationResult.get());
+        } else {
             Player newPlayer = game.createPlayer(registerMessage.getPlayerName());
             RegistrationInfoMessage registrationInfoMessage = this.botRegistrationService.register(registerMessage, newPlayer);
             this.botNotifier.sendRegistrationInfo(registrationInfoMessage);
+            log.info("Registered player {}", registerMessage.getPlayerName());
         }
     }
 
@@ -56,5 +54,27 @@ public class EngineActor implements IEngineActor {
         playerOptional.ifPresent(player -> {
             game.playerSet(player, setMessage.getAmount());
         });
+    }
+
+
+    /**
+     * Validates a registration message.
+     *
+     * @param registerMessage the received registration message from a player
+     * @return empty Optional if successful, else error message
+     */
+    private Optional<String> validateRegistrationMessage(RegisterMessage registerMessage) {
+        Optional<String> validationResult;
+        String playerName = registerMessage.getPlayerName();
+
+        validationResult = registerMessage.validate();
+        if (validationResult.isPresent()) {
+            return validationResult;
+        }
+
+        if (botRegistrationService.isRegistered(playerName)) {
+            validationResult = Optional.of(String.format("Error: Player with name %s already registered", playerName));
+        }
+        return validationResult;
     }
 }

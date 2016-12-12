@@ -6,6 +6,8 @@ import akka.http.javadsl.model.ContentTypes;
 import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.model.HttpResponse;
 import akka.stream.ActorMaterializer;
+import akka.stream.impl.fusing.Fold;
+import com.zuehlke.hoc.rest.bot2server.FoldMessage;
 import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
 import com.zuehlke.hoc.rest.bot2server.SetMessage;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -47,6 +49,17 @@ class HttpSenderActor extends UntypedActor {
             ActorMaterializer materializer = ActorMaterializer.create(getContext().system());
             log.info("Send set message: Amount: {}, UUID: {}", setMessage.getAmount(), setMessage.getUuid());
             HttpRequest request = HttpRequest.POST("http://localhost:8080/noker/set").withEntity(ContentTypes.APPLICATION_JSON, serializedSetMessage);
+            CompletionStage<HttpResponse> completionStage = Http.get(getContext().system())
+                    .singleRequest(request, materializer);
+            completionStage.thenAccept(x -> log.info("status code was: {}" ,x.status().toString()));
+        }
+
+        if(message instanceof FoldMessage){
+            FoldMessage foldMessage = (FoldMessage)message;
+            String serializedFoldMessage = objectMapper.writeValueAsString(foldMessage);
+            ActorMaterializer materializer = ActorMaterializer.create(getContext().system());
+            log.info("Send fold message:  UUID: {}", foldMessage.getUuid());
+            HttpRequest request = HttpRequest.POST("http://localhost:8080/noker/fold").withEntity(ContentTypes.APPLICATION_JSON, serializedFoldMessage);
             CompletionStage<HttpResponse> completionStage = Http.get(getContext().system())
                     .singleRequest(request, materializer);
             completionStage.thenAccept(x -> log.info("status code was: {}" ,x.status().toString()));

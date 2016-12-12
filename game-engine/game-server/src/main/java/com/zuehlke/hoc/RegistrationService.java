@@ -4,6 +4,7 @@ import com.zuehlke.hoc.model.Player;
 import com.zuehlke.hoc.rest.bot2server.RegisterMessage;
 import com.zuehlke.hoc.rest.server2bot.RegistrationInfoMessage;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,7 +23,7 @@ public interface RegistrationService {
     RegistrationInfoMessage register(RegisterMessage registerMessage, Player player);
 
     /**
-     * Checks a playerName is already in use
+     * Checks if a player with playerName is already registered.
      *
      * @param playerName player name
      * @return true if the player name is already registered.
@@ -30,9 +31,10 @@ public interface RegistrationService {
     boolean isRegistered(String playerName);
 
     /**
-     * Return UUID given a player name
+     * Return URI given a player name.
+     *
      * @param playerName player name of the target.
-     * @return string that represents an uuid.
+     * @return URI of of the player.
      */
     Optional<String> getUriByPlayerName(String playerName);
 
@@ -43,4 +45,11 @@ public interface RegistrationService {
      * @return optional player
      */
     Optional<Player> getPlayerByUuid(UUID uuid);
+
+    /**
+     * Get uris of all registered bots.
+     *
+     * @return collection of all registered uris
+     */
+    Collection<String> getAllRegisteredUris();
 }
