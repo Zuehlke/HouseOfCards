@@ -85,6 +85,10 @@ class JustCallActor extends UntypedActor {
             MatchFinishedMessage matchFinishedMessage = (MatchFinishedMessage) message;
             log.info("received match_finished message. Match winners: {}", matchFinishedMessage.getWinners());
         }
+        if (message instanceof GameFinishedMessage) {
+            GameFinishedMessage gameFinishedMessage = (GameFinishedMessage) message;
+            log.info("received game_finished message. Game winner: {}", gameFinishedMessage.getWinner());
+        }
     }
 
     private static RegisterMessage createRegisterMessage(Credentials credentials) {

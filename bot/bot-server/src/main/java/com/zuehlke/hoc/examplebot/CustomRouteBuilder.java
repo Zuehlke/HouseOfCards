@@ -33,8 +33,7 @@ public class CustomRouteBuilder extends RouteBuilder{
         rest("/player_folded").post().to("direct:playerfolded");
         rest("/player_set").post().to("direct:playerset");
         rest("/match_finished").post().to("direct:matchfinished");
-
-        // TODO: implement missing endpoints
+        rest("/game_finished").post().to("direct:gamefinished");
 
         restConfiguration().component("jetty").port(this.listeningPort);
 
@@ -45,5 +44,6 @@ public class CustomRouteBuilder extends RouteBuilder{
         from("direct:playerfolded").process(new PlayerFoldedProcessor(this.httpReceiverActorRef)).transform().constant("");
         from("direct:playerset").process(new PlayerSetProcessor(this.httpReceiverActorRef)).transform().constant("");
         from("direct:matchfinished").process(new MatchFinishedProcessor(this.httpReceiverActorRef)).transform().constant("");
+        from("direct:gamefinished").process(new GameFinishedProcessor(this.httpReceiverActorRef)).transform().constant("");
     }
 }
