@@ -7,7 +7,7 @@ HTTP.
 
 Running games where your bot is battling can be viewed live in a browser which makes cheering more thrilling.
 
-This [documentation](https://zuehlke.github.io/HouseOfCards/) contains progress and important technical details.
+This project [documentation](https://zuehlke.github.io/HouseOfCards/) contains the progress and important technical details.
 
 <p align="center">
   <img src="docs/images/hoc_logo.png" width="300">

@@ -1,6 +1,6 @@
 # Table of content
 
-* [Noker rules](docs/noker_rules.md)
+* [Noker](docs/noker.md)
 * [Architecture overview](docs/architecture_overview.md)
 * [Protocol for Bots](docs/noker_protocol.md)
     * [Registration messages](docs/registration_messages.md)
