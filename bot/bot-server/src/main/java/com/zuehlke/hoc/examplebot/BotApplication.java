@@ -19,7 +19,11 @@ public class BotApplication {
             String uri = args[1];
             String teamname = args[0];
             int port = Integer.parseInt(args[2]);
-            String strategy = args[3];
+
+            String strategy = "";
+            if(args.length > 3) {
+                strategy = args[3];
+            }
 
             ActorSystem system = ActorSystem.create();
 
@@ -34,6 +38,7 @@ public class BotApplication {
                     system.actorOf(playerProps);
                     break;
                 default:
+                    System.out.println("Start a bot that does always call");
                     playerProps = Props.create(JustCallActor.class, new Credentials(teamname, uri, port));
                     system.actorOf(playerProps);
             }
