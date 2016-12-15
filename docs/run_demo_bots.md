@@ -17,6 +17,6 @@ Start the game-engine with the following commands:
 As soon as the game-engine receives two registrations it will  start the game.
 Upon receiving the YourTurn messages both bots will send a SetMessage with the smallest possible bet.
 
-In order to start the bots with a defined list of predefined moves, pass the string "tobi" or "riki" as fourth argument (E.g. teamA localhost 8081 tobi). It is important to start the bot with the strategy "tobi" before a bot with stragegy "riki" is started. Otherwise the game will not be finished an the pots run out of scripted moves.
+In order to start the bots with a defined list of predefined moves, pass the string "tobi" or "riki" as fourth argument (E.g. teamA localhost 8081 tobi). It is important to first start the bot with the strategy "tobi" and then start a bot with stragegy "riki". Otherwise the bots run out of scripted moves.
 
 ![](images/arguments-test-bot.png)
