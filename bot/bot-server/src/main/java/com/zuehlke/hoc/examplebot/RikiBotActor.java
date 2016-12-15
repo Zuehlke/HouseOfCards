@@ -19,8 +19,8 @@ public class RikiBotActor extends JustCallActor {
 
     private Stack<Bot2ServerMessage> moveScript = new Stack<>();
 
-    public RikiBotActor(Credentials credentials){
-       super(credentials);
+    public RikiBotActor(Credentials credentials) {
+        super(credentials);
 
         SetMessage call = new SetMessage();
         call.setAmount(0);
@@ -37,8 +37,13 @@ public class RikiBotActor extends JustCallActor {
 
     protected void processTurnRequestMessage(TurnRequestMessage turnRequestMessage) {
         log.info("Riki received turn request");
-        Bot2ServerMessage message = this.moveScript.pop();
-        message.setUuid(this.uuid);
-        this.httpSender.tell(message, getSelf());
+        if (this.moveScript.isEmpty()) {
+            log.info("Riki has no scripted moves left. Did you start riki before tobi?. Terminating bot");
+            getContext().system().terminate();
+        } else {
+            Bot2ServerMessage message = this.moveScript.pop();
+            message.setUuid(this.uuid);
+            this.httpSender.tell(message, getSelf());
+        }
     }
 }

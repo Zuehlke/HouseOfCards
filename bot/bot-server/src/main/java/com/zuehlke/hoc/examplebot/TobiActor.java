@@ -59,6 +59,9 @@ public class TobiActor extends JustCallActor {
 
     protected void processTurnRequestMessage(TurnRequestMessage turnRequestMessage) {
         log.info("Tobi received turn request");
+        if(this.moveScript.isEmpty()){
+            log.info("Something went wrong. Tobi has no scripted moves left. Terminate bot");
+        }
         Bot2ServerMessage message = this.moveScript.pop();
         message.setUuid(this.uuid);
         this.httpSender.tell(message, getSelf());
